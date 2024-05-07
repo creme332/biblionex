@@ -20,11 +20,6 @@ Table of Contents
   - [User Requirements](#user-requirements)
     - [Librarian](#librarian)
     - [Patron](#patron)
-  - [Use Case Diagram](#use-case-diagram)
-  - [UML Class Diagram](#uml-class-diagram)
-  - [Non-functional Requirements](#non-functional-requirements)
-    - [Security](#security)
-  - [References](#references)
 
 
 ## Introduction
@@ -63,7 +58,6 @@ BiblioNex caters to two primary user classes:
 
 1. **Librarians**: Librarians are administrators responsible for managing library operations. They have access to advanced functionalities such as adding, updating, and deleting books from the library catalog, managing user accounts, tracking book loans, generating reports, and customizing system settings. Librarians are typically well-versed in library management practices and have a comprehensive understanding of the system's capabilities.
 2. **Patrons**: Patrons are library users who interact with the system to browse the library catalog, search for books, borrow and return items, and manage their account details. Patrons may vary in their technical proficiency, with some being comfortable navigating the system independently, while others may require assistance from librarians.
-Both user classes may exhibit characteristics such as varying levels of computer literacy, preferences for user interface design, and specific needs or preferences regarding library services. BiblioNex aims to provide a user-friendly experience for both librarians and patrons, accommodating a diverse range of users and their requirements.
 
 ### Product Functions
 
@@ -82,39 +76,24 @@ a seamless and enjoyable shopping experience. A high-level summary of the functi
 
 Librarians should be able to:
 
-- Manage the library catalog by adding, updating, or deleting books.
+- Log into the system and log out.
+- Manage the library catalog by adding, updating, or deleting materials which includes books, journals, and other materials.
+- Search the library catalog.
 - Register new users and manage user accounts, including authentication.
 - Track book loans, handle renewals and returns.
 - Generate reports on library operations and usage patterns.
-- Customize system settings and loan policies.
 
 ### Patron
 
 Patrons should be able to:
 
-- Browse the library catalog to search for books.
+- Log into the system and log out.
+- Browse the library catalog, which includes books, journals, and other
+materials.
+- Search for specific items using keywords, titles, authors, or categories.
+- Check availability status of books.
+- Check location of books within the library to find their physical copies.
 - View book details and availability status.
 - View their loan history and manage their account details.
-
-## Use Case Diagram
-
-![Use Case Diagram for regular users]()
-
-![Use Case Diagram for administrators]()
-
-## UML Class Diagram
-
-![UML Class Diagram]()
-
-## Non-functional Requirements
-
-### Security
-
-- Password Policy: The system shall enforce a password policy, including minimum length and
-  complexity.
-- Password Hashing: User passwords shall be securely hashed using industry-standard cryptographic hash functions such as bcrypt.
-- User Authorization: Access to sensitive functionalities, such as order processing and administrative functions, shall be restricted based on user roles and permissions.
-
-## References
-
-1. Montoya J., SRS-Template, 2019. https://github.com/jam01/SRS-Template [online]. Accessed on 30 January 2024.
+- Manage their account settings, including updating information, changing
+passwords, and viewing their borrowing history.
