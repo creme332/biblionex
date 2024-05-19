@@ -1,13 +1,13 @@
--- MariaDB dump 10.19  Distrib 10.4.32-MariaDB, for Win64 (AMD64)
+-- MySQL dump 10.19  Distrib 10.3.38-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: biblionex
 -- ------------------------------------------------------
--- Server version	10.4.32-MariaDB
+-- Server version	10.3.38-MariaDB-0ubuntu0.20.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -125,14 +125,14 @@ DROP TABLE IF EXISTS `fine`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fine` (
-  `patron_id` int(11) unsigned NOT NULL,
-  `loan_id` int(11) unsigned NOT NULL,
-  `date` datetime NOT NULL,
+  `patron_id` int(10) unsigned NOT NULL,
+  `loan_id` int(10) unsigned NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
   `amount` decimal(10,2) NOT NULL,
-  PRIMARY KEY (`patron_id`,`loan_id`),
-  KEY `consk1` (`loan_id`),
-  CONSTRAINT `consk1` FOREIGN KEY (`loan_id`) REFERENCES `loan` (`loan_id`),
-  CONSTRAINT `consk2` FOREIGN KEY (`patron_id`) REFERENCES `patron` (`patron_id`)
+  PRIMARY KEY (`loan_id`,`patron_id`,`date`),
+  KEY `fine_patron_patron_id_fk` (`patron_id`),
+  CONSTRAINT `fine_loan_loan_id_fk` FOREIGN KEY (`loan_id`) REFERENCES `loan` (`loan_id`),
+  CONSTRAINT `fine_patron_patron_id_fk` FOREIGN KEY (`patron_id`) REFERENCES `patron` (`patron_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -206,14 +206,14 @@ DROP TABLE IF EXISTS `librarian`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `librarian` (
   `librarian_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `address` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
+  `address` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
   `phone_no` varchar(255) NOT NULL,
   `email` varchar(320) NOT NULL,
   PRIMARY KEY (`librarian_id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `librarian_email_uindex` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -234,18 +234,24 @@ DROP TABLE IF EXISTS `loan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `loan` (
-  `loan_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `patron_id` int(11) unsigned NOT NULL,
-  `barcode` int(21) unsigned NOT NULL,
-  `issue_date` datetime NOT NULL,
+  `loan_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `patron_id` int(10) unsigned DEFAULT NULL,
+  `barcode` int(10) unsigned DEFAULT NULL,
+  `checkout_librarian_id` int(10) unsigned DEFAULT NULL,
+  `checkin_librarian_id` int(10) unsigned DEFAULT NULL,
+  `issue_date` datetime NOT NULL DEFAULT current_timestamp(),
   `return_date` datetime DEFAULT NULL,
   `due_date` datetime NOT NULL,
-  `renewal_count` int(11) DEFAULT NULL,
+  `renewal_count` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`loan_id`),
-  UNIQUE KEY `patron_id` (`patron_id`,`barcode`,`issue_date`),
-  KEY `cons2` (`barcode`),
-  CONSTRAINT `cons1` FOREIGN KEY (`patron_id`) REFERENCES `patron` (`patron_id`),
-  CONSTRAINT `cons2` FOREIGN KEY (`barcode`) REFERENCES `material_copy` (`barcode`)
+  UNIQUE KEY `loan_pk` (`patron_id`,`barcode`,`issue_date`),
+  KEY `checkin_librarian_id` (`checkin_librarian_id`),
+  KEY `loan_librarian_librarian_id_fk` (`checkout_librarian_id`),
+  KEY `loan_material_copy_barcode_fk` (`barcode`),
+  CONSTRAINT `checkin_librarian_id` FOREIGN KEY (`checkin_librarian_id`) REFERENCES `librarian` (`librarian_id`),
+  CONSTRAINT `loan_librarian_librarian_id_fk` FOREIGN KEY (`checkout_librarian_id`) REFERENCES `librarian` (`librarian_id`),
+  CONSTRAINT `loan_material_copy_barcode_fk` FOREIGN KEY (`barcode`) REFERENCES `material_copy` (`barcode`),
+  CONSTRAINT `loan_patron_patron_id_fk` FOREIGN KEY (`patron_id`) REFERENCES `patron` (`patron_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -299,15 +305,15 @@ CREATE TABLE `material_copy` (
   `barcode` int(21) unsigned NOT NULL AUTO_INCREMENT,
   `material_id` int(11) unsigned NOT NULL,
   `order_id` int(11) unsigned NOT NULL,
-  `condition` varchar(255) DEFAULT NULL,
-  `shelf_no` int(11) NOT NULL,
-  `aisle_no` int(11) NOT NULL,
-  `section_no` int(11) NOT NULL,
+  `condition` enum('New','Used - Like New','Used - Good','Used - Acceptable','Unacceptable') NOT NULL,
+  `shelf_no` int(10) unsigned NOT NULL DEFAULT 0,
+  `aisle_no` int(10) unsigned NOT NULL DEFAULT 0,
+  `section_no` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`barcode`),
-  KEY `mc_consk1` (`material_id`),
-  KEY `mc_consk2` (`order_id`),
-  CONSTRAINT `mc_consk1` FOREIGN KEY (`material_id`) REFERENCES `material` (`material_id`),
-  CONSTRAINT `mc_consk2` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`)
+  KEY `material_copy_material_material_id_fk` (`material_id`),
+  KEY `material_copy_order_order_id_fk` (`order_id`),
+  CONSTRAINT `material_copy_material_material_id_fk` FOREIGN KEY (`material_id`) REFERENCES `material` (`material_id`),
+  CONSTRAINT `material_copy_order_order_id_fk` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -332,18 +338,18 @@ CREATE TABLE `order` (
   `librarian_id` int(11) unsigned NOT NULL,
   `vendor_id` int(11) unsigned NOT NULL,
   `material_id` int(11) unsigned NOT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'pending',
-  `created_date` datetime NOT NULL,
-  `quantity` int(11) NOT NULL,
+  `status` enum('Pending','Processing','Shipped','Delivered','Completed','Canceled','Refunded','On Hold','Failed','Returned') NOT NULL DEFAULT 'Pending',
+  `created_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `quantity` int(10) unsigned NOT NULL,
   `delivery_date` datetime DEFAULT NULL,
   `unit_price` decimal(10,2) NOT NULL,
   PRIMARY KEY (`order_id`),
-  UNIQUE KEY `order_uc` (`librarian_id`,`material_id`,`vendor_id`,`created_date`),
-  KEY `order_conk1` (`vendor_id`),
-  KEY `order_conk2` (`material_id`),
-  CONSTRAINT `order_conk1` FOREIGN KEY (`vendor_id`) REFERENCES `vendor` (`vendor_id`),
-  CONSTRAINT `order_conk2` FOREIGN KEY (`material_id`) REFERENCES `material` (`material_id`),
-  CONSTRAINT `order_conk3` FOREIGN KEY (`librarian_id`) REFERENCES `librarian` (`librarian_id`)
+  KEY `order_material_material_id_fk` (`material_id`),
+  KEY `order_librarian_librarian_id_fk` (`librarian_id`),
+  KEY `order_vendor_vendor_id_fk` (`vendor_id`),
+  CONSTRAINT `order_librarian_librarian_id_fk` FOREIGN KEY (`librarian_id`) REFERENCES `librarian` (`librarian_id`),
+  CONSTRAINT `order_material_material_id_fk` FOREIGN KEY (`material_id`) REFERENCES `material` (`material_id`),
+  CONSTRAINT `order_vendor_vendor_id_fk` FOREIGN KEY (`vendor_id`) REFERENCES `vendor` (`vendor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -365,17 +371,18 @@ DROP TABLE IF EXISTS `patron`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `patron` (
   `patron_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `address` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
+  `address` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
   `phone_no` varchar(255) NOT NULL,
   `email` varchar(320) NOT NULL,
-  `registration_date` datetime NOT NULL,
+  `registration_date` datetime NOT NULL DEFAULT current_timestamp(),
   `birth_date` datetime DEFAULT NULL,
-  `card_no` varchar(255) NOT NULL,
+  `credit_card_no` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`patron_id`),
-  UNIQUE KEY `patron_uc` (`email`,`card_no`)
+  UNIQUE KEY `patron_email_uindex` (`email`),
+  UNIQUE KEY `patron_credit_card_no_uindex` (`credit_card_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -397,11 +404,11 @@ DROP TABLE IF EXISTS `publisher`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `publisher` (
   `publisher_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `country` varchar(255) DEFAULT NULL,
+  `country` varchar(255) NOT NULL DEFAULT 'Mauritius',
   PRIMARY KEY (`publisher_id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `publisher_pk` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -427,7 +434,7 @@ CREATE TABLE `vendor` (
   `name` varchar(255) NOT NULL,
   `contact_person` varchar(255) NOT NULL,
   PRIMARY KEY (`vendor_id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `vendor_pk` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -452,9 +459,9 @@ CREATE TABLE `vendor_material` (
   `material_id` int(11) unsigned NOT NULL,
   `unit_price` decimal(10,2) NOT NULL,
   PRIMARY KEY (`vendor_id`,`material_id`),
-  KEY `vm_consk2` (`material_id`),
-  CONSTRAINT `vm_consk1` FOREIGN KEY (`vendor_id`) REFERENCES `vendor` (`vendor_id`),
-  CONSTRAINT `vm_consk2` FOREIGN KEY (`material_id`) REFERENCES `material` (`material_id`)
+  KEY `vendor_material_material_material_id_fk` (`material_id`),
+  CONSTRAINT `vendor_material_material_material_id_fk` FOREIGN KEY (`material_id`) REFERENCES `material` (`material_id`),
+  CONSTRAINT `vendor_material_vendor_vendor_id_fk` FOREIGN KEY (`vendor_id`) REFERENCES `vendor` (`vendor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -481,7 +488,7 @@ CREATE TABLE `video` (
   `rating` int(11) unsigned NOT NULL,
   `format` varchar(255) NOT NULL,
   PRIMARY KEY (`material_id`),
-  CONSTRAINT `video_consk1` FOREIGN KEY (`material_id`) REFERENCES `material` (`material_id`),
+  CONSTRAINT `video_material_material_id_fk` FOREIGN KEY (`material_id`) REFERENCES `material` (`material_id`),
   CONSTRAINT `format_extension_check` CHECK (`format` regexp '\\.(MP4|AVI|MOV|MKV|FLV|MPEG)$'),
   CONSTRAINT `rating_range_check` CHECK (`rating` >= 1 and `rating` <= 5)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -507,7 +514,7 @@ CREATE TABLE `video_genre` (
   `material_id` int(11) unsigned NOT NULL,
   `genre` varchar(255) NOT NULL,
   PRIMARY KEY (`material_id`,`genre`),
-  CONSTRAINT `videogerne_consk1` FOREIGN KEY (`material_id`) REFERENCES `video` (`material_id`)
+  CONSTRAINT `video_genre_video_material_id_fk` FOREIGN KEY (`material_id`) REFERENCES `video` (`material_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -519,14 +526,6 @@ LOCK TABLES `video_genre` WRITE;
 /*!40000 ALTER TABLE `video_genre` DISABLE KEYS */;
 /*!40000 ALTER TABLE `video_genre` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'biblionex'
---
-
---
--- Dumping routines for database 'biblionex'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -537,4 +536,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-15 12:41:21
+-- Dump completed on 2024-05-19 19:36:56
