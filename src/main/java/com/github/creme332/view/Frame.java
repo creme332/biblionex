@@ -3,7 +3,7 @@ package com.github.creme332.view;
 import java.awt.*;
 import javax.swing.*;
 
-import com.github.creme332.controller.ScreenNames;
+import com.github.creme332.controller.ScreenName;
 import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidPathException;
 
@@ -19,7 +19,7 @@ public class Frame extends JFrame {
     private CardLayout cardLayout = new CardLayout(); // used to swap between screens
     private JPanel cardPanels = new JPanel(cardLayout); // a container for all screens
 
-    // pages
+    // screens
     private SplashScreen splashScreen = new SplashScreen();
     private Login loginPage = new Login();
     private Registration registrationPage = new Registration();
@@ -46,9 +46,9 @@ public class Frame extends JFrame {
         }
 
         // setup screen container
-        cardPanels.add(splashScreen, ScreenNames.SPLASH_SCREEN.getScreenName());
-        cardPanels.add(loginPage, ScreenNames.LOGIN_SCREEN.getScreenName());
-        cardPanels.add(registrationPage, ScreenNames.PATRON_REGISTRATION_SCREEN.getScreenName());
+        cardPanels.add(splashScreen, ScreenName.SPLASH_SCREEN.getScreenName());
+        cardPanels.add(loginPage, ScreenName.LOGIN_SCREEN.getScreenName());
+        cardPanels.add(registrationPage, ScreenName.PATRON_REGISTRATION_SCREEN.getScreenName());
 
         this.add(cardPanels);
 
@@ -56,7 +56,7 @@ public class Frame extends JFrame {
         this.setVisible(true);
     }
 
-    public JPanel getPage(ScreenNames name) {
+    public JPanel getPage(ScreenName name) {
         switch (name) {
             case LOGIN_SCREEN:
                 return loginPage;
@@ -65,22 +65,13 @@ public class Frame extends JFrame {
             case PATRON_REGISTRATION_SCREEN:
                 return registrationPage;
             default:
-                break;
+                System.out.println("Invalid screen: " + name.getScreenName());
+                System.exit(0);
         }
         return registrationPage;
     }
 
-    /**
-     * Displays frame which is initially hidden.
-     * 
-     * Call this function once all components have been added to the frame
-     * to ensure proper rendering.
-     */
-    public void showFrame() {
-        this.setVisible(true);
-    }
-
-    public void switchToScreen(ScreenNames screenName) {
+    public void switchToScreen(ScreenName screenName) {
         cardLayout.show(cardPanels, screenName.getScreenName());
     }
 }

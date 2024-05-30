@@ -1,6 +1,6 @@
 package com.github.creme332.controller;
 
-public enum ScreenNames {
+public enum ScreenName {
     SPLASH_SCREEN("splashScreen"),
     HOME_SCREEN("homeScreen"),
     LOGIN_SCREEN("loginScreen"),
@@ -10,7 +10,7 @@ public enum ScreenNames {
 
     private final String screenName;
 
-    ScreenNames(String screenName) {
+    ScreenName(String screenName) {
         this.screenName = screenName;
     }
 
