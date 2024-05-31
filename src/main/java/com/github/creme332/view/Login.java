@@ -1,18 +1,14 @@
 package com.github.creme332.view;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Login extends JPanel {
-    private JTextField userText;
-    private JPasswordField passwordText;
-    private JLabel success;
+    private JTextField emailField;
+    private JPasswordField passwordField;
+    private JLabel errorLabel;
+
+    private JButton loginButton;
+    private JButton registerButton;
 
     public Login() {
         // Set the layout
@@ -24,9 +20,9 @@ public class Login extends JPanel {
         add(userLabel);
 
         // Create text field for username
-        userText = new JTextField(20);
-        userText.setBounds(100, 20, 165, 25);
-        add(userText);
+        emailField = new JTextField(20);
+        emailField.setBounds(100, 20, 165, 25);
+        add(emailField);
 
         // Create JLabel for password
         JLabel passwordLabel = new JLabel("Password");
@@ -34,17 +30,17 @@ public class Login extends JPanel {
         add(passwordLabel);
 
         // Create text field for password
-        passwordText = new JPasswordField(20);
-        passwordText.setBounds(100, 50, 165, 25);
-        add(passwordText);
+        passwordField = new JPasswordField(20);
+        passwordField.setBounds(100, 50, 165, 25);
+        add(passwordField);
 
         // Create login button
-        JButton loginButton = new JButton("Login");
+        loginButton = new JButton("Login");
         loginButton.setBounds(10, 80, 80, 25);
         add(loginButton);
 
         // Create registration button
-        JButton registerButton = new JButton("Create a new account");
+        registerButton = new JButton("Create a new account");
         registerButton.setBorderPainted(false);
         registerButton.setFocusPainted(false);
         registerButton.setBackground(null);
@@ -52,31 +48,30 @@ public class Login extends JPanel {
         add(registerButton);
 
         // Create success message label
-        success = new JLabel("");
-        success.setBounds(10, 110, 300, 25);
-        add(success);
+        errorLabel = new JLabel("Invalid credentials");
+        errorLabel.setBounds(10, 140, 300, 25);
+        errorLabel.setVisible(false);
+        add(errorLabel);
 
-        // Add action listener to login button
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String user = userText.getText();
-                String password = new String(passwordText.getPassword());
+    }
 
-                // Hardcoded username and password for validation
-                if (user.equals("admin") && password.equals("password")) {
-                    success.setText("Login successful!");
-                } else {
-                    success.setText("Login failed!");
-                }
-            }
-        });
+    public JButton getRegisterButton() {
+        return registerButton;
+    }
 
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // switch to registration page
-            }
-        });
+    public JButton getLoginButton() {
+        return loginButton;
+    }
+
+    public char[] getPassword() {
+        return passwordField.getPassword();
+    }
+
+    public void showError() {
+        errorLabel.setVisible(true);
+    }
+
+    public void hideError() {
+        errorLabel.setVisible(false);
     }
 }
