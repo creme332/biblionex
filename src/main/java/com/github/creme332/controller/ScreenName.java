@@ -1,12 +1,19 @@
 package com.github.creme332.controller;
 
+/**
+ * Name of screen that can be displayed on frame.
+ */
 public enum ScreenName {
+    // screens common to both patron and librarian
     SPLASH_SCREEN("splashScreen"),
-    HOME_SCREEN("homeScreen"),
     LOGIN_SCREEN("loginScreen"),
+
+    // patron screens
     PATRON_REGISTRATION_SCREEN("patronRegistrationScreen"),
     PATRON_DASHBOARD_SCREEN("patronDashboardScreen"),
-    SETTINGS_SCREEN("settingsScreen");
+
+    // librarian screens
+    LIBRARIAN_DASHBOARD_SCREEN("librarianDashboardScreen");
 
     private final String screenName;
 
