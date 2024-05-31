@@ -5,9 +5,9 @@
 - Git
 - Apache Maven
 - Java JDK (v17 preferred)
-- MySQL database
+- MySQL
 
-## Manual build
+## Project setup
 
 Clone the project:
 
@@ -21,17 +21,28 @@ Navigate to the root directory of the project:
 cd biblionex
 ```
 
-Install dependencies:
+Create a `.env` file with the following contents:
+
+```
+DB_URL=jdbc:mysql://localhost:3306/biblionex
+DB_USERNAME=root
+DB_PASSWORD=aaa
+```
+
+Update the values assigned to `DB_USERNAME` and `DB_PASSWORD` with your MySQL login details.
+
+
+Install Maven dependencies:
 
 ```bash
 mvn clean install
 ```
 
-Compile the project:
+## Database setup
+
+Create a MySQL database `biblionex`:
 
 ```bash
-mvn compile
+mysql -u root -p < db/biblionex.sql
 ```
-
-## Database setup
 
