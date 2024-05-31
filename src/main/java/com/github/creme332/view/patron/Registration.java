@@ -1,4 +1,4 @@
-package com.github.creme332.view;
+package com.github.creme332.view.patron;
 
 import javax.swing.*;
 
@@ -7,6 +7,7 @@ public class Registration extends JPanel {
     private JPasswordField passwordText;
     private JLabel success;
     private JButton registerButton;
+    private JButton loginButton;
 
     public Registration() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -43,6 +44,14 @@ public class Registration extends JPanel {
         registerButton.setBounds(10, 80, 100, 25);
         container.add(registerButton);
 
+        // Create Login button
+        loginButton = new JButton("Already have an account?");
+        loginButton.setBorderPainted(false);
+        loginButton.setFocusPainted(false);
+        loginButton.setBackground(null);
+        loginButton.setBounds(10, 110, 220, 25);
+        container.add(loginButton);
+
         // Create success message label
         success = new JLabel("");
         success.setBounds(10, 110, 300, 25);
@@ -53,9 +62,12 @@ public class Registration extends JPanel {
         return registerButton;
     }
 
+    public JButton getLoginButton() {
+        return loginButton;
+    }
+
     public String getEnteredText() {
         return userText.getText();
-
     }
 
     public char[] getEnteredUser() {
