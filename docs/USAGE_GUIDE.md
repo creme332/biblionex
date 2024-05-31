@@ -2,7 +2,13 @@
 
 ## Run project
 
-Run the project:
+Start your MySQL server:
+
+```bash
+sudo service mysql start
+```
+
+Run the application:
 
 ```bash
 mvn exec:java -Dexec.mainClass=com.github.creme332.Main
