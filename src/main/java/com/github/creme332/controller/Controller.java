@@ -5,12 +5,14 @@ import java.util.TimerTask;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
+import com.github.creme332.controller.patron.RegisterController;
 import com.github.creme332.model.AppState;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
+import com.github.creme332.view.patron.Registration;
 
 /**
- * Controls all the logic in the application by linking views and model.
+ * Main controller of application.
  */
 public class Controller implements PropertyChangeListener {
     private AppState app = new AppState();
@@ -18,7 +20,7 @@ public class Controller implements PropertyChangeListener {
     private Frame frame; // frame of app
 
     // declare controller & view for registration
-    private Registration registrationPage;
+    private Registration patronRegistrationPage;
     private RegisterController registrationController;
 
     private Login loginPage;
@@ -52,8 +54,8 @@ public class Controller implements PropertyChangeListener {
 
             frame = new Frame();
 
-            registrationPage = (Registration) frame.getPage(ScreenName.PATRON_REGISTRATION_SCREEN);
-            registrationController = new RegisterController(app, registrationPage);
+            patronRegistrationPage = (Registration) frame.getPage(ScreenName.PATRON_REGISTRATION_SCREEN);
+            registrationController = new RegisterController(app, patronRegistrationPage);
 
             loginPage = (Login) frame.getPage(ScreenName.LOGIN_SCREEN);
             loginController = new LoginController(app, loginPage);
