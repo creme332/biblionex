@@ -28,4 +28,19 @@ public class Librarian extends User {
     public void setRole(String role) {
         this.role = role;
     }
+
+    @Override
+    public String toString() {
+        return "Librarian{" +
+                "librarian_id=" + userId +
+                ", address='" + address + '\'' +
+                ", password='" + password + '\'' +
+                ", last_name='" + lastName + '\'' +
+                ", first_name='" + firstName + '\'' +
+                ", phone_no='" + phoneNo + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+
+    }
 }
