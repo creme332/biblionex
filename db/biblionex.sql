@@ -1,8 +1,8 @@
--- MySQL dump 10.19  Distrib 10.3.38-MariaDB, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.19  Distrib 10.3.39-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: biblionex
 -- ------------------------------------------------------
--- Server version	10.3.38-MariaDB-0ubuntu0.20.04.1
+-- Server version	10.3.39-MariaDB-0ubuntu0.20.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -212,6 +212,7 @@ CREATE TABLE `librarian` (
   `first_name` varchar(255) NOT NULL,
   `phone_no` varchar(255) NOT NULL,
   `email` varchar(320) NOT NULL,
+  `role` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`librarian_id`),
   UNIQUE KEY `librarian_email_uindex` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -536,4 +537,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-19 19:36:56
+-- Dump completed on 2024-06-03 18:41:57
