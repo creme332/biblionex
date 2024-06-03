@@ -1,41 +1,34 @@
 package com.github.creme332.model;
 
-import java.util.Arrays;
-
 public abstract class User {
     private String email;
     private String password;
+    private int userId;
+    private String address;
+    private String firstName;
+    private String lastName;
+    private String phoneNo;
 
-    public User(String email, String password) {
+    public User(String email, String password, int userId, String address, String firstName, String lastName,
+            String phoneNo) {
         this.email = email;
         this.password = password;
+        this.userId = userId;
+        this.address = address;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNo = phoneNo;
     }
 
-    public User() {
-        email = "";
-        password = "";
-    }
-
-    public abstract String getUserType();
-
-    public abstract boolean save();
-
-    public static boolean authenticate(String email, char[] input) {
-        boolean isCorrect = true;
-
-        // TODO: Fetch password from database
-        char[] correctPassword = { 'b', 'u', 'g', 'a', 'b', 'o', 'o' };
-
-        if (input.length != correctPassword.length) {
-            isCorrect = false;
-        } else {
-            isCorrect = Arrays.equals(input, correctPassword);
-        }
-
-        // Zero out the password for security purposes.
-        Arrays.fill(correctPassword, '0');
-
-        return isCorrect;
+    public User(String email, String password, String address, String firstName, String lastName,
+            String phoneNo) {
+        this.email = email;
+        this.password = password;
+        this.userId = -1;
+        this.address = address;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNo = phoneNo;
     }
 
     public String getEmail() {
@@ -54,4 +47,43 @@ public abstract class User {
         this.password = password;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
 }
