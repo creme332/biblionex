@@ -1,13 +1,13 @@
 package com.github.creme332.model;
 
 public abstract class User {
-    private String email;
-    private String password;
-    private int userId;
-    private String address;
-    private String firstName;
-    private String lastName;
-    private String phoneNo;
+    protected String email;
+    protected String password;
+    protected int userId;
+    protected String address;
+    protected String firstName;
+    protected String lastName;
+    protected String phoneNo;
 
     public User(String email, String password, int userId, String address, String firstName, String lastName,
             String phoneNo) {
