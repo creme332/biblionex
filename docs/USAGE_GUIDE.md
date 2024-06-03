@@ -19,3 +19,9 @@ mvn exec:java -Dexec.mainClass=com.github.creme332.App
 ```bash
 mvn test
 ```
+
+## Export database
+
+```bash
+mysqldump -u root -p --databases  biblionex > db/biblionex.sql
+```
