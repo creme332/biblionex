@@ -6,7 +6,7 @@ import java.beans.PropertyChangeSupport;
 import com.github.creme332.controller.ScreenName;
 
 public class AppState {
-    private ScreenName currentScreen = ScreenName.SPLASH_SCREEN;
+    private ScreenName currentScreen;
     private PropertyChangeSupport support;
 
     public AppState() {

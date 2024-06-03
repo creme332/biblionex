@@ -50,20 +50,19 @@ public class Controller implements PropertyChangeListener {
 
     public Controller() {
         try {
-            app.addPropertyChangeListener(this); // listen to changes to app state
-
             frame = new Frame();
-
-            patronRegistrationPage = (Registration) frame.getPage(ScreenName.PATRON_REGISTRATION_SCREEN);
-            registrationController = new RegisterController(app, patronRegistrationPage);
-
-            loginPage = (Login) frame.getPage(ScreenName.LOGIN_SCREEN);
-            loginController = new LoginController(app, loginPage);
-
         } catch (InvalidPathException e) {
             e.printStackTrace();
             System.exit(0);
         }
+
+        patronRegistrationPage = (Registration) frame.getPage(ScreenName.PATRON_REGISTRATION_SCREEN);
+        registrationController = new RegisterController(app, patronRegistrationPage);
+
+        loginPage = (Login) frame.getPage(ScreenName.LOGIN_SCREEN);
+        loginController = new LoginController(app, loginPage);
+
+        app.addPropertyChangeListener(this); // listen to changes to app state
 
         playStartAnimation();
     }
