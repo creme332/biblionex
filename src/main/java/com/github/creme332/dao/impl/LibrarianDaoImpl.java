@@ -2,6 +2,7 @@ package com.github.creme332.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -48,8 +49,29 @@ public class LibrarianDaoImpl implements LibrarianDao {
 
     @Override
     public Librarian findById(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        Librarian librarian = null;
+        String query = "SELECT * FROM librarian WHERE librarian_id = ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                librarian = new Librarian();
+                librarian.setUserId(resultSet.getInt("librarian_id"));
+                librarian.setAddress(resultSet.getString("address"));
+                librarian.setPassword(resultSet.getString("password"));
+                librarian.setLastName(resultSet.getString("last_name"));
+                librarian.setFirstName(resultSet.getString("first_name"));
+                librarian.setPhoneNo(resultSet.getString("phone_no"));
+                librarian.setUserId(id);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle exceptions (e.g., log the error or rethrow it)
+        }
+
+        return librarian;
     }
 
     @Override
@@ -60,8 +82,29 @@ public class LibrarianDaoImpl implements LibrarianDao {
 
     @Override
     public Librarian findByEmail(String email) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByEmail'");
+        Librarian librarian = null;
+        String query = "SELECT * FROM librarian WHERE email = ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                librarian = new Librarian();
+                librarian.setUserId(resultSet.getInt("librarian_id"));
+                librarian.setAddress(resultSet.getString("address"));
+                librarian.setPassword(resultSet.getString("password"));
+                librarian.setLastName(resultSet.getString("last_name"));
+                librarian.setFirstName(resultSet.getString("first_name"));
+                librarian.setPhoneNo(resultSet.getString("phone_no"));
+                librarian.setEmail(email);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle exceptions (e.g., log the error or rethrow it)
+        }
+
+        return librarian;
     }
 
 }
