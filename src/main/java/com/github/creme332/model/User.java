@@ -9,7 +9,7 @@ public abstract class User {
     protected String lastName;
     protected String phoneNo;
 
-    public User(String email, String password, int userId, String address, String firstName, String lastName,
+    protected User(String email, String password, int userId, String address, String firstName, String lastName,
             String phoneNo) {
         this.email = email;
         this.password = password;
@@ -20,7 +20,7 @@ public abstract class User {
         this.phoneNo = phoneNo;
     }
 
-    public User(String email, String password, String address, String firstName, String lastName,
+    protected User(String email, String password, String address, String firstName, String lastName,
             String phoneNo) {
         this.email = email;
         this.password = password;
@@ -29,6 +29,16 @@ public abstract class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNo = phoneNo;
+    }
+
+    protected User() {
+        this.email = "";
+        this.password = "";
+        this.userId = -1;
+        this.address = "";
+        this.firstName = "";
+        this.lastName = "";
+        this.phoneNo = "";
     }
 
     public String getEmail() {
