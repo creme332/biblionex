@@ -63,6 +63,8 @@ public class Frame extends JFrame {
         // add cardPanels to frame
         this.add(cardPanels);
 
+        this.pack();
+        
         // display frame
         this.setVisible(true);
     }
