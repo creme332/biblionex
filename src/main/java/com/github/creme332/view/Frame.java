@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.swing.*;
 
-import com.github.creme332.controller.ScreenName;
+import com.github.creme332.controller.Screen;
 import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.patron.Registration;
@@ -24,7 +24,7 @@ public class Frame extends JFrame {
     private JPanel cardPanels = new JPanel(cardLayout); // a container for all screens
 
     // a map that maps a screen name to screen
-    private Map<ScreenName, JPanel> screenMapper = new HashMap<ScreenName, JPanel>();
+    private Map<Screen, JPanel> screenMapper = new HashMap<Screen, JPanel>();
 
     public Frame() throws InvalidPathException {
         // set frame title
@@ -48,15 +48,15 @@ public class Frame extends JFrame {
         }
 
         // setup screen mapper and create screens
-        screenMapper.put(ScreenName.SPLASH_SCREEN, new SplashScreen());
-        screenMapper.put(ScreenName.LOGIN_SCREEN, new Login());
-        screenMapper.put(ScreenName.PATRON_REGISTRATION_SCREEN, new Registration());
-        screenMapper.put(ScreenName.PATRON_DASHBOARD_SCREEN, new com.github.creme332.view.patron.Dashboard());
-        screenMapper.put(ScreenName.LIBRARIAN_DASHBOARD_SCREEN, new com.github.creme332.view.librarian.Dashboard());
+        screenMapper.put(Screen.SPLASH_SCREEN, new SplashScreen());
+        screenMapper.put(Screen.LOGIN_SCREEN, new Login());
+        screenMapper.put(Screen.PATRON_REGISTRATION_SCREEN, new Registration());
+        screenMapper.put(Screen.PATRON_DASHBOARD_SCREEN, new com.github.creme332.view.patron.Dashboard());
+        screenMapper.put(Screen.LIBRARIAN_DASHBOARD_SCREEN, new com.github.creme332.view.librarian.Dashboard());
         // to add new screens to frame, add a new line here...
 
         // add screens to cardPanels
-        for (ScreenName screenName : screenMapper.keySet()) {
+        for (Screen screenName : screenMapper.keySet()) {
             cardPanels.add(screenMapper.get(screenName), screenName.getScreenName());
         }
 
@@ -67,7 +67,7 @@ public class Frame extends JFrame {
         this.setVisible(true);
     }
 
-    public JPanel getPage(ScreenName name) {
+    public JPanel getPage(Screen name) {
         JPanel screen = screenMapper.get(name);
         if (screen == null) {
             System.out.println("Invalid screen: " + name.getScreenName());
@@ -76,7 +76,7 @@ public class Frame extends JFrame {
         return screen;
     }
 
-    public void switchToScreen(ScreenName screenName) {
+    public void switchToScreen(Screen screenName) {
         cardLayout.show(cardPanels, screenName.getScreenName());
     }
 }

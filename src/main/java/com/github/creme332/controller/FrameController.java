@@ -27,13 +27,13 @@ public class FrameController implements PropertyChangeListener {
         TimerTask showMainScreen;
         final long animationDuration = 800; // ms
 
-        app.setCurrentScreen(ScreenName.SPLASH_SCREEN);
+        app.setCurrentScreen(Screen.SPLASH_SCREEN);
 
         // show login screen when timer has elapsed
         showMainScreen = new TimerTask() {
             @Override
             public void run() {
-                app.setCurrentScreen(ScreenName.LOGIN_SCREEN);
+                app.setCurrentScreen(Screen.LOGIN_SCREEN);
                 timer.cancel();
                 timer.purge();
             }
@@ -46,7 +46,7 @@ public class FrameController implements PropertyChangeListener {
         String propertyName = e.getPropertyName();
 
         if ("currentScreen".equals(propertyName)) {
-            frame.switchToScreen((ScreenName) e.getNewValue());
+            frame.switchToScreen((Screen) e.getNewValue());
         }
     }
 }

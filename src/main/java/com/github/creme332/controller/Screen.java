@@ -3,7 +3,7 @@ package com.github.creme332.controller;
 /**
  * Name of screen that can be displayed on frame.
  */
-public enum ScreenName {
+public enum Screen {
     // screens common to both patron and librarian
     SPLASH_SCREEN("splashScreen"),
     LOGIN_SCREEN("loginScreen"),
@@ -17,7 +17,7 @@ public enum ScreenName {
 
     private final String screenName;
 
-    ScreenName(String screenName) {
+    Screen(String screenName) {
         this.screenName = screenName;
     }
 

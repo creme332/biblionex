@@ -3,7 +3,7 @@ package com.github.creme332.controller.patron;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import com.github.creme332.controller.ScreenName;
+import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.view.patron.Registration;
 
@@ -28,7 +28,7 @@ public class RegisterController {
                 // Hardcoded username and password for validation
                 if (user.equals("admin") && password.equals("password")) {
                     System.out.println("Registration successful. Must switch to dashboard screen...");
-                    app.setCurrentScreen(ScreenName.LOGIN_SCREEN);
+                    app.setCurrentScreen(Screen.LOGIN_SCREEN);
                 } else {
                     registrationPage.setErrorMessage("Invalid info!");
                 }
@@ -38,7 +38,7 @@ public class RegisterController {
         registrationPage.getLoginButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                app.setCurrentScreen(ScreenName.LOGIN_SCREEN);
+                app.setCurrentScreen(Screen.LOGIN_SCREEN);
             }
         });
     }

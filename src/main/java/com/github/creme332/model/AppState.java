@@ -3,10 +3,10 @@ package com.github.creme332.model;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import com.github.creme332.controller.ScreenName;
+import com.github.creme332.controller.Screen;
 
 public class AppState {
-    private ScreenName currentScreen;
+    private Screen currentScreen;
     private PropertyChangeSupport support;
     private User loggedInUser;
 
@@ -18,11 +18,11 @@ public class AppState {
         support.addPropertyChangeListener("currentScreen", listener);
     }
 
-    public ScreenName getCurrentScreen() {
+    public Screen getCurrentScreen() {
         return currentScreen;
     }
 
-    public void setCurrentScreen(ScreenName newScreen) {
+    public void setCurrentScreen(Screen newScreen) {
         // System.out.println("Switching screens: " + currentScreen.getScreenName() + "
         // -> " + newScreen.getScreenName());
 

@@ -33,10 +33,10 @@ public class LoginController {
 
                     if (userType.equals("patron")) {
                         app.setLoggedInUser(Patron.findByEmail(email));
-                        app.setCurrentScreen(ScreenName.PATRON_DASHBOARD_SCREEN);
+                        app.setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
                     } else {
                         app.setLoggedInUser(Librarian.findByEmail(email));
-                        app.setCurrentScreen(ScreenName.LIBRARIAN_DASHBOARD_SCREEN);
+                        app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN);
                     }
 
                 } else {
@@ -49,7 +49,7 @@ public class LoginController {
         loginPage.getRegisterButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                app.setCurrentScreen(ScreenName.PATRON_REGISTRATION_SCREEN);
+                app.setCurrentScreen(Screen.PATRON_REGISTRATION_SCREEN);
             }
         });
     }
