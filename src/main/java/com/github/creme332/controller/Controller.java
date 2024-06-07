@@ -14,21 +14,26 @@ public class Controller {
 
     public Controller() {
         Frame frame = null;
-        
+        FrameController frameController = null;
         try {
             frame = new Frame();
+            frameController = new FrameController(app, frame);
         } catch (InvalidPathException e) {
             e.printStackTrace();
             System.exit(0);
         }
 
-        Registration patronRegistrationPage = (Registration) frame.getPage(ScreenName.PATRON_REGISTRATION_SCREEN);
+        Registration patronRegistrationPage = (Registration) frame.getPage(Screen.PATRON_REGISTRATION_SCREEN);
         new RegisterController(app, patronRegistrationPage);
 
-        Login loginPage = (Login) frame.getPage(ScreenName.LOGIN_SCREEN);
+        Login loginPage = (Login) frame.getPage(Screen.LOGIN_SCREEN);
         new LoginController(app, loginPage);
 
-        FrameController controller = new FrameController(app, frame);
-        controller.playAnimation();
+        new com.github.creme332.controller.patron.DashboardController(app,
+                (com.github.creme332.view.patron.Dashboard) frame
+                        .getPage(Screen.PATRON_DASHBOARD_SCREEN));
+
+        frameController.playAnimation();
+        // app.setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
     }
 }
