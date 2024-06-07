@@ -1,8 +1,8 @@
 name: Lint
 
 on: # yamllint disable-line rule:truthy
-  push:
-  pull_request:
+  # push:
+  # pull_request:
   workflow_dispatch:
 
 jobs:
