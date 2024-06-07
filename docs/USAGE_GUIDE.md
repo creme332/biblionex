@@ -11,11 +11,17 @@ sudo service mysql start
 Run the application:
 
 ```bash
-mvn exec:java -Dexec.mainClass=com.github.creme332.Main
+mvn exec:java -Dexec.mainClass=com.github.creme332.App
 ```
 
 ## Run tests
 
 ```bash
 mvn test
+```
+
+## Export database
+
+```bash
+mysqldump -u root -p --databases  biblionex > db/biblionex.sql
 ```

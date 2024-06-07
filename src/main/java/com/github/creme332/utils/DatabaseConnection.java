@@ -1,4 +1,4 @@
-package com.github.creme332.model;
+package com.github.creme332.utils;
 
 import io.github.cdimascio.dotenv.Dotenv;
 

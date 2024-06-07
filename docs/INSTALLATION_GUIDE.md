@@ -40,7 +40,7 @@ mvn clean install
 
 ## Database setup
 
-Create a MySQL database `biblionex`:
+Run the SQL script found in `db/biblionex.sql` to setup the database:
 
 ```bash
 mysql -u root -p < db/biblionex.sql

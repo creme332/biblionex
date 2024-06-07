@@ -1,11 +1,11 @@
 package com.github.creme332;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.github.creme332.controller.Controller;
+import com.github.creme332.view.MyTheme;
 
 public class App {
     public static void main(String[] args) {
-        FlatIntelliJLaf.setup();
+        MyTheme.setup();
         new Controller();
     }
 }
