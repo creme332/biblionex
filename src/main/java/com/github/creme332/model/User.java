@@ -1,5 +1,7 @@
 package com.github.creme332.model;
 
+import java.util.Arrays;
+
 public abstract class User {
     protected String email;
     protected String password;
@@ -8,6 +10,7 @@ public abstract class User {
     protected String firstName;
     protected String lastName;
     protected String phoneNo;
+    protected UserType userType;
 
     protected User(String email, String password, int userId, String address, String firstName, String lastName,
             String phoneNo) {
@@ -39,6 +42,30 @@ public abstract class User {
         this.firstName = "";
         this.lastName = "";
         this.phoneNo = "";
+    }
+
+    public boolean authenticate(String email, char[] enteredPassword) {
+        boolean isCorrect = true;
+
+        // check if emails do not match
+        if (!email.equals(this.email)) {
+            Arrays.fill(enteredPassword, '0');
+            return false;
+        }
+
+        // verify passwords
+        char[] correctPassword = this.password.toCharArray();
+        if (enteredPassword.length != correctPassword.length) {
+            isCorrect = false;
+        } else {
+            isCorrect = Arrays.equals(enteredPassword, correctPassword);
+        }
+
+        // Zero out the password for security purposes.
+        Arrays.fill(correctPassword, '0');
+        Arrays.fill(enteredPassword, '0');
+
+        return isCorrect;
     }
 
     public String getEmail() {
@@ -95,5 +122,9 @@ public abstract class User {
 
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
+    }
+
+    public UserType getUserType() {
+        return userType;
     }
 }

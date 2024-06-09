@@ -15,18 +15,21 @@ public class Librarian extends User {
             String phoneNo, String role) {
         super(email, password, userId, address, firstName, lastName, phoneNo);
         this.role = role;
+        this.userType = UserType.LIBRARIAN;
     }
 
     public Librarian(String email, String password, String address, String firstName, String lastName,
             String phoneNo, String role) {
         super(email, password, address, firstName, lastName, phoneNo);
         this.role = role;
+        this.userType = UserType.LIBRARIAN;
     }
 
     public Librarian() {
         // this constructor is for testing only
         super("admin@admin.com", "abcd", "street", "john", "peter", "432423423");
         this.role = "Chief Officer";
+        this.userType = UserType.LIBRARIAN;
     }
 
     public String getRole() {

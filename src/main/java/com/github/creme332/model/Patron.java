@@ -17,10 +17,12 @@ public class Patron extends User {
     public Patron(String email, String password, int userId, String address, String firstName, String lastName,
             String phoneNo) {
         super(email, password, userId, address, firstName, lastName, phoneNo);
+        userType = UserType.PATRON;
     }
 
     public Patron() {
         super();
+        userType = UserType.PATRON;
         creditCardNo = "";
     }
 
