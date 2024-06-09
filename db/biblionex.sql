@@ -102,30 +102,6 @@ LOCK TABLES `book_author` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `book_genre`
---
-
-DROP TABLE IF EXISTS `book_genre`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `book_genre` (
-  `material_id` int(11) unsigned NOT NULL,
-  `genre` varchar(255) NOT NULL,
-  PRIMARY KEY (`material_id`,`genre`),
-  CONSTRAINT `bookgenre_consk1` FOREIGN KEY (`material_id`) REFERENCES `book` (`material_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `book_genre`
---
-
-LOCK TABLES `book_genre` WRITE;
-/*!40000 ALTER TABLE `book_genre` DISABLE KEYS */;
-/*!40000 ALTER TABLE `book_genre` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `fine`
 --
 
@@ -179,30 +155,6 @@ CREATE TABLE `journal` (
 LOCK TABLES `journal` WRITE;
 /*!40000 ALTER TABLE `journal` DISABLE KEYS */;
 /*!40000 ALTER TABLE `journal` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `journal_scope`
---
-
-DROP TABLE IF EXISTS `journal_scope`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `journal_scope` (
-  `material_id` int(11) unsigned NOT NULL,
-  `scope` varchar(255) NOT NULL,
-  PRIMARY KEY (`material_id`,`scope`),
-  CONSTRAINT `journalscope_consk1` FOREIGN KEY (`material_id`) REFERENCES `journal` (`material_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `journal_scope`
---
-
-LOCK TABLES `journal_scope` WRITE;
-/*!40000 ALTER TABLE `journal_scope` DISABLE KEYS */;
-/*!40000 ALTER TABLE `journal_scope` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -333,6 +285,30 @@ CREATE TABLE `material_copy` (
 LOCK TABLES `material_copy` WRITE;
 /*!40000 ALTER TABLE `material_copy` DISABLE KEYS */;
 /*!40000 ALTER TABLE `material_copy` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `material_genre`
+--
+
+DROP TABLE IF EXISTS `material_genre`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `material_genre` (
+  `material_id` int(10) unsigned NOT NULL,
+  `genre` varchar(255) NOT NULL,
+  PRIMARY KEY (`material_id`,`genre`),
+  CONSTRAINT `material_genre_material_material_id_fk` FOREIGN KEY (`material_id`) REFERENCES `material` (`material_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `material_genre`
+--
+
+LOCK TABLES `material_genre` WRITE;
+/*!40000 ALTER TABLE `material_genre` DISABLE KEYS */;
+/*!40000 ALTER TABLE `material_genre` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -511,30 +487,6 @@ LOCK TABLES `video` WRITE;
 /*!40000 ALTER TABLE `video` DISABLE KEYS */;
 /*!40000 ALTER TABLE `video` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `video_genre`
---
-
-DROP TABLE IF EXISTS `video_genre`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `video_genre` (
-  `material_id` int(11) unsigned NOT NULL,
-  `genre` varchar(255) NOT NULL,
-  PRIMARY KEY (`material_id`,`genre`),
-  CONSTRAINT `video_genre_video_material_id_fk` FOREIGN KEY (`material_id`) REFERENCES `video` (`material_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `video_genre`
---
-
-LOCK TABLES `video_genre` WRITE;
-/*!40000 ALTER TABLE `video_genre` DISABLE KEYS */;
-/*!40000 ALTER TABLE `video_genre` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -545,4 +497,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-03 19:09:42
+-- Dump completed on 2024-06-09 17:50:52
