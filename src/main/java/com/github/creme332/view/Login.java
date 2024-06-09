@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 import org.kordamp.ikonli.swing.FontIcon;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
@@ -13,10 +15,11 @@ import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 public class Login extends JPanel {
     private JTextField emailField;
     private JPasswordField passwordField;
-    private JLabel errorLabel;
 
     private JButton loginButton;
     private JButton registerButton;
+
+    private final Border redBorder = new LineBorder(Color.red);
 
     public Login() {
         this.setLayout(new GridBagLayout());
@@ -91,14 +94,6 @@ public class Login extends JPanel {
         registerButton.setFocusPainted(false);
         registerButton.setBackground(null);
         formContainer.add(registerButton);
-
-        // Create success message label
-        errorLabel = new JLabel("Invalid credentials");
-        errorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);// 0.0
-
-        errorLabel.setVisible(false);
-        formContainer.add(errorLabel);
-
     }
 
     public String getEmail() {
@@ -118,10 +113,7 @@ public class Login extends JPanel {
     }
 
     public void showError() {
-        errorLabel.setVisible(true);
-    }
-
-    public void hideError() {
-        errorLabel.setVisible(false);
+        emailField.setBorder(redBorder);
+        passwordField.setBorder(redBorder);
     }
 }
