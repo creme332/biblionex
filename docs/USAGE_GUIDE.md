@@ -22,6 +22,8 @@ mvn test
 
 ## Export database
 
+To export the database using `mysqldump` (v10):
+
 ```bash
 mysqldump -u root -p --databases  biblionex > db/biblionex.sql
 ```
