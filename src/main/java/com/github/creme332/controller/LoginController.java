@@ -2,6 +2,10 @@ package com.github.creme332.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Librarian;
@@ -22,8 +26,8 @@ public class LoginController {
         this.loginPage = loginPage;
         this.app = app;
 
-        // Add action listener to login button
-        loginPage.getLoginButton().addActionListener(new ActionListener() {
+        // Create a common ActionListener for login logic
+        ActionListener loginAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String email = loginPage.getEmail();
@@ -55,10 +59,28 @@ public class LoginController {
                     app.setLoggedInUser(Librarian.findByEmail(email));
                     app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN);
                 }
-
             }
-        });
+        };
 
+        // Add action listener to login button
+        loginPage.getLoginButton().addActionListener(loginAction);
+
+        // Add key bindings to emailField and passwordField
+        Action loginSubmitAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loginAction.actionPerformed(e);
+            }
+        };
+
+        loginPage.getEmailField().getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ENTER"), "submit");
+        loginPage.getEmailField().getActionMap().put("submit", loginSubmitAction);
+
+        loginPage.getPasswordField().getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ENTER"),
+                "submit");
+        loginPage.getPasswordField().getActionMap().put("submit", loginSubmitAction);
+
+        // Add action listener to register button
         loginPage.getRegisterButton().addActionListener(e -> app.setCurrentScreen(Screen.PATRON_REGISTRATION_SCREEN));
     }
 }
