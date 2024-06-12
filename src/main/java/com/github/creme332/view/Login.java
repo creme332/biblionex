@@ -116,4 +116,12 @@ public class Login extends JPanel {
         emailField.setBorder(redBorder);
         passwordField.setBorder(redBorder);
     }
+
+    public JTextField getEmailField() {
+        return emailField;
+    }
+
+    public JPasswordField getPasswordField() {
+        return passwordField;
+    }
 }
