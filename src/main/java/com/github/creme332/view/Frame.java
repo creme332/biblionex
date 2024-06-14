@@ -1,7 +1,7 @@
 package com.github.creme332.view;
 
 import java.awt.*;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import javax.swing.*;
@@ -24,7 +24,7 @@ public class Frame extends JFrame {
     private JPanel cardPanels = new JPanel(cardLayout); // a container for all screens
 
     // a map that maps a screen name to screen
-    private Map<Screen, JPanel> screenMapper = new HashMap<Screen, JPanel>();
+    private Map<Screen, JPanel> screenMapper = new EnumMap<>(Screen.class);
 
     public Frame() throws InvalidPathException {
         // set frame title
@@ -37,13 +37,13 @@ public class Frame extends JFrame {
         this.setResizable(true);
 
         // add close button to frame
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // set application icon
         this.setIconImage(new IconLoader().loadIcon("/icons/stack-of-books.png").getImage());
 
         // center frame on startup if frame is not maximized
-        if (this.getExtendedState() != JFrame.MAXIMIZED_BOTH) {
+        if (this.getExtendedState() != MAXIMIZED_BOTH) {
             this.setLocationRelativeTo(null);
         }
 
@@ -56,15 +56,15 @@ public class Frame extends JFrame {
         // to add new screens to frame, add a new line here...
 
         // add screens to cardPanels
-        for (Screen screenName : screenMapper.keySet()) {
-            cardPanels.add(screenMapper.get(screenName), screenName.getScreenName());
+        for (Map.Entry<Screen, JPanel> entry : screenMapper.entrySet()) {
+            cardPanels.add(entry.getValue(), entry.getKey().getScreenName());
         }
 
         // add cardPanels to frame
         this.add(cardPanels);
 
         this.pack();
-        
+
         // display frame
         this.setVisible(true);
     }

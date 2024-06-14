@@ -1,15 +1,16 @@
 package com.github.creme332.model;
 
 public class Material {
-    private int materialId;
-    private int publisherId;
-    private String description;
-    private String imageUrl;
-    private int ageRestriction;
-    private String type;
-    private String title;
+    protected int materialId;
+    protected int publisherId;
+    protected String description;
+    protected String imageUrl;
+    protected int ageRestriction;
+    protected MaterialType type;
+    protected String title;
 
-    public Material(int materialId, int publisherId, String description, String imageUrl, int ageRestriction, String type, String title) {
+    public Material(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
+            MaterialType type, String title) {
         this.materialId = materialId;
         this.publisherId = publisherId;
         this.description = description;
@@ -59,11 +60,11 @@ public class Material {
         this.ageRestriction = ageRestriction;
     }
 
-    public String getType() {
+    public MaterialType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(MaterialType type) {
         this.type = type;
     }
 

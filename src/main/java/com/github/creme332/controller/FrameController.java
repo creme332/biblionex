@@ -24,27 +24,26 @@ public class FrameController implements PropertyChangeListener {
      */
     public void playAnimation() {
         Timer timer = new Timer();
-        TimerTask showMainScreen;
+        TimerTask showNextScreen;
         final long animationDuration = 800; // ms
 
-        app.setCurrentScreen(Screen.SPLASH_SCREEN);
+        frame.switchToScreen(Screen.SPLASH_SCREEN);
 
-        // show login screen when timer has elapsed
-        showMainScreen = new TimerTask() {
+        // show screen set by AppState when timer has elapsed
+        showNextScreen = new TimerTask() {
             @Override
             public void run() {
-                app.setCurrentScreen(Screen.LOGIN_SCREEN);
+                frame.switchToScreen(app.getCurrentScreen());
                 timer.cancel();
                 timer.purge();
             }
         };
-        timer.schedule(showMainScreen, animationDuration);
+        timer.schedule(showNextScreen, animationDuration);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         String propertyName = e.getPropertyName();
-
         if ("currentScreen".equals(propertyName)) {
             frame.switchToScreen((Screen) e.getNewValue());
         }
