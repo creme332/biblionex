@@ -20,7 +20,8 @@ public class Loan {
     private String dueDate;
     private int renewalCount;
 
-    public Loan(int loanId, int patronId, int barcode, int checkoutLibrarianId, int checkinLibrarianId, String issueDate, String returnDate, String dueDate, int renewalCount) {
+    public Loan(int loanId, int patronId, int barcode, int checkoutLibrarianId, int checkinLibrarianId,
+            String issueDate, String returnDate, String dueDate, int renewalCount) {
         this.loanId = loanId;
         this.patronId = patronId;
         this.barcode = barcode;
@@ -85,8 +86,7 @@ public class Loan {
                         resultSet.getString("issue_date"),
                         resultSet.getString("return_date"),
                         resultSet.getString("due_date"),
-                        resultSet.getInt("renewal_count")
-                );
+                        resultSet.getInt("renewal_count"));
                 loans.add(loan);
             }
         } catch (SQLException e) {
@@ -111,8 +111,7 @@ public class Loan {
                         resultSet.getString("issue_date"),
                         resultSet.getString("return_date"),
                         resultSet.getString("due_date"),
-                        resultSet.getInt("renewal_count")
-                );
+                        resultSet.getInt("renewal_count"));
                 loans.add(loan);
             }
         } catch (SQLException e) {

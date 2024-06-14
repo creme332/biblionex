@@ -43,8 +43,7 @@ public class VendorMaterial {
                 VendorMaterial vendorMaterial = new VendorMaterial(
                         resultSet.getInt("vendor_id"),
                         resultSet.getInt("material_id"),
-                        resultSet.getDouble("unit_price")
-                );
+                        resultSet.getDouble("unit_price"));
                 vendorMaterials.add(vendorMaterial);
             }
         } catch (SQLException e) {
@@ -63,8 +62,7 @@ public class VendorMaterial {
                 VendorMaterial vendorMaterial = new VendorMaterial(
                         resultSet.getInt("vendor_id"),
                         resultSet.getInt("material_id"),
-                        resultSet.getDouble("unit_price")
-                );
+                        resultSet.getDouble("unit_price"));
                 vendorMaterials.add(vendorMaterial);
             }
         } catch (SQLException e) {

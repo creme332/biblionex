@@ -24,8 +24,9 @@ public class Publisher {
 
     /**
      * Finds publishers by the specified column and value.
+     * 
      * @param column The column name to search by.
-     * @param value The value to search for in the specified column.
+     * @param value  The value to search for in the specified column.
      * @return A list of publishers matching the search criteria.
      */
     public static List<Publisher> findBy(String column, String value) {
@@ -48,6 +49,7 @@ public class Publisher {
 
     /**
      * Retrieves all publishers from the database.
+     * 
      * @return A list of all publishers.
      */
     public static List<Publisher> findAll() {
@@ -69,6 +71,7 @@ public class Publisher {
 
     /**
      * Saves a new publisher to the database.
+     * 
      * @param publisher The publisher to save.
      */
     public static void save(Publisher publisher) {
@@ -86,6 +89,7 @@ public class Publisher {
 
     /**
      * Updates an existing publisher in the database.
+     * 
      * @param publisher The publisher to update.
      */
     public static void update(Publisher publisher) {
@@ -104,6 +108,7 @@ public class Publisher {
 
     /**
      * Deletes a publisher from the database by ID.
+     * 
      * @param id The ID of the publisher to delete.
      */
     public static void delete(int id) {
