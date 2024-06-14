@@ -5,8 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.sql.Date;
 
 import com.github.creme332.utils.DatabaseConnection;
 
@@ -16,9 +16,11 @@ public class Patron extends User {
     private Date birthDate;
 
     public Patron(String email, String password, int userId, String address, String firstName, String lastName,
-            String phoneNo) {
+            String phoneNo, String creditCardNo, Date birthDate) {
         super(email, password, userId, address, firstName, lastName, phoneNo);
         userType = UserType.PATRON;
+        this.creditCardNo = creditCardNo;
+        this.birthDate = birthDate;
     }
 
     public Patron() {
@@ -29,7 +31,7 @@ public class Patron extends User {
 
     public static void save(Patron patron) {
         final Connection conn = DatabaseConnection.getConnection();
-        String query = "INSERT INTO patron (address, password, last_name, first_name, phone_no, email, registration_date, birth_date, credit_card_no) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO patron (address, password, last_name, first_name, phone_no, email, birth_date, credit_card_no) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, patron.getAddress());
@@ -38,9 +40,8 @@ public class Patron extends User {
             preparedStatement.setString(4, patron.getFirstName());
             preparedStatement.setString(5, patron.getPhoneNo());
             preparedStatement.setString(6, patron.getEmail());
-            preparedStatement.setDate(7, new java.sql.Date(patron.getRegistrationDate().getTime()));
-            preparedStatement.setDate(8, new java.sql.Date(patron.getBirthDate().getTime()));
-            preparedStatement.setString(9, patron.getCreditCardNo());
+            preparedStatement.setDate(7, patron.getBirthDate());
+            preparedStatement.setString(8, patron.getCreditCardNo());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -58,7 +59,7 @@ public class Patron extends User {
             preparedStatement.setString(4, patron.getFirstName());
             preparedStatement.setString(5, patron.getPhoneNo());
             preparedStatement.setString(6, patron.getEmail());
-            preparedStatement.setDate(7, new java.sql.Date(patron.getBirthDate().getTime()));
+            preparedStatement.setDate(7, patron.getBirthDate());
             preparedStatement.setString(8, patron.getCreditCardNo());
             preparedStatement.setInt(9, patron.getUserId());
             preparedStatement.executeUpdate();
