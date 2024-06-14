@@ -31,7 +31,7 @@ public class Patron extends User {
 
     public static void save(Patron patron) {
         final Connection conn = DatabaseConnection.getConnection();
-        String query = "INSERT INTO patron (address, password, last_name, first_name, phone_no, email) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO patron (address, password, last_name, first_name, phone_no, email, credit_card_no) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, patron.getAddress());
@@ -40,6 +40,7 @@ public class Patron extends User {
             preparedStatement.setString(4, patron.getFirstName());
             preparedStatement.setString(5, patron.getPhoneNo());
             preparedStatement.setString(6, patron.getEmail());
+            preparedStatement.setString(7, patron.getCreditCardNo());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -150,5 +151,12 @@ public class Patron extends User {
             e.printStackTrace();
         }
         return patrons;
+    }
+    public String getCreditCardNo() {
+        return creditCardNo;
+    }
+
+    public void setCreditCardNo(String creditCardNo) {
+        this.creditCardNo = creditCardNo;
     }
 }

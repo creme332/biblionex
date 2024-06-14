@@ -1,6 +1,9 @@
 package com.github.creme332.view.patron;
 
 import javax.swing.*;
+
+import com.github.creme332.utils.IconLoader;
+
 import java.awt.*;
 
 public class Registration extends JPanel {
@@ -16,77 +19,180 @@ public class Registration extends JPanel {
     private JTextField CCNField;
     private JLabel success;
     private JButton registerButton;
-    private JButton loginButton;
+    private JButton backButton;
 
     public Registration() {
         this.setLayout(new BorderLayout());
 
         // Header
-        JPanel headerPanel = new JPanel();
-        headerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JButton backButton = new JButton("Back");
-        headerPanel.add(backButton);
-        JLabel heading = new JLabel("Patron Registration Form");
-        headerPanel.add(heading);
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        backButton = new JButton("Back");
+        headerPanel.add(backButton, BorderLayout.WEST);
+        JLabel heading = new JLabel("Patron Registration Form", JLabel.CENTER);
+        heading.setFont(new Font("Serif", Font.BOLD, 25));
+        headerPanel.add(heading, BorderLayout.CENTER);
         add(headerPanel, BorderLayout.NORTH);
 
         // Form
         JPanel formPanel = new JPanel();
-        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        formPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        Font labelFont = new Font("Serif", Font.PLAIN, 15);
+        Font inputFont = new Font("Serif", Font.PLAIN, 15);
 
         // Personal details
-        formPanel.add(new JLabel("Personal details"));
-        JPanel personalDetailsPanel = new JPanel(new GridLayout(4, 2, 10, 10));
-        personalDetailsPanel.add(new JLabel("First Name:"));
-        firstNameField = new JTextField(20);
-        personalDetailsPanel.add(firstNameField);
-        personalDetailsPanel.add(new JLabel("Last Name:"));
-        lastNameField = new JTextField(20);
-        personalDetailsPanel.add(lastNameField);
-        personalDetailsPanel.add(new JLabel("Email Address:"));
-        emailField = new JTextField(20);
-        personalDetailsPanel.add(emailField);
-        personalDetailsPanel.add(new JLabel("Phone Number:"));
-        phoneField = new JTextField(20);
-        personalDetailsPanel.add(phoneField);
-        personalDetailsPanel.add(new JLabel("Home Address:"));
-        addressField = new JTextField(20);
-        personalDetailsPanel.add(addressField);
-        formPanel.add(personalDetailsPanel);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        JLabel personalDetailsLabel = new JLabel("Personal details");
+        personalDetailsLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        formPanel.add(personalDetailsLabel, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridy = 1;
+        JLabel firstNameLabel = new JLabel("First Name:");
+        firstNameLabel.setFont(labelFont);
+        formPanel.add(firstNameLabel, gbc);
+        gbc.gridy = 2;
+        firstNameField = new JTextField(15);
+        firstNameField.setFont(inputFont);
+        formPanel.add(firstNameField, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        JLabel lastNameLabel = new JLabel("Last Name:");
+        lastNameLabel.setFont(labelFont);
+        formPanel.add(lastNameLabel, gbc);
+        gbc.gridy = 2;
+        lastNameField = new JTextField(15);
+        lastNameField.setFont(inputFont);
+        formPanel.add(lastNameField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        JLabel emailLabel = new JLabel("Email Address:");
+        emailLabel.setFont(labelFont);
+        formPanel.add(emailLabel, gbc);
+        gbc.gridy = 4;
+        emailField = new JTextField(15);
+        emailField.setFont(inputFont);
+        formPanel.add(emailField, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        JLabel phoneLabel = new JLabel("Phone Number:");
+        phoneLabel.setFont(labelFont);
+        formPanel.add(phoneLabel, gbc);
+        gbc.gridy = 4;
+        phoneField = new JTextField(15);
+        phoneField.setFont(inputFont);
+        formPanel.add(phoneField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 2;
+        JLabel addressLabel = new JLabel("Home Address:");
+        addressLabel.setFont(labelFont);
+        formPanel.add(addressLabel, gbc);
+        gbc.gridy = 6;
+        addressField = new JTextField(15);
+        addressField.setFont(inputFont);
+        formPanel.add(addressField, gbc);
 
         // Payment information
-        formPanel.add(new JLabel("Payment information"));
-        JPanel paymentInfoPanel = new JPanel(new GridLayout(2, 3, 10, 10));
-        paymentInfoPanel.add(new JLabel("Credit Card Number:"));
-        CCNField = new JTextField(20);
-        paymentInfoPanel.add(CCNField);
-        paymentInfoPanel.add(new JLabel("")); // Placeholder for icons
-        paymentInfoPanel.add(new JLabel("Expiry date:"));
-        expiryDateField = new JTextField(20);
-        paymentInfoPanel.add(expiryDateField);
-        paymentInfoPanel.add(new JLabel("Security code:"));
-        securityCodeField = new JTextField(20);
-        paymentInfoPanel.add(securityCodeField);
-        formPanel.add(paymentInfoPanel);
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.gridwidth = 2;
+        JLabel paymentInfoLabel = new JLabel("Payment information");
+        paymentInfoLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        formPanel.add(paymentInfoLabel, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridy = 8;
+        JLabel ccNumberLabel = new JLabel("Credit Card Number:");
+        ccNumberLabel.setFont(labelFont);
+        formPanel.add(ccNumberLabel, gbc);
+        gbc.gridy = 9;
+        CCNField = new JTextField(15);
+        CCNField.setFont(inputFont);
+        formPanel.add(CCNField, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 8;
+        IconLoader iconLoader = new IconLoader();
+        try {
+            // Add an appropriate image icon 'Credit Card'
+            ImageIcon ccIcon = iconLoader.loadIcon("", 20);
+            JLabel ccIconLabel = new JLabel(ccIcon);
+            formPanel.add(ccIconLabel, gbc);
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle the exception as needed
+        }
+        gbc.gridy = 9;
+
+        gbc.gridx = 0;
+        gbc.gridy = 10;
+        JLabel expiryDateLabel = new JLabel("Expiry date:");
+        expiryDateLabel.setFont(labelFont);
+        formPanel.add(expiryDateLabel, gbc);
+        gbc.gridy = 11;
+        expiryDateField = new JTextField(15);
+        expiryDateField.setFont(inputFont);
+        formPanel.add(expiryDateField, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 10;
+        JLabel securityCodeLabel = new JLabel("Security code:");
+        securityCodeLabel.setFont(labelFont);
+        formPanel.add(securityCodeLabel, gbc);
+        gbc.gridy = 11;
+        securityCodeField = new JTextField(5);
+        securityCodeField.setFont(inputFont);
+        formPanel.add(securityCodeField, gbc);
 
         // Account information
-        formPanel.add(new JLabel("Account information"));
-        JPanel accountInfoPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        accountInfoPanel.add(new JLabel("Password:"));
-        passwordField = new JPasswordField(20);
-        accountInfoPanel.add(passwordField);
-        accountInfoPanel.add(new JLabel("Confirm Password:"));
-        confirmPasswordField = new JPasswordField(20);
-        accountInfoPanel.add(confirmPasswordField);
-        formPanel.add(accountInfoPanel);
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.gridwidth = 2;
+        JLabel accountInfoLabel = new JLabel("Account information");
+        accountInfoLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        formPanel.add(accountInfoLabel, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridy = 13;
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setFont(labelFont);
+        formPanel.add(passwordLabel, gbc);
+        gbc.gridy = 14;
+        passwordField = new JPasswordField(15);
+        passwordField.setFont(inputFont);
+        formPanel.add(passwordField, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 13;
+        JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
+        confirmPasswordLabel.setFont(labelFont);
+        formPanel.add(confirmPasswordLabel, gbc);
+        gbc.gridy = 14;
+        confirmPasswordField = new JPasswordField(15);
+        confirmPasswordField.setFont(inputFont);
+        formPanel.add(confirmPasswordField, gbc);
 
         // Register button
+        gbc.gridx = 0;
+        gbc.gridy = 15;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
         registerButton = new JButton("Register");
-        formPanel.add(registerButton);
+        formPanel.add(registerButton, gbc);
 
         // Success message
+        gbc.gridy = 16;
         success = new JLabel("");
-        formPanel.add(success);
+        formPanel.add(success, gbc);
 
         add(formPanel, BorderLayout.CENTER);
     }
