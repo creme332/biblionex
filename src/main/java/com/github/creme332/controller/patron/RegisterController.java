@@ -2,16 +2,12 @@ package com.github.creme332.controller.patron;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 
 import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Patron;
 import com.github.creme332.view.patron.Registration;
 
-/**
- * Controller for registration page
- */
 public class RegisterController {
     Registration registrationPage;
     AppState app;
@@ -49,6 +45,14 @@ public class RegisterController {
                 Patron.save(patron);
                 
                 registrationPage.setSuccessMessage("Registration successful. Please log in.");
+                app.setCurrentScreen(Screen.LOGIN_SCREEN);
+            }
+        });
+
+        // Add action listener to back button
+        registrationPage.getBackButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 app.setCurrentScreen(Screen.LOGIN_SCREEN);
             }
         });

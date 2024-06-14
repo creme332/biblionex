@@ -36,8 +36,9 @@ public class Registration extends JPanel {
         // Form
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new GridBagLayout());
+        formPanel.setPreferredSize(new Dimension(2000, 1000));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        // gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         Font labelFont = new Font("Serif", Font.PLAIN, 15);
@@ -111,86 +112,90 @@ public class Registration extends JPanel {
         formPanel.add(paymentInfoLabel, gbc);
 
         gbc.gridwidth = 1;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         JLabel ccNumberLabel = new JLabel("Credit Card Number:");
         ccNumberLabel.setFont(labelFont);
         formPanel.add(ccNumberLabel, gbc);
-        gbc.gridy = 9;
-        CCNField = new JTextField(15);
-        CCNField.setFont(inputFont);
-        formPanel.add(CCNField, gbc);
 
+        gbc.gridx = 2;
         gbc.gridx = 1;
         gbc.gridy = 8;
+        gbc.gridheight = 3;
         IconLoader iconLoader = new IconLoader();
         try {
-            // Add an appropriate image icon 'Credit Card'
-            ImageIcon ccIcon = iconLoader.loadIcon("", 20);
+            // Load and scale the image
+            ImageIcon ccIcon = iconLoader.loadIcon("/icons/credit_card.png", 120);
             JLabel ccIconLabel = new JLabel(ccIcon);
             formPanel.add(ccIconLabel, gbc);
         } catch (Exception e) {
             e.printStackTrace(); // Handle the exception as needed
         }
-        gbc.gridy = 9;
+        gbc.gridheight = 1;
 
         gbc.gridx = 0;
         gbc.gridy = 10;
+        CCNField = new JTextField(15);
+        CCNField.setFont(inputFont);
+        formPanel.add(CCNField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 11;
         JLabel expiryDateLabel = new JLabel("Expiry date:");
         expiryDateLabel.setFont(labelFont);
         formPanel.add(expiryDateLabel, gbc);
-        gbc.gridy = 11;
+        gbc.gridy = 12;
         expiryDateField = new JTextField(15);
         expiryDateField.setFont(inputFont);
         formPanel.add(expiryDateField, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 10;
+        gbc.gridy = 11;
         JLabel securityCodeLabel = new JLabel("Security code:");
         securityCodeLabel.setFont(labelFont);
         formPanel.add(securityCodeLabel, gbc);
-        gbc.gridy = 11;
-        securityCodeField = new JTextField(5);
+        gbc.gridy = 12;
+        securityCodeField = new JTextField(15);
         securityCodeField.setFont(inputFont);
         formPanel.add(securityCodeField, gbc);
 
         // Account information
         gbc.gridx = 0;
-        gbc.gridy = 12;
+        gbc.gridy = 13;
         gbc.gridwidth = 2;
         JLabel accountInfoLabel = new JLabel("Account information");
         accountInfoLabel.setFont(new Font("Serif", Font.BOLD, 20));
         formPanel.add(accountInfoLabel, gbc);
 
         gbc.gridwidth = 1;
-        gbc.gridy = 13;
+        gbc.gridy = 14;
         JLabel passwordLabel = new JLabel("Password:");
         passwordLabel.setFont(labelFont);
         formPanel.add(passwordLabel, gbc);
-        gbc.gridy = 14;
+        gbc.gridy = 15;
         passwordField = new JPasswordField(15);
         passwordField.setFont(inputFont);
         formPanel.add(passwordField, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 13;
+        gbc.gridy = 14;
         JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
         confirmPasswordLabel.setFont(labelFont);
         formPanel.add(confirmPasswordLabel, gbc);
-        gbc.gridy = 14;
+        gbc.gridy = 15;
         confirmPasswordField = new JPasswordField(15);
         confirmPasswordField.setFont(inputFont);
         formPanel.add(confirmPasswordField, gbc);
 
         // Register button
         gbc.gridx = 0;
-        gbc.gridy = 15;
+        gbc.gridy = 16;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         registerButton = new JButton("Register");
         formPanel.add(registerButton, gbc);
 
         // Success message
-        gbc.gridy = 16;
+        gbc.gridy = 17;
         success = new JLabel("");
         formPanel.add(success, gbc);
 
@@ -199,6 +204,10 @@ public class Registration extends JPanel {
 
     public JButton getRegisterButton() {
         return registerButton;
+    }
+
+    public JButton getBackButton() {
+        return backButton;
     }
 
     public String getEmail() {
