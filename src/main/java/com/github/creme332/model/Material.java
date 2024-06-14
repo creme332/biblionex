@@ -6,11 +6,11 @@ public class Material {
     protected String description;
     protected String imageUrl;
     protected int ageRestriction;
-    protected String type;
+    protected MaterialType type;
     protected String title;
 
     public Material(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
-            String type, String title) {
+            MaterialType type, String title) {
         this.materialId = materialId;
         this.publisherId = publisherId;
         this.description = description;
@@ -60,11 +60,11 @@ public class Material {
         this.ageRestriction = ageRestriction;
     }
 
-    public String getType() {
+    public MaterialType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(MaterialType type) {
         this.type = type;
     }
 
