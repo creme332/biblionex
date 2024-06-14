@@ -34,6 +34,5 @@ public class Controller {
                         .getPage(Screen.PATRON_DASHBOARD_SCREEN));
 
         frameController.playAnimation();
-        // app.setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
     }
 }

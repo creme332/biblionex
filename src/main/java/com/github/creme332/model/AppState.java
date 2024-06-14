@@ -6,7 +6,7 @@ import java.beans.PropertyChangeSupport;
 import com.github.creme332.controller.Screen;
 
 public class AppState {
-    private Screen currentScreen;
+    private Screen currentScreen = Screen.LOGIN_SCREEN;
     private PropertyChangeSupport support;
     private User loggedInUser;
 
@@ -23,11 +23,8 @@ public class AppState {
     }
 
     public void setCurrentScreen(Screen newScreen) {
-        // System.out.println("Switching screens: " + currentScreen.getScreenName() + "
-        // -> " + newScreen.getScreenName());
-
-        if (currentScreen == newScreen)
-            return;
+        // System.out.println("Switching screens: " + currentScreen.getScreenName() +
+        // "-> " + newScreen.getScreenName());
         support.firePropertyChange("currentScreen", currentScreen, newScreen);
         currentScreen = newScreen;
     }
