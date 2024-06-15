@@ -5,11 +5,9 @@ import java.awt.event.ActionListener;
 
 import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
+import com.github.creme332.model.Patron;
 import com.github.creme332.view.patron.Registration;
 
-/**
- * Controller for registration page
- */
 public class RegisterController {
     Registration registrationPage;
     AppState app;
@@ -22,24 +20,38 @@ public class RegisterController {
         registrationPage.getRegisterButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                char[] user = registrationPage.getEnteredUser();
-                String password = new String(registrationPage.getEnteredText());
+                String email = registrationPage.getEmail();
+                char[] password = registrationPage.getPassword();
+                char[] confirmPassword = registrationPage.getConfirmPassword();
+                String firstName = registrationPage.getFirstName();
+                String lastName = registrationPage.getLastName();
+                String phone = registrationPage.getPhone();
+                String address = registrationPage.getAddress();
+                String creditCardNo = registrationPage.getCreditCardNo();
+                String expiryDate = registrationPage.getExpiryDate();
+                String securityCode = registrationPage.getSecurityCode();
 
-                // Hardcoded username and password for validation
-                if (user.equals("admin") && password.equals("password")) {
-                    System.out.println("Registration successful. Must switch to dashboard screen...");
-                    app.setCurrentScreen(Screen.LOGIN_SCREEN);
-                } else {
-                    registrationPage.setErrorMessage("Invalid info!");
+                if (!new String(password).equals(new String(confirmPassword))) {
+                    registrationPage.setErrorMessage("Passwords do not match!");
+                    return;
                 }
-            }
-        });
 
-        registrationPage.getLoginButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+                if (email.isEmpty() || password.length == 0 || firstName.isEmpty() || lastName.isEmpty()
+                        || phone.isEmpty() || address.isEmpty()) {
+                    registrationPage.setErrorMessage("All fields must be filled out!");
+                    return;
+                }
+
+                Patron patron = new Patron(email, new String(password), address, firstName, lastName, phone,
+                        creditCardNo, null);
+                Patron.save(patron);
+
+                registrationPage.setSuccessMessage("Registration successful. Please log in.");
                 app.setCurrentScreen(Screen.LOGIN_SCREEN);
             }
         });
+
+        // Add action listener to back button
+        registrationPage.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LOGIN_SCREEN));
     }
 }
