@@ -1,6 +1,10 @@
 package com.github.creme332.view.patron;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
+import org.kordamp.ikonli.swing.FontIcon;
 
 import com.github.creme332.utils.IconLoader;
 
@@ -16,105 +20,112 @@ public class Registration extends JPanel {
     private JTextField addressField;
     private JTextField expiryDateField;
     private JTextField securityCodeField;
-    private JTextField CCNField;
-    private JLabel success;
+    private JTextField creditCardField;
+    private JLabel errorLabel;
     private JButton registerButton;
     private JButton backButton;
+
+    public JLabel createLegend(String name) {
+        JLabel legend = new JLabel(name);
+        legend.putClientProperty("FlatLaf.style", "font: $h2.font");
+        return legend;
+    }
+
+    public JPanel createHeaderPanel() {
+        JPanel headerPanel = new JPanel(new BorderLayout());
+
+        // add padding
+        headerPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
+
+        // create backButton
+        backButton = new JButton();
+        FontIcon backIcon = FontIcon.of(BootstrapIcons.ARROW_LEFT, 40);
+        backIcon.setIconColor(Color.white);
+        backButton.setIcon(backIcon);
+        
+        headerPanel.add(backButton, BorderLayout.WEST);
+
+        // create form title
+        JLabel heading = new JLabel("Patron Registration Form", JLabel.CENTER);
+        heading.putClientProperty("FlatLaf.style", "font: $h1.font");
+        headerPanel.add(heading, BorderLayout.CENTER);
+
+        return headerPanel;
+    }
 
     public Registration() {
         this.setLayout(new BorderLayout());
 
-        // Header
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        backButton = new JButton("Back");
-        headerPanel.add(backButton, BorderLayout.WEST);
-        JLabel heading = new JLabel("Patron Registration Form", JLabel.CENTER);
-        heading.setFont(new Font("Serif", Font.BOLD, 25));
-        headerPanel.add(heading, BorderLayout.CENTER);
-        add(headerPanel, BorderLayout.NORTH);
+        // add Header
+        add(createHeaderPanel(), BorderLayout.NORTH);
 
-        // Form
-        JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridBagLayout());
-        formPanel.setPreferredSize(new Dimension(2000, 1000));
+        // add Form
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        add(formPanel, BorderLayout.CENTER);
+
+        // define layout constraints for form
         GridBagConstraints gbc = new GridBagConstraints();
-        // gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        Font labelFont = new Font("Serif", Font.PLAIN, 15);
-        Font inputFont = new Font("Serif", Font.PLAIN, 15);
-
-        // Personal details
+        // add Personal details legend
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        JLabel personalDetailsLabel = new JLabel("Personal details");
-        personalDetailsLabel.setFont(new Font("Serif", Font.BOLD, 20));
-        formPanel.add(personalDetailsLabel, gbc);
+        JLabel personalLegend = createLegend("Personal details");
+        formPanel.add(personalLegend, gbc);
 
         gbc.gridwidth = 1;
         gbc.gridy = 1;
-        JLabel firstNameLabel = new JLabel("First Name:");
-        firstNameLabel.setFont(labelFont);
+        JLabel firstNameLabel = new JLabel("First Name");
         formPanel.add(firstNameLabel, gbc);
         gbc.gridy = 2;
         firstNameField = new JTextField(15);
-        firstNameField.setFont(inputFont);
         formPanel.add(firstNameField, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 1;
-        JLabel lastNameLabel = new JLabel("Last Name:");
-        lastNameLabel.setFont(labelFont);
+        JLabel lastNameLabel = new JLabel("Last Name");
         formPanel.add(lastNameLabel, gbc);
         gbc.gridy = 2;
         lastNameField = new JTextField(15);
-        lastNameField.setFont(inputFont);
         formPanel.add(lastNameField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
-        JLabel emailLabel = new JLabel("Email Address:");
-        emailLabel.setFont(labelFont);
+        JLabel emailLabel = new JLabel("Email Address");
         formPanel.add(emailLabel, gbc);
         gbc.gridy = 4;
         emailField = new JTextField(15);
-        emailField.setFont(inputFont);
         formPanel.add(emailField, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 3;
-        JLabel phoneLabel = new JLabel("Phone Number:");
-        phoneLabel.setFont(labelFont);
+        JLabel phoneLabel = new JLabel("Phone Number");
         formPanel.add(phoneLabel, gbc);
         gbc.gridy = 4;
         phoneField = new JTextField(15);
-        phoneField.setFont(inputFont);
         formPanel.add(phoneField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.gridwidth = 2;
-        JLabel addressLabel = new JLabel("Home Address:");
-        addressLabel.setFont(labelFont);
+        JLabel addressLabel = new JLabel("Home Address");
         formPanel.add(addressLabel, gbc);
         gbc.gridy = 6;
         addressField = new JTextField(15);
-        addressField.setFont(inputFont);
         formPanel.add(addressField, gbc);
 
         // Payment information
         gbc.gridx = 0;
         gbc.gridy = 7;
         gbc.gridwidth = 2;
-        JLabel paymentInfoLabel = new JLabel("Payment information");
-        paymentInfoLabel.setFont(new Font("Serif", Font.BOLD, 20));
-        formPanel.add(paymentInfoLabel, gbc);
+        JLabel paymentLegend = createLegend("Payment information");
+        formPanel.add(paymentLegend, gbc);
 
         gbc.gridwidth = 1;
         gbc.gridy = 9;
-        JLabel ccNumberLabel = new JLabel("Credit Card Number:");
-        ccNumberLabel.setFont(labelFont);
+        JLabel ccNumberLabel = new JLabel("Credit Card Number");
         formPanel.add(ccNumberLabel, gbc);
 
         gbc.gridx = 2;
@@ -124,82 +135,71 @@ public class Registration extends JPanel {
         IconLoader iconLoader = new IconLoader();
         try {
             // Load and scale the image
-            ImageIcon ccIcon = iconLoader.loadIcon("/icons/credit_card.png", 120);
+            ImageIcon ccIcon = iconLoader.loadIcon("/icons/credit_card.png", 100, 413);
             JLabel ccIconLabel = new JLabel(ccIcon);
             formPanel.add(ccIconLabel, gbc);
         } catch (Exception e) {
             e.printStackTrace(); // Handle the exception as needed
+            System.exit(0);
         }
         gbc.gridheight = 1;
 
         gbc.gridx = 0;
         gbc.gridy = 10;
-        CCNField = new JTextField(15);
-        CCNField.setFont(inputFont);
-        formPanel.add(CCNField, gbc);
+        creditCardField = new JTextField(15);
+        formPanel.add(creditCardField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 11;
-        JLabel expiryDateLabel = new JLabel("Expiry date:");
-        expiryDateLabel.setFont(labelFont);
+        JLabel expiryDateLabel = new JLabel("Expiry Date");
         formPanel.add(expiryDateLabel, gbc);
         gbc.gridy = 12;
         expiryDateField = new JTextField(15);
-        expiryDateField.setFont(inputFont);
         formPanel.add(expiryDateField, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 11;
-        JLabel securityCodeLabel = new JLabel("Security code:");
-        securityCodeLabel.setFont(labelFont);
+        JLabel securityCodeLabel = new JLabel("Security Code");
         formPanel.add(securityCodeLabel, gbc);
         gbc.gridy = 12;
         securityCodeField = new JTextField(15);
-        securityCodeField.setFont(inputFont);
         formPanel.add(securityCodeField, gbc);
 
         // Account information
         gbc.gridx = 0;
         gbc.gridy = 13;
         gbc.gridwidth = 2;
-        JLabel accountInfoLabel = new JLabel("Account information");
-        accountInfoLabel.setFont(new Font("Serif", Font.BOLD, 20));
-        formPanel.add(accountInfoLabel, gbc);
+        JLabel accountLegend = createLegend("Account information");
+        formPanel.add(accountLegend, gbc);
 
         gbc.gridwidth = 1;
         gbc.gridy = 14;
-        JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setFont(labelFont);
+        JLabel passwordLabel = new JLabel("Password");
         formPanel.add(passwordLabel, gbc);
         gbc.gridy = 15;
         passwordField = new JPasswordField(15);
-        passwordField.setFont(inputFont);
         formPanel.add(passwordField, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 14;
-        JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
-        confirmPasswordLabel.setFont(labelFont);
+        JLabel confirmPasswordLabel = new JLabel("Confirm Password");
         formPanel.add(confirmPasswordLabel, gbc);
         gbc.gridy = 15;
         confirmPasswordField = new JPasswordField(15);
-        confirmPasswordField.setFont(inputFont);
         formPanel.add(confirmPasswordField, gbc);
 
-        // Register button
+        // position error label
         gbc.gridx = 0;
         gbc.gridy = 16;
         gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
+        errorLabel = new JLabel("");
+        errorLabel.setBorder(new EmptyBorder(10, 0, 10, 0));
+        formPanel.add(errorLabel, gbc);
+
+        // position Register button
+        gbc.gridy = 17;
         registerButton = new JButton("Register");
         formPanel.add(registerButton, gbc);
-
-        // Success message
-        gbc.gridy = 17;
-        success = new JLabel("");
-        formPanel.add(success, gbc);
-
-        add(formPanel, BorderLayout.CENTER);
     }
 
     public JButton getRegisterButton() {
@@ -239,7 +239,7 @@ public class Registration extends JPanel {
     }
 
     public String getCreditCardNo() {
-        return CCNField.getText();
+        return creditCardField.getText();
     }
 
     public String getExpiryDate() {
@@ -251,10 +251,10 @@ public class Registration extends JPanel {
     }
 
     public void setErrorMessage(String text) {
-        success.setText(text);
+        errorLabel.setText(text);
     }
 
     public void setSuccessMessage(String text) {
-        success.setText(text);
+        errorLabel.setText(text);
     }
 }
