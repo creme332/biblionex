@@ -36,25 +36,22 @@ public class RegisterController {
                     return;
                 }
 
-                if (email.isEmpty() || password.length == 0 || firstName.isEmpty() || lastName.isEmpty() || phone.isEmpty() || address.isEmpty()) {
+                if (email.isEmpty() || password.length == 0 || firstName.isEmpty() || lastName.isEmpty()
+                        || phone.isEmpty() || address.isEmpty()) {
                     registrationPage.setErrorMessage("All fields must be filled out!");
                     return;
                 }
 
-                Patron patron = new Patron(email, new String(password), 0, address, firstName, lastName, phone, creditCardNo, null);
+                Patron patron = new Patron(email, new String(password), address, firstName, lastName, phone,
+                        creditCardNo, null);
                 Patron.save(patron);
-                
+
                 registrationPage.setSuccessMessage("Registration successful. Please log in.");
                 app.setCurrentScreen(Screen.LOGIN_SCREEN);
             }
         });
 
         // Add action listener to back button
-        registrationPage.getBackButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                app.setCurrentScreen(Screen.LOGIN_SCREEN);
-            }
-        });
+        registrationPage.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LOGIN_SCREEN));
     }
 }
