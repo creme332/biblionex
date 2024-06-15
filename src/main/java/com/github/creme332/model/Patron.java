@@ -23,6 +23,14 @@ public class Patron extends User {
         this.birthDate = birthDate;
     }
 
+    public Patron(String email, String password, String address, String firstName, String lastName,
+            String phoneNo, String creditCardNo, Date birthDate) {
+        super(email, password, address, firstName, lastName, phoneNo);
+        userType = UserType.PATRON;
+        this.creditCardNo = creditCardNo;
+        this.birthDate = birthDate;
+    }
+
     public Patron() {
         super();
         userType = UserType.PATRON;
@@ -152,6 +160,7 @@ public class Patron extends User {
         }
         return patrons;
     }
+
     public String getCreditCardNo() {
         return creditCardNo;
     }
