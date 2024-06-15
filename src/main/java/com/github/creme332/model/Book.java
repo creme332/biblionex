@@ -73,15 +73,15 @@ public class Book extends Material {
                 ResultSet result = pstmt.executeQuery();
                 if (result.next()) {
                     return new Book(
-                            rs.getInt("material_id"),
-                            rs.getInt("publisher_id"),
-                            rs.getString("description"),
-                            rs.getString("image_url"),
-                            rs.getInt("age_restriction"),
-                            MaterialType.valueOf(rs.getString("type")),
-                            rs.getString("title"),
-                            rs.getInt("page_count"),
-                            rs.getString("isbn"));
+                            result.getInt("material_id"),
+                            result.getInt("publisher_id"),
+                            result.getString("description"),
+                            result.getString("image_url"),
+                            result.getInt("age_restriction"),
+                            MaterialType.valueOf(result.getString("type")),
+                            result.getString("title"),
+                            result.getInt("page_count"),
+                            result.getString("isbn"));
                 }
             }
         } finally {
@@ -99,15 +99,15 @@ public class Book extends Material {
                 ResultSet result = stmt.executeQuery(query);
                 while (result.next()) {
                     books.add(new Book(
-                            rs.getInt("material_id"),
-                            rs.getInt("publisher_id"),
-                            rs.getString("description"),
-                            rs.getString("image_url"),
-                            rs.getInt("age_restriction"),
-                            MaterialType.valueOf(rs.getString("type")),
-                            rs.getString("title"),
-                            rs.getInt("page_count"),
-                            rs.getString("isbn")));
+                            result.getInt("material_id"),
+                            result.getInt("publisher_id"),
+                            result.getString("description"),
+                            result.getString("image_url"),
+                            result.getInt("age_restriction"),
+                            MaterialType.valueOf(result.getString("type")),
+                            result.getString("title"),
+                            result.getInt("page_count"),
+                            result.getString("isbn")));
                 }
             }
         } finally {
