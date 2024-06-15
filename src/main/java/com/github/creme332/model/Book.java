@@ -14,7 +14,7 @@ public class Book extends Material {
     private int pageCount;
     private String isbn;
 
-    public Book(int materialId, int publisherId, String description, String imageUrl, int ageRestriction, String type, String title, int pageCount, String isbn) {
+    public Book(int materialId, int publisherId, String description, String imageUrl, int ageRestriction, MaterialType type, String title, int pageCount, String isbn) {
         super(materialId, publisherId, description, imageUrl, ageRestriction, type, title);
         this.pageCount = pageCount;
         this.isbn = isbn;
@@ -46,7 +46,7 @@ public class Book extends Material {
                 pstmt.setString(3, book.getDescription());
                 pstmt.setString(4, book.getImageUrl());
                 pstmt.setInt(5, book.getAgeRestriction());
-                pstmt.setString(6, book.getType());
+                pstmt.setString(6, book.getType().name());
                 pstmt.setString(7, book.getTitle());
                 pstmt.executeUpdate();
             }
@@ -77,7 +77,7 @@ public class Book extends Material {
                             rs.getString("description"),
                             rs.getString("image_url"),
                             rs.getInt("age_restriction"),
-                            rs.getString("type"),
+                            MaterialType.valueOf(rs.getString("type")),
                             rs.getString("title"),
                             rs.getInt("page_count"),
                             rs.getString("isbn")
@@ -104,7 +104,7 @@ public class Book extends Material {
                             rs.getString("description"),
                             rs.getString("image_url"),
                             rs.getInt("age_restriction"),
-                            rs.getString("type"),
+                            MaterialType.valueOf(rs.getString("type")),
                             rs.getString("title"),
                             rs.getInt("page_count"),
                             rs.getString("isbn")
@@ -126,7 +126,7 @@ public class Book extends Material {
                 pstmt.setString(2, book.getDescription());
                 pstmt.setString(3, book.getImageUrl());
                 pstmt.setInt(4, book.getAgeRestriction());
-                pstmt.setString(5, book.getType());
+                pstmt.setString(5, book.getType().name());
                 pstmt.setString(6, book.getTitle());
                 pstmt.setInt(7, book.getMaterialId());
                 pstmt.executeUpdate();
@@ -173,7 +173,7 @@ public class Book extends Material {
                 ", description='" + getDescription() + '\'' +
                 ", imageUrl='" + getImageUrl() + '\'' +
                 ", ageRestriction=" + getAgeRestriction() +
-                ", type='" + getType() + '\'' +
+                ", type=" + getType() +
                 ", title='" + getTitle() + '\'' +
                 '}';
     }
