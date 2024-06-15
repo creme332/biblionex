@@ -63,9 +63,7 @@ public class Frame extends JFrame {
         // add cardPanels to frame
         this.add(cardPanels);
 
-        // this.pack();
-
-        this.setPreferredSize(new Dimension(1600, 1000));
+        this.pack();
 
         // display frame
         this.setVisible(true);
