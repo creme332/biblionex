@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.creme332.utils.DatabaseConnection;
+import com.github.creme332.utils.PasswordAuthentication;
 
 public class Librarian extends User {
     private String role;
@@ -43,12 +44,14 @@ public class Librarian extends User {
 
     public static void save(Librarian librarian) {
         final Connection conn = DatabaseConnection.getConnection();
+        PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
+        String hashedPassword = passwordAuthentication.hash(librarian.getPassword().toCharArray());
 
         String query = "INSERT INTO librarian (address, password, last_name, first_name, phone_no, email) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, librarian.getAddress());
-            preparedStatement.setString(2, librarian.getPassword());
+            preparedStatement.setString(2, hashedPassword);  // Save hashed password
             preparedStatement.setString(3, librarian.getLastName());
             preparedStatement.setString(4, librarian.getFirstName());
             preparedStatement.setString(5, librarian.getPhoneNo());
@@ -66,12 +69,14 @@ public class Librarian extends User {
 
     public static void update(Librarian librarian) {
         final Connection conn = DatabaseConnection.getConnection();
+        PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
+        String hashedPassword = passwordAuthentication.hash(librarian.getPassword().toCharArray());
 
         String query = "UPDATE librarian SET address = ?, password = ?, last_name = ?, first_name = ?, phone_no = ?, email = ? WHERE librarian_id = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, librarian.getAddress());
-            preparedStatement.setString(2, librarian.getPassword());
+            preparedStatement.setString(2, hashedPassword);  // Save hashed password
             preparedStatement.setString(3, librarian.getLastName());
             preparedStatement.setString(4, librarian.getFirstName());
             preparedStatement.setString(5, librarian.getPhoneNo());
@@ -122,7 +127,8 @@ public class Librarian extends User {
                 librarian.setLastName(resultSet.getString("last_name"));
                 librarian.setFirstName(resultSet.getString("first_name"));
                 librarian.setPhoneNo(resultSet.getString("phone_no"));
-                librarian.setUserId(id);
+                librarian.setEmail(resultSet.getString("email"));
+                librarian.setRole(resultSet.getString("role"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -150,6 +156,7 @@ public class Librarian extends User {
                 librarian.setFirstName(resultSet.getString("first_name"));
                 librarian.setPhoneNo(resultSet.getString("phone_no"));
                 librarian.setEmail(resultSet.getString("email"));
+                librarian.setRole(resultSet.getString("role"));
 
                 librarians.add(librarian);
             }
@@ -179,6 +186,7 @@ public class Librarian extends User {
                 librarian.setFirstName(resultSet.getString("first_name"));
                 librarian.setPhoneNo(resultSet.getString("phone_no"));
                 librarian.setEmail(email);
+                librarian.setRole(resultSet.getString("role"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -201,6 +209,5 @@ public class Librarian extends User {
                 ", email='" + email + '\'' +
                 ", role='" + role + '\'' +
                 '}';
-
     }
 }
