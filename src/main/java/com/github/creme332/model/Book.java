@@ -70,8 +70,8 @@ public class Book extends Material {
             String query = "SELECT * FROM book INNER JOIN material ON book.material_id = material.material_id WHERE book.material_id = ?";
             try (PreparedStatement pstmt = connection.prepareStatement(query)) {
                 pstmt.setInt(1, materialId);
-                ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
+                ResultSet result = pstmt.executeQuery();
+                if (result.next()) {
                     return new Book(
                             rs.getInt("material_id"),
                             rs.getInt("publisher_id"),
@@ -96,8 +96,8 @@ public class Book extends Material {
         try {
             String query = "SELECT * FROM book INNER JOIN material ON book.material_id = material.material_id";
             try (Statement stmt = connection.createStatement()) {
-                ResultSet rs = stmt.executeQuery(query);
-                while (rs.next()) {
+                ResultSet result = stmt.executeQuery(query);
+                while (result.next()) {
                     books.add(new Book(
                             rs.getInt("material_id"),
                             rs.getInt("publisher_id"),
@@ -172,7 +172,7 @@ public class Book extends Material {
                 ", description='" + getDescription() + '\'' +
                 ", imageUrl='" + getImageUrl() + '\'' +
                 ", ageRestriction=" + getAgeRestriction() +
-                ", type='" + getType() + '\'' +
+                ", type=" + getType() +
                 ", title='" + getTitle() + '\'' +
                 '}';
     }

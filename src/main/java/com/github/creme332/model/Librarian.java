@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.creme332.utils.DatabaseConnection;
@@ -63,18 +64,44 @@ public class Librarian extends User {
         }
     }
 
-    public static void update(Librarian book) {
+    public static void update(Librarian librarian) {
         final Connection conn = DatabaseConnection.getConnection();
 
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        String query = "UPDATE librarian SET address = ?, password = ?, last_name = ?, first_name = ?, phone_no = ?, email = ? WHERE librarian_id = ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setString(1, librarian.getAddress());
+            preparedStatement.setString(2, librarian.getPassword());
+            preparedStatement.setString(3, librarian.getLastName());
+            preparedStatement.setString(4, librarian.getFirstName());
+            preparedStatement.setString(5, librarian.getPhoneNo());
+            preparedStatement.setString(6, librarian.getEmail());
+            preparedStatement.setInt(7, librarian.getUserId());
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Librarian updated successfully!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void delete(int id) {
         final Connection conn = DatabaseConnection.getConnection();
 
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        String query = "DELETE FROM librarian WHERE librarian_id = ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+            if (rowsDeleted > 0) {
+                System.out.println("Librarian deleted successfully!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Librarian findById(int id) {
@@ -106,7 +133,31 @@ public class Librarian extends User {
     }
 
     public static List<Librarian> findAll() {
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        final Connection conn = DatabaseConnection.getConnection();
+
+        List<Librarian> librarians = new ArrayList<>();
+        String query = "SELECT * FROM librarian";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Librarian librarian = new Librarian();
+                librarian.setUserId(resultSet.getInt("librarian_id"));
+                librarian.setAddress(resultSet.getString("address"));
+                librarian.setPassword(resultSet.getString("password"));
+                librarian.setLastName(resultSet.getString("last_name"));
+                librarian.setFirstName(resultSet.getString("first_name"));
+                librarian.setPhoneNo(resultSet.getString("phone_no"));
+                librarian.setEmail(resultSet.getString("email"));
+
+                librarians.add(librarian);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return librarians;
     }
 
     public static Librarian findByEmail(String email) {
