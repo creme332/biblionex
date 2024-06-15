@@ -63,6 +63,11 @@ public class Registration extends JPanel {
         JPanel formPanel = new JPanel(new GridBagLayout());
         add(formPanel, BorderLayout.CENTER);
 
+        // make form scrollable
+        JScrollPane scrollPane = new JScrollPane(formPanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        this.add(scrollPane);
+
         // define layout constraints for form
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
