@@ -14,7 +14,8 @@ public class Book extends Material {
     private int pageCount;
     private String isbn;
 
-    public Book(int materialId, int publisherId, String description, String imageUrl, int ageRestriction, MaterialType type, String title, int pageCount, String isbn) {
+    public Book(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
+            MaterialType type, String title, int pageCount, String isbn) {
         super(materialId, publisherId, description, imageUrl, ageRestriction, type, title);
         this.pageCount = pageCount;
         this.isbn = isbn;
@@ -36,7 +37,7 @@ public class Book extends Material {
         this.isbn = isbn;
     }
 
-    public static void addBook(Book book) throws SQLException {
+    public static void save(Book book) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         try {
             String materialQuery = "INSERT INTO material (material_id, publisher_id, description, image_url, age_restriction, type, title) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -46,7 +47,7 @@ public class Book extends Material {
                 pstmt.setString(3, book.getDescription());
                 pstmt.setString(4, book.getImageUrl());
                 pstmt.setInt(5, book.getAgeRestriction());
-                pstmt.setString(6, book.getType().name());
+                pstmt.setString(6, book.getType().toString());
                 pstmt.setString(7, book.getTitle());
                 pstmt.executeUpdate();
             }
@@ -63,7 +64,7 @@ public class Book extends Material {
         }
     }
 
-    public static Book getBookById(int materialId) throws SQLException {
+    public static Book findById(int materialId) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         try {
             String query = "SELECT * FROM book INNER JOIN material ON book.material_id = material.material_id WHERE book.material_id = ?";
@@ -72,16 +73,15 @@ public class Book extends Material {
                 ResultSet result = pstmt.executeQuery();
                 if (result.next()) {
                     return new Book(
-                        result.getInt("material_id"),
-                        result.getInt("publisher_id"),
-                        result.getString("description"),
-                        result.getString("image_url"),
-                        result.getInt("age_restriction"),
-                        MaterialType.valueOf(result.getString("type")),
-                        result.getString("title"),
-                        result.getInt("page_count"),
-                        result.getString("isbn")
-                    );
+                            rs.getInt("material_id"),
+                            rs.getInt("publisher_id"),
+                            rs.getString("description"),
+                            rs.getString("image_url"),
+                            rs.getInt("age_restriction"),
+                            MaterialType.valueOf(rs.getString("type")),
+                            rs.getString("title"),
+                            rs.getInt("page_count"),
+                            rs.getString("isbn"));
                 }
             }
         } finally {
@@ -90,7 +90,7 @@ public class Book extends Material {
         return null;
     }
 
-    public static List<Book> getAllBooks() throws SQLException {
+    public static List<Book> findAll() throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         List<Book> books = new ArrayList<>();
         try {
@@ -99,16 +99,15 @@ public class Book extends Material {
                 ResultSet result = stmt.executeQuery(query);
                 while (result.next()) {
                     books.add(new Book(
-                        result.getInt("material_id"),
-                        result.getInt("publisher_id"),
-                        result.getString("description"),
-                        result.getString("image_url"),
-                        result.getInt("age_restriction"),
-                        MaterialType.valueOf(result.getString("type")),
-                        result.getString("title"),
-                        result.getInt("page_count"),
-                        result.getString("isbn")
-                    ));
+                            rs.getInt("material_id"),
+                            rs.getInt("publisher_id"),
+                            rs.getString("description"),
+                            rs.getString("image_url"),
+                            rs.getInt("age_restriction"),
+                            MaterialType.valueOf(rs.getString("type")),
+                            rs.getString("title"),
+                            rs.getInt("page_count"),
+                            rs.getString("isbn")));
                 }
             }
         } finally {
@@ -117,7 +116,7 @@ public class Book extends Material {
         return books;
     }
 
-    public static void updateBook(Book book) throws SQLException {
+    public static void update(Book book) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         try {
             String materialQuery = "UPDATE material SET publisher_id = ?, description = ?, image_url = ?, age_restriction = ?, type = ?, title = ? WHERE material_id = ?";
@@ -126,7 +125,7 @@ public class Book extends Material {
                 pstmt.setString(2, book.getDescription());
                 pstmt.setString(3, book.getImageUrl());
                 pstmt.setInt(4, book.getAgeRestriction());
-                pstmt.setString(5, book.getType().name());
+                pstmt.setString(5, book.getType().toString());
                 pstmt.setString(6, book.getTitle());
                 pstmt.setInt(7, book.getMaterialId());
                 pstmt.executeUpdate();
@@ -144,7 +143,7 @@ public class Book extends Material {
         }
     }
 
-    public static void deleteBook(int materialId) throws SQLException {
+    public static void delete(int materialId) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         try {
             String bookQuery = "DELETE FROM book WHERE material_id = ?";
