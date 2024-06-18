@@ -9,8 +9,7 @@ public class Material {
     protected MaterialType type;
     protected String title;
 
-    public Material(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
-            MaterialType type, String title) {
+    public Material(int materialId, int publisherId, String description, String imageUrl, int ageRestriction, MaterialType type, String title) {
         this.materialId = materialId;
         this.publisherId = publisherId;
         this.description = description;
@@ -85,7 +84,7 @@ public class Material {
                 ", description='" + description + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", ageRestriction=" + ageRestriction +
-                ", type='" + type + '\'' +
+                ", type=" + type +
                 ", title='" + title + '\'' +
                 '}';
     }
