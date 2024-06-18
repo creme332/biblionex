@@ -14,7 +14,9 @@ public class Book extends Material {
     private int pageCount;
     private String isbn;
 
-    public Book(int materialId, int publisherId, String description, String imageUrl, int ageRestriction, String type, String title, int pageCount, String isbn) {
+    public Book(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
+            MaterialType type,
+            String title, int pageCount, String isbn) {
         super(materialId, publisherId, description, imageUrl, ageRestriction, type, title);
         this.pageCount = pageCount;
         this.isbn = isbn;
@@ -46,7 +48,7 @@ public class Book extends Material {
                 pstmt.setString(3, book.getDescription());
                 pstmt.setString(4, book.getImageUrl());
                 pstmt.setInt(5, book.getAgeRestriction());
-                pstmt.setString(6, book.getType());
+                pstmt.setString(6, book.getType().toString());
                 pstmt.setString(7, book.getTitle());
                 pstmt.executeUpdate();
             }
@@ -69,19 +71,18 @@ public class Book extends Material {
             String query = "SELECT * FROM book INNER JOIN material ON book.material_id = material.material_id WHERE book.material_id = ?";
             try (PreparedStatement pstmt = connection.prepareStatement(query)) {
                 pstmt.setInt(1, materialId);
-                ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
+                ResultSet resultSet = pstmt.executeQuery();
+                if (resultSet.next()) {
                     return new Book(
-                            rs.getInt("material_id"),
-                            rs.getInt("publisher_id"),
-                            rs.getString("description"),
-                            rs.getString("image_url"),
-                            rs.getInt("age_restriction"),
-                            rs.getString("type"),
-                            rs.getString("title"),
-                            rs.getInt("page_count"),
-                            rs.getString("isbn")
-                    );
+                            resultSet.getInt("material_id"),
+                            resultSet.getInt("publisher_id"),
+                            resultSet.getString("description"),
+                            resultSet.getString("image_url"),
+                            resultSet.getInt("age_restriction"),
+                            MaterialType.valueOf(resultSet.getString("type")),
+                            resultSet.getString("title"),
+                            resultSet.getInt("page_count"),
+                            resultSet.getString("isbn"));
                 }
             }
         } finally {
@@ -96,19 +97,18 @@ public class Book extends Material {
         try {
             String query = "SELECT * FROM book INNER JOIN material ON book.material_id = material.material_id";
             try (Statement stmt = connection.createStatement()) {
-                ResultSet rs = stmt.executeQuery(query);
-                while (rs.next()) {
+                ResultSet resultSet = stmt.executeQuery(query);
+                while (resultSet.next()) {
                     books.add(new Book(
-                            rs.getInt("material_id"),
-                            rs.getInt("publisher_id"),
-                            rs.getString("description"),
-                            rs.getString("image_url"),
-                            rs.getInt("age_restriction"),
-                            rs.getString("type"),
-                            rs.getString("title"),
-                            rs.getInt("page_count"),
-                            rs.getString("isbn")
-                    ));
+                            resultSet.getInt("material_id"),
+                            resultSet.getInt("publisher_id"),
+                            resultSet.getString("description"),
+                            resultSet.getString("image_url"),
+                            resultSet.getInt("age_restriction"),
+                            MaterialType.valueOf(resultSet.getString("type")),
+                            resultSet.getString("title"),
+                            resultSet.getInt("page_count"),
+                            resultSet.getString("isbn")));
                 }
             }
         } finally {
@@ -126,7 +126,7 @@ public class Book extends Material {
                 pstmt.setString(2, book.getDescription());
                 pstmt.setString(3, book.getImageUrl());
                 pstmt.setInt(4, book.getAgeRestriction());
-                pstmt.setString(5, book.getType());
+                pstmt.setString(5, book.getType().toString());
                 pstmt.setString(6, book.getTitle());
                 pstmt.setInt(7, book.getMaterialId());
                 pstmt.executeUpdate();
