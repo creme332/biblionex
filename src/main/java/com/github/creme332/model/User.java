@@ -1,6 +1,7 @@
 package com.github.creme332.model;
 
 import java.util.Arrays;
+import com.github.creme332.utils.PasswordAuthentication;
 
 public abstract class User {
     protected String email;
@@ -53,16 +54,10 @@ public abstract class User {
             return false;
         }
 
-        // verify passwords
-        char[] correctPassword = this.password.toCharArray();
-        if (enteredPassword.length != correctPassword.length) {
-            isCorrect = false;
-        } else {
-            isCorrect = Arrays.equals(enteredPassword, correctPassword);
-        }
+        PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
+        isCorrect = passwordAuthentication.authenticate(enteredPassword, this.password);
 
         // Zero out the password for security purposes.
-        Arrays.fill(correctPassword, '0');
         Arrays.fill(enteredPassword, '0');
 
         return isCorrect;
@@ -126,5 +121,9 @@ public abstract class User {
 
     public UserType getUserType() {
         return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 }

@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.github.creme332.utils.DatabaseConnection;
+import com.github.creme332.utils.PasswordAuthentication;
 
 public class Patron extends User {
     private Date registrationDate;
@@ -41,9 +42,12 @@ public class Patron extends User {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "INSERT INTO patron (address, password, last_name, first_name, phone_no, email, credit_card_no) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
+        PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
+        String hashedPassword = passwordAuthentication.hash(patron.getPassword().toCharArray());
+
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, patron.getAddress());
-            preparedStatement.setString(2, patron.getPassword());
+            preparedStatement.setString(2, hashedPassword);  // Save hashed password
             preparedStatement.setString(3, patron.getLastName());
             preparedStatement.setString(4, patron.getFirstName());
             preparedStatement.setString(5, patron.getPhoneNo());
@@ -59,9 +63,12 @@ public class Patron extends User {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "UPDATE patron SET address = ?, password = ?, last_name = ?, first_name = ?, phone_no = ?, email = ? WHERE patron_id = ?";
 
+        PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
+        String hashedPassword = passwordAuthentication.hash(patron.getPassword().toCharArray());
+
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, patron.getAddress());
-            preparedStatement.setString(2, patron.getPassword());
+            preparedStatement.setString(2, hashedPassword);  // Save hashed password
             preparedStatement.setString(3, patron.getLastName());
             preparedStatement.setString(4, patron.getFirstName());
             preparedStatement.setString(5, patron.getPhoneNo());
