@@ -15,7 +15,8 @@ public class Book extends Material {
     private String isbn;
 
     public Book(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
-            MaterialType type, String title, int pageCount, String isbn) {
+            MaterialType type,
+            String title, int pageCount, String isbn) {
         super(materialId, publisherId, description, imageUrl, ageRestriction, type, title);
         this.pageCount = pageCount;
         this.isbn = isbn;
@@ -37,7 +38,7 @@ public class Book extends Material {
         this.isbn = isbn;
     }
 
-    public static void save(Book book) throws SQLException {
+    public static void addBook(Book book) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         try {
             String materialQuery = "INSERT INTO material (material_id, publisher_id, description, image_url, age_restriction, type, title) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -64,24 +65,24 @@ public class Book extends Material {
         }
     }
 
-    public static Book findById(int materialId) throws SQLException {
+    public static Book getBookById(int materialId) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         try {
             String query = "SELECT * FROM book INNER JOIN material ON book.material_id = material.material_id WHERE book.material_id = ?";
             try (PreparedStatement pstmt = connection.prepareStatement(query)) {
                 pstmt.setInt(1, materialId);
-                ResultSet result = pstmt.executeQuery();
-                if (result.next()) {
+                ResultSet resultSet = pstmt.executeQuery();
+                if (resultSet.next()) {
                     return new Book(
-                            result.getInt("material_id"),
-                            result.getInt("publisher_id"),
-                            result.getString("description"),
-                            result.getString("image_url"),
-                            result.getInt("age_restriction"),
-                            MaterialType.valueOf(result.getString("type")),
-                            result.getString("title"),
-                            result.getInt("page_count"),
-                            result.getString("isbn"));
+                            resultSet.getInt("material_id"),
+                            resultSet.getInt("publisher_id"),
+                            resultSet.getString("description"),
+                            resultSet.getString("image_url"),
+                            resultSet.getInt("age_restriction"),
+                            MaterialType.valueOf(resultSet.getString("type")),
+                            resultSet.getString("title"),
+                            resultSet.getInt("page_count"),
+                            resultSet.getString("isbn"));
                 }
             }
         } finally {
@@ -90,24 +91,24 @@ public class Book extends Material {
         return null;
     }
 
-    public static List<Book> findAll() throws SQLException {
+    public static List<Book> getAllBooks() throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         List<Book> books = new ArrayList<>();
         try {
             String query = "SELECT * FROM book INNER JOIN material ON book.material_id = material.material_id";
             try (Statement stmt = connection.createStatement()) {
-                ResultSet result = stmt.executeQuery(query);
-                while (result.next()) {
+                ResultSet resultSet = stmt.executeQuery(query);
+                while (resultSet.next()) {
                     books.add(new Book(
-                            result.getInt("material_id"),
-                            result.getInt("publisher_id"),
-                            result.getString("description"),
-                            result.getString("image_url"),
-                            result.getInt("age_restriction"),
-                            MaterialType.valueOf(result.getString("type")),
-                            result.getString("title"),
-                            result.getInt("page_count"),
-                            result.getString("isbn")));
+                            resultSet.getInt("material_id"),
+                            resultSet.getInt("publisher_id"),
+                            resultSet.getString("description"),
+                            resultSet.getString("image_url"),
+                            resultSet.getInt("age_restriction"),
+                            MaterialType.valueOf(resultSet.getString("type")),
+                            resultSet.getString("title"),
+                            resultSet.getInt("page_count"),
+                            resultSet.getString("isbn")));
                 }
             }
         } finally {
@@ -116,7 +117,7 @@ public class Book extends Material {
         return books;
     }
 
-    public static void update(Book book) throws SQLException {
+    public static void updateBook(Book book) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         try {
             String materialQuery = "UPDATE material SET publisher_id = ?, description = ?, image_url = ?, age_restriction = ?, type = ?, title = ? WHERE material_id = ?";
@@ -143,7 +144,7 @@ public class Book extends Material {
         }
     }
 
-    public static void delete(int materialId) throws SQLException {
+    public static void deleteBook(int materialId) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         try {
             String bookQuery = "DELETE FROM book WHERE material_id = ?";
@@ -172,7 +173,7 @@ public class Book extends Material {
                 ", description='" + getDescription() + '\'' +
                 ", imageUrl='" + getImageUrl() + '\'' +
                 ", ageRestriction=" + getAgeRestriction() +
-                ", type=" + getType() +
+                ", type='" + getType() + '\'' +
                 ", title='" + getTitle() + '\'' +
                 '}';
     }
