@@ -164,4 +164,32 @@ public class RegistrationForm extends JPanel {
         errorLabel.setForeground(Color.GREEN);
         errorLabel.setText(text);
     }
+
+    public JTextField getAddressField() {
+        return addressField;
+    }
+
+        public JTextField getPhoneField() {
+        return phoneField;
+    }
+
+        public JTextField getLastNameField() {
+        return lastNameField;
+    }
+
+        public JTextField getFirstNameField() {
+        return firstNameField;
+    }
+
+        public JTextField getConfirmPasswordField() {
+        return confirmPasswordField;
+    }
+
+        public JTextField getPasswordField() {
+        return passwordField;
+    }
+
+        public JTextField getEmailField() {
+        return emailField;
+    }
 }
