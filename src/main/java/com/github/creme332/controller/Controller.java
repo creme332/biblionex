@@ -1,9 +1,11 @@
 package com.github.creme332.controller;
 
+import com.github.creme332.controller.librarian.RegistrationController;
 import com.github.creme332.controller.patron.RegisterController;
 import com.github.creme332.model.AppState;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
+import com.github.creme332.view.librarian.RegistrationForm;
 import com.github.creme332.view.patron.Registration;
 
 /**
@@ -25,6 +27,8 @@ public class Controller {
 
         Registration patronRegistrationPage = (Registration) frame.getPage(Screen.PATRON_REGISTRATION_SCREEN);
         new RegisterController(app, patronRegistrationPage);
+
+        new RegistrationController(app, (RegistrationForm) frame.getPage(Screen.LIBRARIAN_REGISTRATION_SCREEN));
 
         Login loginPage = (Login) frame.getPage(Screen.LOGIN_SCREEN);
         new LoginController(app, loginPage);
