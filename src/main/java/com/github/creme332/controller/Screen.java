@@ -13,6 +13,7 @@ public enum Screen {
     PATRON_DASHBOARD_SCREEN("patronDashboardScreen"),
 
     // librarian screens
+    LIBRARIAN_MATERIAL_SCREEN("librarianMaterialScreen"),
     LIBRARIAN_DASHBOARD_SCREEN("librarianDashboardScreen"),
     LIBRARIAN_REGISTRATION_SCREEN("librarianRegistrationScreen");
 
