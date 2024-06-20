@@ -39,6 +39,10 @@ public class Patron extends User {
     }
 
     public static void save(Patron patron) {
+        if (!User.validateEmail(patron.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         final Connection conn = DatabaseConnection.getConnection();
         String query = "INSERT INTO patron (address, password, last_name, first_name, phone_no, email, credit_card_no) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -60,6 +64,10 @@ public class Patron extends User {
     }
 
     public static void update(Patron patron) {
+        if (!User.validateEmail(patron.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         final Connection conn = DatabaseConnection.getConnection();
         String query = "UPDATE patron SET address = ?, password = ?, last_name = ?, first_name = ?, phone_no = ?, email = ? WHERE patron_id = ?";
 
