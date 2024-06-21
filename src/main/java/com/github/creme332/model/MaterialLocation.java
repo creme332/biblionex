@@ -1,5 +1,9 @@
 package com.github.creme332.model;
 
+/**
+ * Location in library where a material can be stored. Multiple materials can be
+ * stored at the same location.
+ */
 public class MaterialLocation {
     private int shelfNo;
     private int aisleNo;
