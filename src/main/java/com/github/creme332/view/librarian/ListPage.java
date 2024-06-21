@@ -2,11 +2,7 @@ package com.github.creme332.view.librarian;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableCellEditor;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -56,7 +52,7 @@ public class ListPage extends JPanel {
         };
         patronTable = new JTable(tableModel);
         patronTable.getColumn("Action").setCellRenderer(new ButtonRenderer());
-        patronTable.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox()));
+        patronTable.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox(), this));
         JScrollPane scrollPane = new JScrollPane(patronTable);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane, BorderLayout.CENTER);
@@ -115,6 +111,12 @@ public class ListPage extends JPanel {
         patron.setPhoneNo(phoneNo);
 
         Patron.update(patron);
+    }
+
+    public void deletePatronFromDatabase(int row) {
+        int patronId = (int) tableModel.getValueAt(row, 0);
+        Patron.delete(patronId);
+        tableModel.removeRow(row);
     }
 
     // Getter methods for controller
