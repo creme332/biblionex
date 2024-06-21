@@ -20,6 +20,28 @@ public class Material {
         this.title = title;
     }
 
+    /**
+     * Constructor for creating a new material. Material ID is unknown and will be
+     * set by database.
+     * 
+     * @param materialId
+     * @param publisherId
+     * @param description
+     * @param imageUrl
+     * @param ageRestriction
+     * @param type
+     * @param title
+     */
+    public Material(int publisherId, String description, String imageUrl, int ageRestriction,
+            MaterialType type, String title) {
+        this.publisherId = publisherId;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.ageRestriction = ageRestriction;
+        this.type = type;
+        this.title = title;
+    }
+
     public int getMaterialId() {
         return materialId;
     }

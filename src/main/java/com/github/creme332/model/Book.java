@@ -15,9 +15,28 @@ public class Book extends Material {
     private String isbn;
 
     public Book(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
-            MaterialType type,
             String title, int pageCount, String isbn) {
-        super(materialId, publisherId, description, imageUrl, ageRestriction, type, title);
+        super(materialId, publisherId, description, imageUrl, ageRestriction, MaterialType.BOOK, title);
+        this.pageCount = pageCount;
+        this.isbn = isbn;
+    }
+
+    /**
+     * Constructor for creating a new book. Material ID is unknown and will be
+     * set by database.
+     * 
+     * @param publisherId
+     * @param description
+     * @param imageUrl
+     * @param ageRestriction
+     * @param type
+     * @param title
+     * @param pageCount
+     * @param isbn
+     */
+    public Book(int publisherId, String description, String imageUrl, int ageRestriction,
+            String title, int pageCount, String isbn) {
+        super(publisherId, description, imageUrl, ageRestriction, MaterialType.BOOK, title);
         this.pageCount = pageCount;
         this.isbn = isbn;
     }
@@ -38,56 +57,87 @@ public class Book extends Material {
         this.isbn = isbn;
     }
 
-    public static void addBook(Book book) throws SQLException {
+    public static void save(Book book) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
-        try {
-            String materialQuery = "INSERT INTO material (material_id, publisher_id, description, image_url, age_restriction, type, title) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement pstmt = connection.prepareStatement(materialQuery)) {
-                pstmt.setInt(1, book.getMaterialId());
-                pstmt.setInt(2, book.getPublisherId());
-                pstmt.setString(3, book.getDescription());
-                pstmt.setString(4, book.getImageUrl());
-                pstmt.setInt(5, book.getAgeRestriction());
-                pstmt.setString(6, book.getType().toString());
-                pstmt.setString(7, book.getTitle());
-                pstmt.executeUpdate();
+        String materialQuery = """
+                INSERT INTO material
+                 (publisher_id, description, image_url, age_restriction, type, title)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)
+                 """;
+
+        // start a transaction
+        connection.setAutoCommit(false);
+
+        try (PreparedStatement createMaterial = connection.prepareStatement(materialQuery,
+                Statement.RETURN_GENERATED_KEYS)) {
+
+            // perform insertion in material table
+            createMaterial.setInt(1, book.getPublisherId());
+            createMaterial.setString(2, book.getDescription());
+            createMaterial.setString(3, book.getImageUrl());
+            createMaterial.setInt(4, book.getAgeRestriction());
+            createMaterial.setString(5, book.getType().toString());
+            createMaterial.setString(6, book.getTitle());
+
+            createMaterial.executeUpdate();
+
+            int affectedRows = createMaterial.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Creating user failed, no rows affected.");
             }
 
-            String bookQuery = "INSERT INTO book (material_id, page_count, isbn) VALUES (?, ?, ?)";
-            try (PreparedStatement pstmt = connection.prepareStatement(bookQuery)) {
-                pstmt.setInt(1, book.getMaterialId());
-                pstmt.setInt(2, book.getPageCount());
-                pstmt.setString(3, book.getIsbn());
-                pstmt.executeUpdate();
+            try (ResultSet generatedKeys = createMaterial.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    book.setMaterialId((int) generatedKeys.getLong(1));
+                } else {
+                    throw new SQLException("Creating material failed, no ID obtained.");
+                }
             }
-        } finally {
-            connection.close();
+
+            // perform insertion in book table
+            String bookQuery = "INSERT INTO book (material_id, page_count, isbn) VALUES (?, ?, ?)";
+            try (PreparedStatement createBook = connection.prepareStatement(bookQuery)) {
+                createBook.setInt(1, book.getMaterialId());
+                createBook.setInt(2, book.getPageCount());
+                createBook.setString(3, book.getIsbn());
+                createBook.executeUpdate();
+            } catch (SQLException e) {
+                connection.rollback();
+            }
+
+            connection.commit();
+        } catch (SQLException e) {
+            connection.rollback();
         }
+
     }
 
     public static Book getBookById(int materialId) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
-        try {
-            String query = "SELECT * FROM book INNER JOIN material ON book.material_id = material.material_id WHERE book.material_id = ?";
-            try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-                pstmt.setInt(1, materialId);
-                ResultSet resultSet = pstmt.executeQuery();
-                if (resultSet.next()) {
-                    return new Book(
-                            resultSet.getInt("material_id"),
-                            resultSet.getInt("publisher_id"),
-                            resultSet.getString("description"),
-                            resultSet.getString("image_url"),
-                            resultSet.getInt("age_restriction"),
-                            MaterialType.valueOf(resultSet.getString("type")),
-                            resultSet.getString("title"),
-                            resultSet.getInt("page_count"),
-                            resultSet.getString("isbn"));
-                }
+        String query = """
+                SELECT * FROM book
+                INNER JOIN material
+                ON book.material_id = material.material_id
+                WHERE book.material_id = ?
+                """;
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, materialId);
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                return new Book(
+                        resultSet.getInt("material_id"),
+                        resultSet.getInt("publisher_id"),
+                        resultSet.getString("description"),
+                        resultSet.getString("image_url"),
+                        resultSet.getInt("age_restriction"),
+                        resultSet.getString("title"),
+                        resultSet.getInt("page_count"),
+                        resultSet.getString("isbn"));
             }
-        } finally {
-            connection.close();
         }
+
         return null;
     }
 
@@ -105,7 +155,6 @@ public class Book extends Material {
                             resultSet.getString("description"),
                             resultSet.getString("image_url"),
                             resultSet.getInt("age_restriction"),
-                            MaterialType.valueOf(resultSet.getString("type")),
                             resultSet.getString("title"),
                             resultSet.getInt("page_count"),
                             resultSet.getString("isbn")));
@@ -120,7 +169,17 @@ public class Book extends Material {
     public static void updateBook(Book book) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         try {
-            String materialQuery = "UPDATE material SET publisher_id = ?, description = ?, image_url = ?, age_restriction = ?, type = ?, title = ? WHERE material_id = ?";
+            String materialQuery = """
+                    UPDATE material
+                        SET publisher_id = ?,
+                        description = ?,
+                        image_url = ?,
+                        age_restriction = ?,
+                        type = ?,
+                        title = ?
+                        WHERE material_id = ?
+                    """;
+            ;
             try (PreparedStatement pstmt = connection.prepareStatement(materialQuery)) {
                 pstmt.setInt(1, book.getPublisherId());
                 pstmt.setString(2, book.getDescription());

@@ -9,16 +9,47 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An object representing a physical copy of a material (book, video, ...). A
+ * material can have multiple copies.
+ */
 public class MaterialCopy {
 
+    /**
+     * Unique identifier for a physical copy of a material.
+     */
+    private int barcode;
+
     private MaterialLocation location;
+
+    /**
+     * ID of order from which copy was purchased.
+     */
     private int orderId;
     private MaterialCondition condition;
+    private int materialId;
 
     public MaterialCopy(MaterialLocation location, int orderId, MaterialCondition condition) {
         this.location = location;
         this.orderId = orderId;
         this.condition = condition;
+    }
+
+    public int getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(int materialId) {
+        this.materialId = materialId;
+
+    }
+
+    public int getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(int barcode) {
+        this.barcode = barcode;
     }
 
     public MaterialLocation getLocation() {
@@ -45,34 +76,38 @@ public class MaterialCopy {
         this.condition = condition;
     }
 
-    public static List<MaterialCopy> findBy(String column, String value) {
+    /**
+     * 
+     * @return A list of loans for current material copy.
+     */
+    public List<Loan> getLoanHistory() {
+        // TODO
+        return new ArrayList<>();
+    }
+
+    public static MaterialCopy findById(int barcode) {
         final Connection conn = DatabaseConnection.getConnection();
-        List<MaterialCopy> materialCopies = new ArrayList<>();
-        String query = "SELECT * FROM material_copy WHERE " + column + " = ?";
+        String query = "SELECT * FROM material_copy WHERE barcode = ?";
+        MaterialCopy result = null;
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setString(1, value);
+            preparedStatement.setInt(1, barcode);
             ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
 
-            while (resultSet.next()) {
-                MaterialLocation materialLocation = new MaterialLocation(
-                        resultSet.getInt("barcode"),
-                        resultSet.getInt("material_id"),
-                        resultSet.getInt("shelf_no"),
-                        resultSet.getInt("aisle_no"),
-                        resultSet.getInt("section_no"));
+            MaterialLocation materialLocation = new MaterialLocation(
+                    resultSet.getInt("shelf_no"),
+                    resultSet.getInt("aisle_no"),
+                    resultSet.getInt("section_no"));
 
-                MaterialCopy materialCopy = new MaterialCopy(
-                        materialLocation,
-                        resultSet.getInt("order_id"),
-                        MaterialCondition.valueOf(resultSet.getString("condition")));
-                materialCopies.add(materialCopy);
-            }
+            result = new MaterialCopy(
+                    materialLocation,
+                    resultSet.getInt("order_id"),
+                    MaterialCondition.valueOf(resultSet.getString("condition")));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return materialCopies;
+        return result;
     }
 
     public static List<MaterialCopy> findAll() {
@@ -85,8 +120,6 @@ public class MaterialCopy {
 
             while (resultSet.next()) {
                 MaterialLocation materialLocation = new MaterialLocation(
-                        resultSet.getInt("barcode"),
-                        resultSet.getInt("material_id"),
                         resultSet.getInt("shelf_no"),
                         resultSet.getInt("aisle_no"),
                         resultSet.getInt("section_no"));
@@ -109,8 +142,8 @@ public class MaterialCopy {
         String query = "INSERT INTO material_copy (barcode, material_id, order_id, condition, shelf_no, aisle_no, section_no) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setInt(1, materialCopy.getLocation().getBarcode());
-            preparedStatement.setInt(2, materialCopy.getLocation().getMaterialId());
+            preparedStatement.setInt(1, materialCopy.getBarcode());
+            preparedStatement.setInt(2, materialCopy.getMaterialId());
             preparedStatement.setInt(3, materialCopy.getOrderId());
             preparedStatement.setString(4, materialCopy.getCondition().name());
             preparedStatement.setInt(5, materialCopy.getLocation().getShelfNo());
@@ -127,13 +160,13 @@ public class MaterialCopy {
         String query = "UPDATE material_copy SET material_id = ?, order_id = ?, condition = ?, shelf_no = ?, aisle_no = ?, section_no = ? WHERE barcode = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setInt(1, materialCopy.getLocation().getMaterialId());
+            preparedStatement.setInt(1, materialCopy.getMaterialId());
             preparedStatement.setInt(2, materialCopy.getOrderId());
             preparedStatement.setString(3, materialCopy.getCondition().name());
             preparedStatement.setInt(4, materialCopy.getLocation().getShelfNo());
             preparedStatement.setInt(5, materialCopy.getLocation().getAisleNo());
             preparedStatement.setInt(6, materialCopy.getLocation().getSectionNo());
-            preparedStatement.setInt(7, materialCopy.getLocation().getBarcode());
+            preparedStatement.setInt(7, materialCopy.getBarcode());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
