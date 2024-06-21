@@ -61,20 +61,15 @@ public class Patron extends User {
 
     public static void update(Patron patron) {
         final Connection conn = DatabaseConnection.getConnection();
-        String query = "UPDATE patron SET address = ?, password = ?, last_name = ?, first_name = ?, phone_no = ?, email = ? WHERE patron_id = ?";
-
-        PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
-        String hashedPassword = passwordAuthentication.hash(patron.getPassword().toCharArray());
-
-        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setString(1, patron.getAddress());
-            preparedStatement.setString(2, hashedPassword); // Save hashed password
-            preparedStatement.setString(3, patron.getLastName());
-            preparedStatement.setString(4, patron.getFirstName());
-            preparedStatement.setString(5, patron.getPhoneNo());
-            preparedStatement.setString(6, patron.getEmail());
-            preparedStatement.setInt(7, patron.getUserId());
-            preparedStatement.executeUpdate();
+        String query = "UPDATE patron SET address = ?, last_name = ?, first_name = ?, phone_no = ?, email = ? WHERE patron_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, patron.getAddress());
+            stmt.setString(2, patron.getLastName());
+            stmt.setString(3, patron.getFirstName());
+            stmt.setString(4, patron.getPhoneNo());
+            stmt.setString(5, patron.getEmail());
+            stmt.setInt(6, patron.getUserId());
+            stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

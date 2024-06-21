@@ -6,7 +6,7 @@ import java.beans.PropertyChangeSupport;
 import com.github.creme332.controller.Screen;
 
 public class AppState {
-    private Screen currentScreen = Screen.LOGIN_SCREEN;
+    private Screen currentScreen = Screen.LIBRARIAN_LIST_SCREEN;
     private PropertyChangeSupport support;
     private User loggedInUser;
 
