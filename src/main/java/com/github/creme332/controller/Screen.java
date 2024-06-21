@@ -14,6 +14,7 @@ public enum Screen {
 
     // librarian screens
     LIBRARIAN_DASHBOARD_SCREEN("librarianDashboardScreen"),
+    LIBRARIAN_LIST_SCREEN("PatronListScreen"),
     LIBRARIAN_REGISTRATION_SCREEN("librarianRegistrationScreen");
 
     private final String screenName;
