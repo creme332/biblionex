@@ -56,8 +56,9 @@ public class Author {
 
     /**
      * Finds authors by the specified column and value.
+     * 
      * @param column The column name to search by.
-     * @param value The value to search for in the specified column.
+     * @param value  The value to search for in the specified column.
      * @return A list of authors matching the search criteria.
      */
     public static List<Author> findBy(String column, String value) {
@@ -69,11 +70,10 @@ public class Author {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Author author = new Author(
-                    resultSet.getInt("author_id"),
-                    resultSet.getString("last_name"),
-                    resultSet.getString("first_name"),
-                    resultSet.getString("email")
-                );
+                        resultSet.getInt("author_id"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("email"));
                 authors.add(author);
             }
         } catch (SQLException e) {
@@ -84,6 +84,7 @@ public class Author {
 
     /**
      * Retrieves all authors from the database.
+     * 
      * @return A list of all authors.
      */
     public static List<Author> findAll() {
@@ -94,11 +95,10 @@ public class Author {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Author author = new Author(
-                    resultSet.getInt("author_id"),
-                    resultSet.getString("last_name"),
-                    resultSet.getString("first_name"),
-                    resultSet.getString("email")
-                );
+                        resultSet.getInt("author_id"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("email"));
                 authors.add(author);
             }
         } catch (SQLException e) {
@@ -109,6 +109,7 @@ public class Author {
 
     /**
      * Saves a new author to the database.
+     * 
      * @param author The author to save.
      */
     public static void save(Author author) {
