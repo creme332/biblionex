@@ -64,6 +64,9 @@ public class LoginController {
                     return;
                 }
 
+                // erase entered data on form
+                loginPage.resetFields();
+
                 if (user.getUserType() == UserType.PATRON) {
                     try {
                         app.setLoggedInUser(Patron.findByEmail(email));

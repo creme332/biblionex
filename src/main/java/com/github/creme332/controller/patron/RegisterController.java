@@ -89,6 +89,8 @@ public class RegisterController {
                 creditCardNo, null);
         try {
             Patron.save(patron);
+            registrationPage.setSuccessMessage("Registration successful. Please log in.");
+            app.setCurrentScreen(Screen.LOGIN_SCREEN);
         } catch (SQLException e) {
             e.printStackTrace();
             return;

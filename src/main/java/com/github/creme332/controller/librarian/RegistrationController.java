@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import com.github.creme332.model.AppState;
 import com.github.creme332.controller.Screen;
 import com.github.creme332.model.Librarian;
+import com.github.creme332.model.Patron;
 import com.github.creme332.view.librarian.RegistrationForm;
 
 public class RegistrationController {
@@ -90,7 +91,11 @@ public class RegistrationController {
             return;
         }
 
-        registrationForm.setSuccessMessage("Registration successful. Please log in.");
-        app.setCurrentScreen(Screen.LOGIN_SCREEN);
+        try {
+            registrationForm.setSuccessMessage("Registration successful. Please log in.");
+            app.setCurrentScreen(Screen.LOGIN_SCREEN);
+        } catch (IllegalArgumentException e) {
+            registrationForm.setErrorMessage(e.getMessage());
+        }
     }
 }

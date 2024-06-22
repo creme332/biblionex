@@ -53,6 +53,10 @@ public class Librarian extends User {
      * @throws SQLException
      */
     public static void save(Librarian librarian) throws SQLException {
+        if (!User.validateEmail(librarian.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         final Connection conn = DatabaseConnection.getConnection();
         PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
         String hashedPassword = passwordAuthentication.hash(librarian.getPassword().toCharArray());

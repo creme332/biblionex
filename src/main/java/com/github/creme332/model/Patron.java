@@ -42,6 +42,10 @@ public class Patron extends User {
      * @throws SQLException
      */
     public static void save(Patron patron) throws SQLException {
+        if (!User.validateEmail(patron.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         final Connection conn = DatabaseConnection.getConnection();
         String query = """
                 INSERT INTO patron (
