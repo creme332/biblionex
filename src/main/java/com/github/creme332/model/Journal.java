@@ -8,30 +8,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Journal extends Material {
     private String issn;
     private String website;
     private JournalFrequency frequency;
-    private java.util.Date startDate;
+    private Date startDate;
 
     /**
      * Constructs a new Journal.
      *
-     * @param materialId      the ID of the material
-     * @param publisherId     the ID of the publisher
-     * @param description     the description of the journal
-     * @param imageUrl        the URL of the journal's image
-     * @param ageRestriction  the age restriction of the journal
-     * @param title           the title of the journal
-     * @param issn            the ISSN of the journal
-     * @param website         the website of the journal
-     * @param frequency       the publication frequency of the journal
-     * @param startDate       the start date of the journal
+     * @param materialId     the ID of the material
+     * @param publisherId    the ID of the publisher
+     * @param description    the description of the journal
+     * @param imageUrl       the URL of the journal's image
+     * @param ageRestriction the age restriction of the journal
+     * @param title          the title of the journal
+     * @param issn           the ISSN of the journal
+     * @param website        the website of the journal
+     * @param frequency      the publication frequency of the journal
+     * @param startDate      the start date of the journal
      */
     public Journal(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
-                   String title, String issn, String website, JournalFrequency frequency, java.util.Date startDate) {
+            String title, String issn, String website, JournalFrequency frequency, Date startDate) {
         super(materialId, publisherId, description, imageUrl, ageRestriction, MaterialType.JOURNAL, title);
         this.issn = issn;
         this.website = website;
@@ -42,18 +43,18 @@ public class Journal extends Material {
     /**
      * Constructs a new Journal without a material ID.
      *
-     * @param publisherId     the ID of the publisher
-     * @param description     the description of the journal
-     * @param imageUrl        the URL of the journal's image
-     * @param ageRestriction  the age restriction of the journal
-     * @param title           the title of the journal
-     * @param issn            the ISSN of the journal
-     * @param website         the website of the journal
-     * @param frequency       the publication frequency of the journal
-     * @param startDate       the start date of the journal
+     * @param publisherId    the ID of the publisher
+     * @param description    the description of the journal
+     * @param imageUrl       the URL of the journal's image
+     * @param ageRestriction the age restriction of the journal
+     * @param title          the title of the journal
+     * @param issn           the ISSN of the journal
+     * @param website        the website of the journal
+     * @param frequency      the publication frequency of the journal
+     * @param startDate      the start date of the journal
      */
     public Journal(int publisherId, String description, String imageUrl, int ageRestriction, String title,
-                   String issn, String website, JournalFrequency frequency, java.util.Date startDate) {
+            String issn, String website, JournalFrequency frequency, Date startDate) {
         super(publisherId, description, imageUrl, ageRestriction, MaterialType.JOURNAL, title);
         this.issn = issn;
         this.website = website;
@@ -118,7 +119,7 @@ public class Journal extends Material {
      * @return the journal, or null if not found
      * @throws SQLException if a database access error occurs
      */
-    public static Journal getJournalById(int id) throws SQLException {
+    public static Journal findById(int id) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String query = """
                 SELECT m.*, j.issn, j.website, j.frequency, j.start_date
@@ -141,8 +142,7 @@ public class Journal extends Material {
                             resultSet.getString("issn"),
                             resultSet.getString("website"),
                             JournalFrequency.valueOf(resultSet.getString("frequency")),
-                            resultSet.getDate("start_date")
-                    );
+                            resultSet.getDate("start_date"));
                 }
             }
         }
@@ -155,7 +155,7 @@ public class Journal extends Material {
      * @return a list of all journals
      * @throws SQLException if a database access error occurs
      */
-    public static List<Journal> getAllJournal() throws SQLException {
+    public static List<Journal> findAll() throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String query = """
                 SELECT m.*, j.issn, j.website, j.frequency, j.start_date
@@ -165,7 +165,7 @@ public class Journal extends Material {
 
         List<Journal> journals = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
+                ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 journals.add(new Journal(
                         resultSet.getInt("material_id"),
@@ -177,8 +177,7 @@ public class Journal extends Material {
                         resultSet.getString("issn"),
                         resultSet.getString("website"),
                         JournalFrequency.valueOf(resultSet.getString("frequency")),
-                        resultSet.getDate("start_date")
-                ));
+                        resultSet.getDate("start_date")));
             }
         }
         return journals;
@@ -190,7 +189,7 @@ public class Journal extends Material {
      * @param journal the journal to be updated
      * @throws SQLException if a database access error occurs
      */
-    public static void updateJournal(Journal journal) throws SQLException {
+    public static void update(Journal journal) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String materialQuery = """
                 UPDATE material SET publisher_id = ?, description = ?, image_url = ?, age_restriction = ?, type = ?, title = ?
@@ -233,7 +232,7 @@ public class Journal extends Material {
      * @param id the ID of the journal to be deleted
      * @throws SQLException if a database access error occurs
      */
-    public static void deleteJournal(int id) throws SQLException {
+    public static void delete(Journal journal) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String journalQuery = "DELETE FROM journal WHERE material_id = ?";
         String materialQuery = "DELETE FROM material WHERE material_id = ?";
@@ -241,11 +240,11 @@ public class Journal extends Material {
         connection.setAutoCommit(false);
 
         try (PreparedStatement deleteJournal = connection.prepareStatement(journalQuery);
-             PreparedStatement deleteMaterial = connection.prepareStatement(materialQuery)) {
-            deleteJournal.setInt(1, id);
+                PreparedStatement deleteMaterial = connection.prepareStatement(materialQuery)) {
+            deleteJournal.setInt(1, journal.getMaterialId());
             deleteJournal.executeUpdate();
 
-            deleteMaterial.setInt(1, id);
+            deleteMaterial.setInt(1, journal.getMaterialId());
             deleteMaterial.executeUpdate();
         }
 
@@ -276,11 +275,11 @@ public class Journal extends Material {
         this.frequency = frequency;
     }
 
-    public java.util.Date getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(java.util.Date startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
