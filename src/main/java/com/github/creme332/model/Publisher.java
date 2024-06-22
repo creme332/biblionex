@@ -22,6 +22,20 @@ public class Publisher {
         this.country = country;
     }
 
+    /**
+     * Constructor used for creating a publisher without a publisher ID.
+     * 
+     * @param name
+     * @param email
+     * @param country
+     */
+    public Publisher(String name, String email, String country) {
+        this.publisherId = -1;
+        this.name = name;
+        this.email = email;
+        this.country = country;
+    }
+
     public int getPublisherId() {
         return publisherId;
     }
