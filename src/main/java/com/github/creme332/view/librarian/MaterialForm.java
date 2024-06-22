@@ -2,7 +2,6 @@ package com.github.creme332.view.librarian;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
 
 public class MaterialForm extends JPanel {
@@ -38,11 +37,6 @@ public class MaterialForm extends JPanel {
         centerPanel.add(formTitle, BorderLayout.CENTER);
 
         materialTypeDropdown = new JComboBox<>(new String[] { "Book", "Journal", "Video" });
-        materialTypeDropdown.addActionListener(e -> {
-            CardLayout cl = (CardLayout) (formPanel.getLayout());
-            String selectedItem = (String) materialTypeDropdown.getSelectedItem();
-            cl.show(formPanel, selectedItem);
-        });
         centerPanel.add(materialTypeDropdown);
 
         headerPanel.add(centerPanel, BorderLayout.CENTER);
@@ -50,53 +44,66 @@ public class MaterialForm extends JPanel {
         return headerPanel;
     }
 
-    private JPanel createBookPanel() {
-        JPanel bookPanel = new JPanel(new GridBagLayout());
+    private JPanel createCommonPanel() {
+        JPanel commonPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        addCommonComponents(commonPanel, gbc);
+
+        return commonPanel;
+    }
+
+    private void addCommonComponents(JPanel panel, GridBagConstraints gbc) {
         gbc.gridx = 0;
         gbc.gridy = 0;
-        bookPanel.add(new JLabel("Choose publisher:"), gbc);
+        panel.add(new JLabel("Choose publisher:"), gbc);
         gbc.gridx = 1;
-        bookPanel.add(new JComboBox<>(new String[] { "ABC" }), gbc);
+        panel.add(new JComboBox<>(new String[] { "ABC" }), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        bookPanel.add(new JLabel("Title:"), gbc);
+        panel.add(new JLabel("Title:"), gbc);
         gbc.gridx = 1;
-        bookPanel.add(new JTextField(15), gbc);
+        panel.add(new JTextField(15), gbc);
         gbc.gridx = 2;
         gbc.gridy = 1;
-        bookPanel.add(new JLabel("Genre:"), gbc);
+        panel.add(new JLabel("Genre:"), gbc);
         gbc.gridx = 3;
-        bookPanel.add(new JTextField(15), gbc);
+        panel.add(new JTextField(15), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        bookPanel.add(new JLabel("Description:"), gbc);
+        panel.add(new JLabel("Description:"), gbc);
         gbc.gridx = 1;
-        bookPanel.add(new JTextField(15), gbc);
+        panel.add(new JTextField(15), gbc);
         gbc.gridx = 2;
         gbc.gridy = 2;
-        bookPanel.add(new JLabel("Age:"), gbc);
+        panel.add(new JLabel("Age:"), gbc);
         gbc.gridx = 3;
-        bookPanel.add(new JSpinner(new SpinnerNumberModel(100, 0, 200, 1)), gbc);
+        panel.add(new JSpinner(new SpinnerNumberModel(100, 0, 200, 1)), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
-        bookPanel.add(new JLabel("Image URL:"), gbc);
+        panel.add(new JLabel("Image URL:"), gbc);
         gbc.gridx = 1;
-        bookPanel.add(new JTextField(15), gbc);
+        panel.add(new JTextField(15), gbc);
 
         // Add a separator
         JSeparator separator = new JSeparator();
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 4;
-        bookPanel.add(separator, gbc);
+        panel.add(separator, gbc);
         gbc.gridwidth = 1;
+    }
+
+    private JPanel createBookPanel() {
+        JPanel bookPanel = createCommonPanel();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         gbc.gridx = 0;
         gbc.gridy = 5;
@@ -127,52 +134,10 @@ public class MaterialForm extends JPanel {
     }
 
     private JPanel createJournalPanel() {
-        JPanel journalPanel = new JPanel(new GridBagLayout());
+        JPanel journalPanel = createCommonPanel();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        journalPanel.add(new JLabel("Choose publisher:"), gbc);
-        gbc.gridx = 1;
-        journalPanel.add(new JComboBox<>(new String[] { "ABC" }), gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        journalPanel.add(new JLabel("Title:"), gbc);
-        gbc.gridx = 1;
-        journalPanel.add(new JTextField(15), gbc);
-        gbc.gridx = 2;
-        gbc.gridy = 1;
-        journalPanel.add(new JLabel("Genre:"), gbc);
-        gbc.gridx = 3;
-        journalPanel.add(new JTextField(15), gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        journalPanel.add(new JLabel("Description:"), gbc);
-        gbc.gridx = 1;
-        journalPanel.add(new JTextField(15), gbc);
-        gbc.gridx = 2;
-        gbc.gridy = 2;
-        journalPanel.add(new JLabel("Age:"), gbc);
-        gbc.gridx = 3;
-        journalPanel.add(new JSpinner(new SpinnerNumberModel(100, 0, 200, 1)), gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        journalPanel.add(new JLabel("Image URL:"), gbc);
-        gbc.gridx = 1;
-        journalPanel.add(new JTextField(15), gbc);
-
-        // Add a separator
-        JSeparator separator = new JSeparator();
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 4;
-        journalPanel.add(separator, gbc);
-        gbc.gridwidth = 1;
 
         gbc.gridx = 0;
         gbc.gridy = 5;
@@ -208,52 +173,10 @@ public class MaterialForm extends JPanel {
     }
 
     private JPanel createVideoPanel() {
-        JPanel videoPanel = new JPanel(new GridBagLayout());
+        JPanel videoPanel = createCommonPanel();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        videoPanel.add(new JLabel("Choose publisher:"), gbc);
-        gbc.gridx = 1;
-        videoPanel.add(new JComboBox<>(new String[] { "ABC" }), gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        videoPanel.add(new JLabel("Title:"), gbc);
-        gbc.gridx = 1;
-        videoPanel.add(new JTextField(15), gbc);
-        gbc.gridx = 2;
-        gbc.gridy = 1;
-        videoPanel.add(new JLabel("Genre:"), gbc);
-        gbc.gridx = 3;
-        videoPanel.add(new JTextField(15), gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        videoPanel.add(new JLabel("Description:"), gbc);
-        gbc.gridx = 1;
-        videoPanel.add(new JTextField(15), gbc);
-        gbc.gridx = 2;
-        gbc.gridy = 2;
-        videoPanel.add(new JLabel("Age:"), gbc);
-        gbc.gridx = 3;
-        videoPanel.add(new JSpinner(new SpinnerNumberModel(100, 0, 200, 1)), gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        videoPanel.add(new JLabel("Image URL:"), gbc);
-        gbc.gridx = 1;
-        videoPanel.add(new JTextField(15), gbc);
-
-        // Add a separator
-        JSeparator separator = new JSeparator();
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 4;
-        videoPanel.add(separator, gbc);
-        gbc.gridwidth = 1;
 
         gbc.gridx = 0;
         gbc.gridy = 5;
@@ -298,5 +221,9 @@ public class MaterialForm extends JPanel {
 
     public JButton getBackButton() {
         return backButton;
+    }
+
+    public JPanel getFormPanel() {
+        return formPanel;
     }
 }
