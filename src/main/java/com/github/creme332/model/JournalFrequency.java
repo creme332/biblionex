@@ -1,19 +1,18 @@
 package com.github.creme332.model;
 
 public enum JournalFrequency {
-  WEEKLY("weekly"),
-  MONTHLY("monthly"),
-  QUARTERLY("quarterly"),
-  ANNUALLY("annually"),
-  BIANNUALLY("biannually"),
-  DAILY("daily");
-
-  private String stringInDB;
+  WEEKLY("Weekly"),
+  MONTHLY("Monthly"),
+  QUARTERLY("Quarterly"),
+  ANNUALLY("Annually"),
+  BIANNUALLY("Biannually"),
+  DAILY("Daily");
 
   /**
-   * 
-   * @param stringRep string representation of enum as in database
+   * String representation of enum as in database
    */
+  private String stringInDB;
+
   JournalFrequency(String stringRep) {
     this.stringInDB = stringRep;
   }
