@@ -59,16 +59,7 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.PATRON_DASHBOARD_SCREEN, new com.github.creme332.view.patron.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_DASHBOARD_SCREEN, new com.github.creme332.view.librarian.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
-
-        // Fetch the list of patrons and pass it to the ListPage constructor
-        List<Patron> patrons;
-        try {
-            patrons = Patron.findAll();
-            screenMapper.put(Screen.LIBRARIAN_LIST_SCREEN, new ListPage(patrons));
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        screenMapper.put(Screen.LIBRARIAN_LIST_SCREEN, new ListPage());
 
         // add screens to cardPanels
         for (Map.Entry<Screen, JPanel> entry : screenMapper.entrySet()) {
