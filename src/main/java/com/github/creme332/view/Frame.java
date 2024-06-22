@@ -12,6 +12,7 @@ import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.librarian.ListPage;
 import com.github.creme332.view.librarian.RegistrationForm;
 import com.github.creme332.view.patron.Registration;
+import com.github.creme332.view.patron.Sidebar;
 
 /**
  * Frame of the GUI application.
@@ -27,6 +28,8 @@ public class Frame extends JFrame {
 
     // a map that maps a screen name to screen
     private Map<Screen, JPanel> screenMapper = new EnumMap<>(Screen.class);
+
+    Sidebar patronSidebar = new Sidebar();
 
     public Frame() throws InvalidPathException {
         // set frame title
@@ -63,8 +66,15 @@ public class Frame extends JFrame {
             cardPanels.add(entry.getValue(), entry.getKey().getScreenName());
         }
 
-        // add cardPanels to frame
-        this.add(cardPanels);
+        // hide patron sidebar by default
+        patronSidebar.setVisible(false);
+
+        // setup frame
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(patronSidebar, BorderLayout.WEST);
+        mainPanel.add(cardPanels, BorderLayout.CENTER);
+
+        this.add(mainPanel);
 
         this.pack();
 
@@ -83,5 +93,6 @@ public class Frame extends JFrame {
 
     public void switchToScreen(Screen screenName) {
         cardLayout.show(cardPanels, screenName.getScreenName());
+        patronSidebar.setVisible(screenName.name().startsWith("PATRON_"));
     }
 }
