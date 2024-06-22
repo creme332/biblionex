@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Dashboard extends JPanel {
-    private JButton backButton;
+    private JButton logOutButton;
     private JButton checkInButton, materialsButton, catalogingButton;
     private JButton checkOutButton, patronsButton, overduesButton;
     private JButton renewButton, librariansButton, acquisitionsButton;
@@ -15,10 +15,10 @@ public class Dashboard extends JPanel {
 
         // Header panel with back button and title
         JPanel headerPanel = new JPanel(new BorderLayout());
-        backButton = new JButton("Back");
+        logOutButton = new JButton("Log out");
         JLabel titleLabel = new JLabel("Admin Dashboard", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        headerPanel.add(backButton, BorderLayout.WEST);
+        headerPanel.add(logOutButton, BorderLayout.WEST);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
 
         // Main panel with buttons
@@ -58,8 +58,9 @@ public class Dashboard extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    public JButton getBackButton() {
-        return backButton;
+    public JButton getLogOutButton() {
+        System.out.println("hereeee");
+        return logOutButton;
     }
 
     public JButton getCheckInButton() {
