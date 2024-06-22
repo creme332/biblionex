@@ -43,6 +43,10 @@ public class Librarian extends User {
     }
 
     public static void save(Librarian librarian) {
+        if (!User.validateEmail(librarian.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         final Connection conn = DatabaseConnection.getConnection();
         PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
         String hashedPassword = passwordAuthentication.hash(librarian.getPassword().toCharArray());
@@ -68,6 +72,10 @@ public class Librarian extends User {
     }
 
     public static void update(Librarian librarian) {
+        if (!User.validateEmail(librarian.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         final Connection conn = DatabaseConnection.getConnection();
         PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
         String hashedPassword = passwordAuthentication.hash(librarian.getPassword().toCharArray());

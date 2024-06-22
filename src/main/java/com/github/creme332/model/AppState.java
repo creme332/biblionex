@@ -36,4 +36,9 @@ public class AppState {
     public User getLoggedInUser() {
         return loggedInUser;
     }
+
+    public void logOut() {
+        loggedInUser = null;
+        setCurrentScreen(Screen.LOGIN_SCREEN);
+    }
 }

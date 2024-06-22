@@ -2,14 +2,17 @@ package com.github.creme332.view;
 
 import java.awt.*;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
 
 import com.github.creme332.controller.Screen;
+import com.github.creme332.model.Patron;
 import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.librarian.MaterialForm;
+import com.github.creme332.view.librarian.ListPage;
 import com.github.creme332.view.librarian.RegistrationForm;
 import com.github.creme332.view.patron.Registration;
 
@@ -58,6 +61,10 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
         screenMapper.put(Screen.LIBRARIAN_MATERIAL_SCREEN, new MaterialForm());
 
+
+        // Fetch the list of patrons and pass it to the ListPage constructor
+        List<Patron> patrons = Patron.findAll();
+        screenMapper.put(Screen.LIBRARIAN_LIST_SCREEN, new ListPage(patrons));
         // to add new screens to frame, add a new line here...
 
         // add screens to cardPanels

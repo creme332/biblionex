@@ -1,6 +1,12 @@
 package com.github.creme332.model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
+
+import com.github.creme332.utils.DatabaseConnection;
 import com.github.creme332.utils.PasswordAuthentication;
 
 public abstract class User {
@@ -61,6 +67,27 @@ public abstract class User {
         Arrays.fill(enteredPassword, '0');
 
         return isCorrect;
+    }
+
+    public static boolean validateEmail(String email) {
+        final Connection conn = DatabaseConnection.getConnection();
+        String query = "SELECT COUNT(*) FROM patron WHERE email = ? UNION SELECT COUNT(*) FROM librarian WHERE email = ?";
+        
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                if (count > 0) {
+                    return false; // Email already exists
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true; // Email is unique
     }
 
     public String getEmail() {
