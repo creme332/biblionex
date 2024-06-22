@@ -1,6 +1,8 @@
 package com.github.creme332.model;
 
-/** */
+/**
+ * Stores information about a material (video, book, journal).
+ */
 public abstract class Material {
     protected int materialId;
     protected int publisherId;
@@ -99,7 +101,6 @@ public abstract class Material {
         this.title = title;
     }
 
-    // Utility Methods
     @Override
     public String toString() {
         return "Material{" +
