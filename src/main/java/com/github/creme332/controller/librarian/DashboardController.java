@@ -1,5 +1,6 @@
 package com.github.creme332.controller.librarian;
 
+import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.view.librarian.Dashboard;
 
@@ -44,12 +45,7 @@ public class DashboardController {
             }
         });
 
-        dashboard.getPatronsButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Patrons button click
-            }
-        });
+        dashboard.getPatronsButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_LIST_SCREEN));
 
         dashboard.getOverduesButton().addActionListener(new ActionListener() {
             @Override

@@ -29,7 +29,7 @@ public class RegisterController {
 
         // Add action listener to back button
         registrationPage.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LOGIN_SCREEN));
-        
+
         // Add key listener for Enter key press in form fields
         addEnterKeyListener(registrationPage.getEmailField());
         addEnterKeyListener(registrationPage.getPasswordField());
@@ -87,13 +87,16 @@ public class RegisterController {
 
         Patron patron = new Patron(email, new String(password), address, firstName, lastName, phone,
                 creditCardNo, null);
-
         try {
             Patron.save(patron);
             registrationPage.setSuccessMessage("Registration successful. Please log in.");
             app.setCurrentScreen(Screen.LOGIN_SCREEN);
-        } catch (IllegalArgumentException e) {
-            registrationPage.setErrorMessage(e.getMessage());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
         }
+
+        registrationPage.setSuccessMessage("Registration successful. Please log in.");
+        app.setCurrentScreen(Screen.LOGIN_SCREEN);
     }
 }

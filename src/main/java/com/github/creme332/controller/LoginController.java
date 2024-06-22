@@ -2,6 +2,8 @@ package com.github.creme332.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -20,7 +22,6 @@ import com.github.creme332.view.Login;
 public class LoginController {
     private Login loginPage;
     private AppState app;
-    private String userType = "librarian";
 
     public LoginController(AppState app, Login loginPage) {
         this.loginPage = loginPage;
@@ -33,11 +34,22 @@ public class LoginController {
                 String email = loginPage.getEmail();
 
                 // assuming is a patron, find his account
-                User user = Patron.findByEmail(email);
+                User user;
+                try {
+                    user = Patron.findByEmail(email);
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                    return;
+                }
 
                 // if no patron account found, assume that user is librarian
                 if (user == null) {
-                    user = Librarian.findByEmail(email);
+                    try {
+                        user = Librarian.findByEmail(email);
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                        return;
+                    }
                 }
 
                 // if email invalid, show error
@@ -56,10 +68,20 @@ public class LoginController {
                 loginPage.resetFields();
 
                 if (user.getUserType() == UserType.PATRON) {
-                    app.setLoggedInUser(Patron.findByEmail(email));
+                    try {
+                        app.setLoggedInUser(Patron.findByEmail(email));
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                        return;
+                    }
                     app.setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
                 } else {
-                    app.setLoggedInUser(Librarian.findByEmail(email));
+                    try {
+                        app.setLoggedInUser(Librarian.findByEmail(email));
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                        return;
+                    }
                     app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN);
                 }
             }

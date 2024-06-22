@@ -1,6 +1,9 @@
 package com.github.creme332.model;
 
-public class Material {
+/**
+ * Stores information about a material (video, book, journal).
+ */
+public abstract class Material {
     protected int materialId;
     protected int publisherId;
     protected String description;
@@ -9,7 +12,7 @@ public class Material {
     protected MaterialType type;
     protected String title;
 
-    public Material(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
+    protected Material(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
             MaterialType type, String title) {
         this.materialId = materialId;
         this.publisherId = publisherId;
@@ -32,7 +35,7 @@ public class Material {
      * @param type
      * @param title
      */
-    public Material(int publisherId, String description, String imageUrl, int ageRestriction,
+    protected Material(int publisherId, String description, String imageUrl, int ageRestriction,
             MaterialType type, String title) {
         this.publisherId = publisherId;
         this.description = description;
@@ -98,7 +101,6 @@ public class Material {
         this.title = title;
     }
 
-    // Utility Methods
     @Override
     public String toString() {
         return "Material{" +

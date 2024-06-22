@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.List;
 import com.github.creme332.utils.ButtonRenderer;
 import com.github.creme332.utils.ButtonEditor;
@@ -20,7 +21,7 @@ public class ListPage extends JPanel {
     private JButton newPatronButton;
     private DefaultTableModel tableModel;
 
-    public ListPage(List<Patron> patrons) {
+    public ListPage() {
         setLayout(new BorderLayout());
 
         // Top Panel
@@ -57,9 +58,6 @@ public class ListPage extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Populate table
-        populateTable(patrons);
-
         // New Patron Button
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         newPatronButton = new JButton("+ New patron");
@@ -78,18 +76,25 @@ public class ListPage extends JPanel {
             }
         });
     }
-    
-    // Populate table method
+
+    /**
+     * Display a list of patrons in the table.
+     * 
+     * @param patrons
+     */
     public void populateTable(List<Patron> patrons) {
         tableModel.setRowCount(0);
+        if (patrons.isEmpty())
+            return;
+
         for (Patron patron : patrons) {
             Object[] rowData = {
-                patron.getUserId(),
-                patron.getFirstName(),
-                patron.getLastName(),
-                patron.getEmail(),
-                patron.getPhoneNo(),
-                "Delete"
+                    patron.getUserId(),
+                    patron.getFirstName(),
+                    patron.getLastName(),
+                    patron.getEmail(),
+                    patron.getPhoneNo(),
+                    "Delete"
             };
             tableModel.addRow(rowData);
         }
@@ -103,19 +108,24 @@ public class ListPage extends JPanel {
         String email = (String) tableModel.getValueAt(row, 3);
         String phoneNo = (String) tableModel.getValueAt(row, 4);
 
-        Patron patron = new Patron();
-        patron.setUserId(patronId);
-        patron.setFirstName(firstName);
-        patron.setLastName(lastName);
-        patron.setEmail(email);
-        patron.setPhoneNo(phoneNo);
+        // Patron patron = new Patron(email, "", );
+        // patron.setUserId(patronId);
+        // patron.setFirstName(firstName);
+        // patron.setLastName(lastName);
+        // patron.setEmail(email);
+        // patron.setPhoneNo(phoneNo);
 
-        Patron.update(patron);
+        // Patron.update(patron);
     }
 
     public void deletePatronFromDatabase(int row) {
         int patronId = (int) tableModel.getValueAt(row, 0);
-        Patron.delete(patronId);
+        try {
+            Patron.delete(patronId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
         tableModel.removeRow(row);
     }
 

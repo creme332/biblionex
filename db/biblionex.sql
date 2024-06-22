@@ -141,7 +141,7 @@ CREATE TABLE `journal` (
   `issn` varchar(255) NOT NULL,
   `start_date` datetime NOT NULL,
   `website` varchar(255) NOT NULL,
-  `frequency` enum('weekly','monthly','quarterly','annually','biannually','daily') DEFAULT NULL,
+  `frequency` enum('Weekly','Monthly','Quarterly','Annually','Biannually','Daily') DEFAULT NULL,
   PRIMARY KEY (`material_id`),
   UNIQUE KEY `issn` (`issn`),
   CONSTRAINT `journal_consk1` FOREIGN KEY (`material_id`) REFERENCES `material` (`material_id`)
