@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An object representing a physical copy of a material (book, video, ...). A
+ * An object storing information about a physical copy of a material. A
  * material can have multiple copies.
  */
 public class MaterialCopy {
@@ -145,33 +145,62 @@ public class MaterialCopy {
             preparedStatement.setInt(5, materialCopy.getLocation().getShelfNo());
             preparedStatement.setInt(6, materialCopy.getLocation().getAisleNo());
             preparedStatement.setInt(7, materialCopy.getLocation().getSectionNo());
-            preparedStatement.executeUpdate();
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new SQLException(
+                        String.format("Could not save material copy with barcode %d and material ID %d",
+                                materialCopy.getBarcode(), materialCopy.getMaterialId()));
+            }
         }
     }
 
+    /**
+     * Updates all attributes of material copy except material ID, order ID and
+     * barcode.
+     * 
+     * @param materialCopy
+     * @throws SQLException
+     */
     public static void update(MaterialCopy materialCopy) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
-        String query = "UPDATE material_copy SET material_id = ?, order_id = ?, condition = ?, shelf_no = ?, aisle_no = ?, section_no = ? WHERE barcode = ?";
+        String query = "UPDATE material_copy SET condition = ?, shelf_no = ?, aisle_no = ?, section_no = ? WHERE barcode = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setInt(1, materialCopy.getMaterialId());
-            preparedStatement.setInt(2, materialCopy.getOrderId());
-            preparedStatement.setString(3, materialCopy.getCondition().toString());
-            preparedStatement.setInt(4, materialCopy.getLocation().getShelfNo());
-            preparedStatement.setInt(5, materialCopy.getLocation().getAisleNo());
-            preparedStatement.setInt(6, materialCopy.getLocation().getSectionNo());
-            preparedStatement.setInt(7, materialCopy.getBarcode());
-            preparedStatement.executeUpdate();
+            preparedStatement.setString(1, materialCopy.getCondition().toString());
+            preparedStatement.setInt(2, materialCopy.getLocation().getShelfNo());
+            preparedStatement.setInt(3, materialCopy.getLocation().getAisleNo());
+            preparedStatement.setInt(4, materialCopy.getLocation().getSectionNo());
+            preparedStatement.setInt(5, materialCopy.getBarcode());
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new SQLException(
+                        String.format("Could not update material copy with barcode %d and material ID %d",
+                                materialCopy.getBarcode(), materialCopy.getMaterialId()));
+            }
         }
     }
 
-    public static void delete(int barcode) throws SQLException {
+    /**
+     * Deletes a particular material copy.
+     * 
+     * @param materialCopy Material copy to be deleted.
+     * @throws SQLException
+     */
+    public static void delete(MaterialCopy materialCopy) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "DELETE FROM material_copy WHERE barcode = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setInt(1, barcode);
-            preparedStatement.executeUpdate();
+            preparedStatement.setInt(1, materialCopy.getBarcode());
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new SQLException(
+                        String.format("Could not delete material copy with barcode %d and material ID %d",
+                                materialCopy.getBarcode(), materialCopy.getMaterialId()));
+            }
         }
     }
 }
