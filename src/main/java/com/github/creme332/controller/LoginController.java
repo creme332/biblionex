@@ -1,5 +1,13 @@
 package com.github.creme332.controller;
 
+import com.github.creme332.model.AppState;
+import com.github.creme332.model.Librarian;
+import com.github.creme332.model.Patron;
+import com.github.creme332.model.User;
+import com.github.creme332.model.UserType;
+import com.github.creme332.view.Frame;
+import com.github.creme332.view.Login;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -9,23 +17,15 @@ import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import com.github.creme332.model.AppState;
-import com.github.creme332.model.Librarian;
-import com.github.creme332.model.Patron;
-import com.github.creme332.model.User;
-import com.github.creme332.model.UserType;
-import com.github.creme332.view.Login;
-
-/**
- * Controller for login page
- */
 public class LoginController {
     private Login loginPage;
     private AppState app;
+    private Frame frame;
 
-    public LoginController(AppState app, Login loginPage) {
+    public LoginController(AppState app, Login loginPage, Frame frame) {
         this.loginPage = loginPage;
         this.app = app;
+        this.frame = frame;
 
         // Create a common ActionListener for login logic
         ActionListener loginAction = new ActionListener() {
@@ -69,20 +69,22 @@ public class LoginController {
 
                 if (user.getUserType() == UserType.PATRON) {
                     try {
-                        app.setLoggedInUser(Patron.findByEmail(email));
+                        Patron patron = Patron.findByEmail(email);
+                        app.setLoggedInUser(patron);
+                        frame.addPatronSideBar(patron);
+                        app.setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                         return;
                     }
-                    app.setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
                 } else {
                     try {
                         app.setLoggedInUser(Librarian.findByEmail(email));
+                        app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN);
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                         return;
                     }
-                    app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN);
                 }
             }
         };

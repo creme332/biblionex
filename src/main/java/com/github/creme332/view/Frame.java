@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.swing.*;
 
 import com.github.creme332.controller.Screen;
+import com.github.creme332.model.Patron;
+import com.github.creme332.view.patron.SideBar;
 import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.librarian.ListPage;
@@ -83,5 +85,12 @@ public class Frame extends JFrame {
 
     public void switchToScreen(Screen screenName) {
         cardLayout.show(cardPanels, screenName.getScreenName());
+    }
+
+    public void addPatronSideBar(Patron patron) {
+        SideBar sideBar = new SideBar(patron);
+        new com.github.creme332.controller.patron.SideBarController(new com.github.creme332.model.AppState(), sideBar);
+        screenMapper.put(Screen.PATRON_SIDEBAR_SCREEN, sideBar);
+        cardPanels.add(sideBar, Screen.PATRON_SIDEBAR_SCREEN.getScreenName());
     }
 }
