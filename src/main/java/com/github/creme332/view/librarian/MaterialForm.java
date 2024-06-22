@@ -1,53 +1,20 @@
 package com.github.creme332.view.librarian;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 
 public class MaterialForm extends JPanel {
-    private CardLayout cardLayout;
     private JPanel formPanel;
     private JComboBox<String> materialTypeDropdown;
     private JButton submitButton;
-    private JLabel formTitle;
     private JButton backButton;
 
     public MaterialForm() {
         setLayout(new BorderLayout());
 
-        // Create a top panel for the back button, title, and dropdown
-        JPanel topPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-
-        backButton = new JButton("Back");
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        // gbc.anchor = GridBagConstraints.EAST;
-        topPanel.add(backButton, gbc);
-
-        formTitle = new JLabel("New Material Form: Book");
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
-        topPanel.add(formTitle, gbc);
-
-        materialTypeDropdown = new JComboBox<>(new String[]{"Book", "Journal", "Video"});
-        materialTypeDropdown.addActionListener(e -> {
-            CardLayout cl = (CardLayout) (formPanel.getLayout());
-            String selectedItem = (String) materialTypeDropdown.getSelectedItem();
-            cl.show(formPanel, selectedItem);
-            formTitle.setText("New Material Form: " + selectedItem);
-        });
-
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
-        topPanel.add(materialTypeDropdown, gbc);
-
-        add(topPanel, BorderLayout.NORTH);
+        add(createHeaderPanel(), BorderLayout.NORTH);
 
         formPanel = new JPanel(new CardLayout());
         formPanel.add(createBookPanel(), "Book");
@@ -56,6 +23,31 @@ public class MaterialForm extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(formPanel);
         add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private JPanel createHeaderPanel() {
+        // Create a top panel for the back button, title, and dropdown
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBorder(new EmptyBorder(new Insets(5, 5, 5, 5)));
+
+        backButton = new JButton("Back");
+        headerPanel.add(backButton, BorderLayout.WEST);
+
+        JPanel centerPanel = new JPanel();
+        JLabel formTitle = new JLabel("New Material Form: ");
+        centerPanel.add(formTitle, BorderLayout.CENTER);
+
+        materialTypeDropdown = new JComboBox<>(new String[] { "Book", "Journal", "Video" });
+        materialTypeDropdown.addActionListener(e -> {
+            CardLayout cl = (CardLayout) (formPanel.getLayout());
+            String selectedItem = (String) materialTypeDropdown.getSelectedItem();
+            cl.show(formPanel, selectedItem);
+        });
+        centerPanel.add(materialTypeDropdown);
+
+        headerPanel.add(centerPanel, BorderLayout.CENTER);
+
+        return headerPanel;
     }
 
     private JPanel createBookPanel() {
@@ -68,7 +60,7 @@ public class MaterialForm extends JPanel {
         gbc.gridy = 0;
         bookPanel.add(new JLabel("Choose publisher:"), gbc);
         gbc.gridx = 1;
-        bookPanel.add(new JComboBox<>(new String[]{"ABC"}), gbc);
+        bookPanel.add(new JComboBox<>(new String[] { "ABC" }), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -121,7 +113,7 @@ public class MaterialForm extends JPanel {
         gbc.gridy = 6;
         bookPanel.add(new JLabel("Author:"), gbc);
         gbc.gridx = 1;
-        bookPanel.add(new JComboBox<>(new String[]{"James"}), gbc);
+        bookPanel.add(new JComboBox<>(new String[] { "James" }), gbc);
 
         // Add the submit button
         gbc.gridx = 0;
@@ -144,7 +136,7 @@ public class MaterialForm extends JPanel {
         gbc.gridy = 0;
         journalPanel.add(new JLabel("Choose publisher:"), gbc);
         gbc.gridx = 1;
-        journalPanel.add(new JComboBox<>(new String[]{"ABC"}), gbc);
+        journalPanel.add(new JComboBox<>(new String[] { "ABC" }), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -202,7 +194,7 @@ public class MaterialForm extends JPanel {
         gbc.gridy = 6;
         journalPanel.add(new JLabel("Frequency:"), gbc);
         gbc.gridx = 3;
-        journalPanel.add(new JComboBox<>(new String[]{"Weekly", "Monthly"}), gbc);
+        journalPanel.add(new JComboBox<>(new String[] { "Weekly", "Monthly" }), gbc);
 
         // Add the submit button
         gbc.gridx = 0;
@@ -225,7 +217,7 @@ public class MaterialForm extends JPanel {
         gbc.gridy = 0;
         videoPanel.add(new JLabel("Choose publisher:"), gbc);
         gbc.gridx = 1;
-        videoPanel.add(new JComboBox<>(new String[]{"ABC"}), gbc);
+        videoPanel.add(new JComboBox<>(new String[] { "ABC" }), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
