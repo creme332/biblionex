@@ -111,6 +111,11 @@ public class Login extends JPanel {
         return emailField;
     }
 
+    public void resetFields(){
+        emailField.setText("");
+        passwordField.setText("");
+    }
+
     public JPasswordField getPasswordField() {
         return passwordField;
     }
