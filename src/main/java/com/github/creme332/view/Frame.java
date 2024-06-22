@@ -1,15 +1,12 @@
 package com.github.creme332.view;
 
 import java.awt.*;
-import java.sql.SQLException;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
 
 import com.github.creme332.controller.Screen;
-import com.github.creme332.model.Patron;
 import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.librarian.ListPage;
