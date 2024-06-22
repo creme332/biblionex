@@ -47,6 +47,12 @@ public class Controller {
                 (com.github.creme332.view.librarian.Dashboard) frame
                         .getPage(Screen.LIBRARIAN_DASHBOARD_SCREEN));
 
-        frameController.playAnimation();
+        if (app.getAutoLogin() != null) {
+            // auto login enabled
+            app.autoLogin(app.getAutoLogin());
+        } else {
+            // start application normally
+            frameController.playAnimation();
+        }
     }
 }
