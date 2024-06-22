@@ -56,24 +56,24 @@ public class Vendor {
 
     /**
      * Finds vendors by the specified column and value.
+     * 
      * @param column The column name to search by.
-     * @param value The value to search for in the specified column.
+     * @param value  The value to search for in the specified column.
      * @return A list of vendors matching the search criteria.
      */
-    public static List<Vendor> findBy(String column, String value) {
+    public static List<Vendor> findById(int vendorId) {
         final Connection conn = DatabaseConnection.getConnection();
         List<Vendor> vendors = new ArrayList<>();
-        String query = "SELECT * FROM vendor WHERE " + column + " = ?";
+        String query = "SELECT * FROM vendor WHERE vendor_id = ?";
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setString(1, value);
+            preparedStatement.setInt(1, vendorId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Vendor vendor = new Vendor(
-                    resultSet.getInt("vendor_id"),
-                    resultSet.getString("email"),
-                    resultSet.getString("name"),
-                    resultSet.getString("contact_person")
-                );
+                        resultSet.getInt("vendor_id"),
+                        resultSet.getString("email"),
+                        resultSet.getString("name"),
+                        resultSet.getString("contact_person"));
                 vendors.add(vendor);
             }
         } catch (SQLException e) {
@@ -84,6 +84,7 @@ public class Vendor {
 
     /**
      * Retrieves all vendors from the database.
+     * 
      * @return A list of all vendors.
      */
     public static List<Vendor> findAll() {
@@ -94,11 +95,10 @@ public class Vendor {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Vendor vendor = new Vendor(
-                    resultSet.getInt("vendor_id"),
-                    resultSet.getString("email"),
-                    resultSet.getString("name"),
-                    resultSet.getString("contact_person")
-                );
+                        resultSet.getInt("vendor_id"),
+                        resultSet.getString("email"),
+                        resultSet.getString("name"),
+                        resultSet.getString("contact_person"));
                 vendors.add(vendor);
             }
         } catch (SQLException e) {
@@ -109,6 +109,7 @@ public class Vendor {
 
     /**
      * Saves a new vendor to the database.
+     * 
      * @param vendor The vendor to save.
      */
     public static void save(Vendor vendor) {

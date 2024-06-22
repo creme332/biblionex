@@ -38,7 +38,7 @@ public class Patron extends User {
         creditCardNo = "";
     }
 
-    public static void save(Patron patron) {
+    public static void save(Patron patron) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "INSERT INTO patron (address, password, last_name, first_name, phone_no, email, credit_card_no) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -47,19 +47,17 @@ public class Patron extends User {
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, patron.getAddress());
-            preparedStatement.setString(2, hashedPassword);  // Save hashed password
+            preparedStatement.setString(2, hashedPassword); // Save hashed password
             preparedStatement.setString(3, patron.getLastName());
             preparedStatement.setString(4, patron.getFirstName());
             preparedStatement.setString(5, patron.getPhoneNo());
             preparedStatement.setString(6, patron.getEmail());
             preparedStatement.setString(7, patron.getCreditCardNo());
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    public static void update(Patron patron) {
+    public static void update(Patron patron) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "UPDATE patron SET address = ?, password = ?, last_name = ?, first_name = ?, phone_no = ?, email = ? WHERE patron_id = ?";
 
@@ -68,37 +66,33 @@ public class Patron extends User {
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, patron.getAddress());
-            preparedStatement.setString(2, hashedPassword);  // Save hashed password
+            preparedStatement.setString(2, hashedPassword); // Save hashed password
             preparedStatement.setString(3, patron.getLastName());
             preparedStatement.setString(4, patron.getFirstName());
             preparedStatement.setString(5, patron.getPhoneNo());
             preparedStatement.setString(6, patron.getEmail());
             preparedStatement.setInt(7, patron.getUserId());
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    public static void delete(int id) {
+    public static void delete(int patronId) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "DELETE FROM patron WHERE patron_id = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setInt(1, patronId);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    public static Patron findById(int id) {
+    public static Patron findById(int patronId) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         Patron patron = null;
         String query = "SELECT * FROM patron WHERE patron_id = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setInt(1, patronId);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
@@ -111,13 +105,11 @@ public class Patron extends User {
                 patron.setPhoneNo(resultSet.getString("phone_no"));
                 patron.setEmail(resultSet.getString("email"));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return patron;
     }
 
-    public static Patron findByEmail(String email) {
+    public static Patron findByEmail(String email) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
 
         Patron patron = null;
@@ -137,13 +129,11 @@ public class Patron extends User {
                 patron.setPhoneNo(resultSet.getString("phone_no"));
                 patron.setEmail(email);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return patron;
     }
 
-    public static List<Patron> findAll() {
+    public static List<Patron> findAll() throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         List<Patron> patrons = new ArrayList<>();
         String query = "SELECT * FROM patron";
@@ -162,8 +152,6 @@ public class Patron extends User {
                 patron.setEmail(resultSet.getString("email"));
                 patrons.add(patron);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return patrons;
     }

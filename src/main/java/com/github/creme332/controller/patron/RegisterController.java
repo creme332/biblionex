@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.SQLException;
 
 import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
@@ -28,7 +29,7 @@ public class RegisterController {
 
         // Add action listener to back button
         registrationPage.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LOGIN_SCREEN));
-        
+
         // Add key listener for Enter key press in form fields
         addEnterKeyListener(registrationPage.getEmailField());
         addEnterKeyListener(registrationPage.getPasswordField());
@@ -40,7 +41,7 @@ public class RegisterController {
         addEnterKeyListener(registrationPage.getCreditCardField());
     }
 
-        private void addEnterKeyListener(javax.swing.JTextField textField) {
+    private void addEnterKeyListener(javax.swing.JTextField textField) {
         textField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -86,7 +87,12 @@ public class RegisterController {
 
         Patron patron = new Patron(email, new String(password), address, firstName, lastName, phone,
                 creditCardNo, null);
-        Patron.save(patron);
+        try {
+            Patron.save(patron);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
 
         registrationPage.setSuccessMessage("Registration successful. Please log in.");
         app.setCurrentScreen(Screen.LOGIN_SCREEN);
