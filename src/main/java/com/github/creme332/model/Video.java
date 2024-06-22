@@ -22,19 +22,19 @@ public class Video extends Material {
     /**
      * Constructs a new Video.
      *
-     * @param materialId      the ID of the material
-     * @param publisherId     the ID of the publisher
-     * @param description     the description of the video
-     * @param imageUrl        the URL of the video's image
-     * @param ageRestriction  the age restriction of the video
-     * @param title           the title of the video
-     * @param rating          the rating of the video
-     * @param duration        the duration of the video in minutes
-     * @param language        the language of the video
-     * @param format          the format of the video
+     * @param materialId     the ID of the material
+     * @param publisherId    the ID of the publisher
+     * @param description    the description of the video
+     * @param imageUrl       the URL of the video's image
+     * @param ageRestriction the age restriction of the video
+     * @param title          the title of the video
+     * @param rating         the rating of the video
+     * @param duration       the duration of the video in minutes
+     * @param language       the language of the video
+     * @param format         the format of the video
      */
     public Video(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
-                 String title, String language, int duration, int rating, String format) {
+            String title, String language, int duration, int rating, String format) {
         super(materialId, publisherId, description, imageUrl, ageRestriction, MaterialType.VIDEO, title);
         this.language = language;
         this.duration = duration;
@@ -45,18 +45,18 @@ public class Video extends Material {
     /**
      * Constructs a new Video without a material ID.
      *
-     * @param publisherId     the ID of the publisher
-     * @param description     the description of the video
-     * @param imageUrl        the URL of the video's image
-     * @param ageRestriction  the age restriction of the video
-     * @param title           the title of the video
-     * @param rating          the rating of the video
-     * @param duration        the duration of the video in minutes
-     * @param language        the language of the video
-     * @param format          the format of the video
+     * @param publisherId    the ID of the publisher
+     * @param description    the description of the video
+     * @param imageUrl       the URL of the video's image
+     * @param ageRestriction the age restriction of the video
+     * @param title          the title of the video
+     * @param rating         the rating of the video
+     * @param duration       the duration of the video in minutes
+     * @param language       the language of the video
+     * @param format         the format of the video
      */
     public Video(int publisherId, String description, String imageUrl, int ageRestriction, String title,
-                 String language, int duration, int rating, String format) {
+            String language, int duration, int rating, String format) {
         super(publisherId, description, imageUrl, ageRestriction, MaterialType.VIDEO, title);
         this.language = language;
         this.duration = duration;
@@ -121,7 +121,7 @@ public class Video extends Material {
      * @return the video, or null if not found
      * @throws SQLException if a database access error occurs
      */
-    public static Video getVideoById(int id) throws SQLException {
+    public static Video findByID(Video video) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String query = """
                 SELECT m.*, v.language, v.duration, v.rating, v.format
@@ -131,7 +131,7 @@ public class Video extends Material {
                 """;
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, id);
+            statement.setInt(1, video.getMaterialId());
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new Video(
@@ -144,8 +144,7 @@ public class Video extends Material {
                             resultSet.getString("language"),
                             resultSet.getInt("duration"),
                             resultSet.getInt("rating"),
-                            resultSet.getString("format")
-                    );
+                            resultSet.getString("format"));
                 }
             }
         }
@@ -158,7 +157,7 @@ public class Video extends Material {
      * @return a list of all videos
      * @throws SQLException if a database access error occurs
      */
-    public static List<Video> getAllVideo() throws SQLException {
+    public static List<Video> findAll() throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String query = """
                 SELECT m.*, v.language, v.duration, v.rating, v.format
@@ -168,7 +167,7 @@ public class Video extends Material {
 
         List<Video> videos = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
+                ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 videos.add(new Video(
                         resultSet.getInt("material_id"),
@@ -180,8 +179,7 @@ public class Video extends Material {
                         resultSet.getString("language"),
                         resultSet.getInt("duration"),
                         resultSet.getInt("rating"),
-                        resultSet.getString("format")
-                ));
+                        resultSet.getString("format")));
             }
         }
         return videos;
@@ -193,7 +191,7 @@ public class Video extends Material {
      * @param video the video to be updated
      * @throws SQLException if a database access error occurs
      */
-    public static void updateVideo(Video video) throws SQLException {
+    public static void update(Video video) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String materialQuery = """
                 UPDATE material SET publisher_id = ?, description = ?, image_url = ?, age_restriction = ?, type = ?, title = ?
@@ -236,7 +234,7 @@ public class Video extends Material {
      * @param id the ID of the video to be deleted
      * @throws SQLException if a database access error occurs
      */
-    public static void deleteVideo(int id) throws SQLException {
+    public static void delete(Video video) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String videoQuery = "DELETE FROM video WHERE material_id = ?";
         String materialQuery = "DELETE FROM material WHERE material_id = ?";
@@ -244,17 +242,16 @@ public class Video extends Material {
         connection.setAutoCommit(false);
 
         try (PreparedStatement deleteVideo = connection.prepareStatement(videoQuery);
-             PreparedStatement deleteMaterial = connection.prepareStatement(materialQuery)) {
-            deleteVideo.setInt(1, id);
+                PreparedStatement deleteMaterial = connection.prepareStatement(materialQuery)) {
+            deleteVideo.setInt(1, video.getMaterialId());
             deleteVideo.executeUpdate();
 
-            deleteMaterial.setInt(1, id);
+            deleteMaterial.setInt(1, video.getMaterialId());
             deleteMaterial.executeUpdate();
         }
 
         connection.commit();
     }
-
 
     public int getRating() {
         return rating;
