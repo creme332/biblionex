@@ -2,9 +2,7 @@ package com.github.creme332.controller.librarian;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.view.librarian.Dashboard;
-import com.github.creme332.controller.Screen;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,12 +14,7 @@ public class DashboardController {
         this.app = app;
         this.dashboard = dashboard;
 
-        dashboard.getBackButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                app.setCurrentScreen(Screen.LOGIN_SCREEN);
-            }
-        });
+        dashboard.getLogOutButton().addActionListener(e -> app.logOut());
 
         dashboard.getCheckInButton().addActionListener(new ActionListener() {
             @Override

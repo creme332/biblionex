@@ -52,6 +52,9 @@ public class LoginController {
                     return;
                 }
 
+                // erase entered data on form
+                loginPage.resetFields();
+
                 if (user.getUserType() == UserType.PATRON) {
                     app.setLoggedInUser(Patron.findByEmail(email));
                     app.setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
