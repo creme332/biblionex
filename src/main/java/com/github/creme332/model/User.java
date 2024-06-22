@@ -1,6 +1,11 @@
 package com.github.creme332.model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Arrays;
+
+import com.github.creme332.utils.DatabaseConnection;
 import com.github.creme332.utils.PasswordAuthentication;
 
 public abstract class User {
@@ -35,16 +40,6 @@ public abstract class User {
         this.phoneNo = phoneNo;
     }
 
-    protected User() {
-        this.email = "";
-        this.password = "";
-        this.userId = -1;
-        this.address = "";
-        this.firstName = "";
-        this.lastName = "";
-        this.phoneNo = "";
-    }
-
     public boolean authenticate(String email, char[] enteredPassword) {
         boolean isCorrect = true;
 
@@ -61,6 +56,39 @@ public abstract class User {
         Arrays.fill(enteredPassword, '0');
 
         return isCorrect;
+    }
+
+    /**
+     * Changes password of a user in database
+     * 
+     * @param user        User who wants to change password
+     * @param newPassword New password in plain text (original version)
+     * @throws SQLException
+     */
+    public static void changePassword(User user, char[] newPassword) throws SQLException {
+        final Connection conn = DatabaseConnection.getConnection();
+        String query;
+
+        PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
+        String hashedPassword = passwordAuthentication.hash(newPassword);
+
+        if (user.getUserType() == UserType.PATRON) {
+            query = "UPDATE patron SET password = ? WHERE patron_id = ?";
+        } else {
+            query = "UPDATE librarian SET password = ? WHERE librarian_id = ?";
+        }
+
+        try (PreparedStatement updatePassword = conn.prepareStatement(query)) {
+            updatePassword.setString(1, hashedPassword);
+            updatePassword.setInt(2, user.getUserId());
+            int rowsAffected = updatePassword.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException(String.format("User record with ID %d could not be found.", user.getUserId()));
+            }
+        }
+
+        // Zero out the password for security purposes.
+        Arrays.fill(newPassword, '0');
     }
 
     public String getEmail() {
