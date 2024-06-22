@@ -1,6 +1,7 @@
 package com.github.creme332.view;
 
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -60,9 +61,14 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
 
         // Fetch the list of patrons and pass it to the ListPage constructor
-        List<Patron> patrons = Patron.findAll();
-        screenMapper.put(Screen.LIBRARIAN_LIST_SCREEN, new ListPage(patrons));
-        // to add new screens to frame, add a new line here...
+        List<Patron> patrons;
+        try {
+            patrons = Patron.findAll();
+            screenMapper.put(Screen.LIBRARIAN_LIST_SCREEN, new ListPage(patrons));
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         // add screens to cardPanels
         for (Map.Entry<Screen, JPanel> entry : screenMapper.entrySet()) {
