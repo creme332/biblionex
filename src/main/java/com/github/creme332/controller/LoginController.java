@@ -82,5 +82,8 @@ public class LoginController {
 
         // Add action listener to register button
         loginPage.getRegisterButton().addActionListener(e -> app.setCurrentScreen(Screen.PATRON_REGISTRATION_SCREEN));
+
+        // Add action listener to forgot password button
+        loginPage.getForgotPasswordButton().addActionListener(e -> app.setCurrentScreen(Screen.FORGET_PASSWORD));
     }
 }

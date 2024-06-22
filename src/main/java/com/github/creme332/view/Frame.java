@@ -58,6 +58,7 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.PATRON_DASHBOARD_SCREEN, new com.github.creme332.view.patron.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_DASHBOARD_SCREEN, new com.github.creme332.view.librarian.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
+        screenMapper.put(Screen.FORGET_PASSWORD, new ForgotPassword());
 
         // Fetch the list of patrons and pass it to the ListPage constructor
         List<Patron> patrons = Patron.findAll();

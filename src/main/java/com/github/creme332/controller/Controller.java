@@ -34,6 +34,8 @@ public class Controller {
 
         new ListPageController(app, (ListPage) frame.getPage(Screen.LIBRARIAN_LIST_SCREEN));
 
+        new ForgotPasswordController(app, (ForgotPassword) frame.getPage(Screen.FORGET_PASSWORD));
+
         Login loginPage = (Login) frame.getPage(Screen.LOGIN_SCREEN);
         new LoginController(app, loginPage);
 
