@@ -45,7 +45,7 @@ public class DashboardController {
             }
         });
 
-        dashboard.getPatronsButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_LIST_SCREEN));
+        dashboard.getPatronsButton().addActionListener(e -> app.setCurrentScreen(Screen.PATRON_LIST_SCREEN));
 
         dashboard.getOverduesButton().addActionListener(new ActionListener() {
             @Override

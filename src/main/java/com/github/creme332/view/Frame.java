@@ -9,8 +9,9 @@ import javax.swing.*;
 import com.github.creme332.controller.Screen;
 import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidPathException;
-import com.github.creme332.view.librarian.ListPage;
 import com.github.creme332.view.librarian.RegistrationForm;
+import com.github.creme332.view.librarian.PatronListPage;
+import com.github.creme332.view.librarian.LibrarianListPage;
 import com.github.creme332.view.patron.Registration;
 
 /**
@@ -56,7 +57,9 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.PATRON_DASHBOARD_SCREEN, new com.github.creme332.view.patron.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_DASHBOARD_SCREEN, new com.github.creme332.view.librarian.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
-        screenMapper.put(Screen.LIBRARIAN_LIST_SCREEN, new ListPage());
+
+        screenMapper.put(Screen.PATRON_LIST_SCREEN, new PatronListPage());
+        screenMapper.put(Screen.LIBRARIAN_LIST_SCREEN, new LibrarianListPage());
 
         // add screens to cardPanels
         for (Map.Entry<Screen, JPanel> entry : screenMapper.entrySet()) {

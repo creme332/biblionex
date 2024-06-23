@@ -29,7 +29,7 @@ public class ButtonEditor extends DefaultCellEditor {
     private void deleteRow() {
         System.out.println("Delete button clicked, row: " + row); // Debug print
         if (row >= 0) {
-            listPage.deletePatronFromDatabase(row);
+            listPage.notifyDeleteUser(row);
         }
     }
 

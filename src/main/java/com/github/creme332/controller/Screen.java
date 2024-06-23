@@ -11,10 +11,11 @@ public enum Screen {
     // patron screens
     PATRON_REGISTRATION_SCREEN("patronRegistrationScreen"),
     PATRON_DASHBOARD_SCREEN("patronDashboardScreen"),
+    PATRON_LIST_SCREEN("patronListScreen"),
 
     // librarian screens
     LIBRARIAN_DASHBOARD_SCREEN("librarianDashboardScreen"),
-    LIBRARIAN_LIST_SCREEN("PatronListScreen"),
+    LIBRARIAN_LIST_SCREEN("librarianListScreen"),
     LIBRARIAN_REGISTRATION_SCREEN("librarianRegistrationScreen");
 
     private final String screenName;
