@@ -10,6 +10,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListPageController {
@@ -19,6 +22,12 @@ public class ListPageController {
     public ListPageController(AppState app, ListPage listPage) {
         this.app = app;
         this.listPage = listPage;
+
+        try {
+            listPage.populateTable(Patron.findAll());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         initController();
     }
 
@@ -60,18 +69,33 @@ public class ListPageController {
 
     private void searchPatrons() {
         String searchText = listPage.getSearchField().getText().trim();
-        List<Patron> patrons;
-        if (searchText.isEmpty()) {
-            patrons = Patron.findAll();
-        } else {
-            if (listPage.getByNameRadio().isSelected()) {
-                patrons = Patron.findAll();
-                patrons.removeIf(patron -> !StringUtil.isSimilar(patron.getFirstName(), searchText)
-                        && !StringUtil.isSimilar(patron.getLastName(), searchText));
+        List<Patron> matchingPatrons = new ArrayList<>();
+
+        try {
+            if (searchText.isEmpty()) {
+                matchingPatrons = Patron.findAll();
             } else {
-                patrons = Patron.findBy("patron_id", searchText);
+                if (listPage.getByNameRadio().isSelected()) {
+                    matchingPatrons = Patron.findAll();
+                    matchingPatrons.removeIf(patron -> !StringUtil.isSimilar(patron.getFirstName(),
+                            searchText)
+                            && !StringUtil.isSimilar(patron.getLastName(), searchText));
+                } else {
+                    try {
+                        Patron patron = Patron.findById(Integer.parseInt(searchText));
+                        if (patron != null)
+                            matchingPatrons.add(patron);
+                    } catch (NumberFormatException e) {
+                        // entered data is not an integer
+                    }
+
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(0);
         }
-        listPage.populateTable(patrons);
+
+        listPage.populateTable(matchingPatrons);
     }
 }

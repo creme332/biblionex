@@ -39,10 +39,22 @@ public class Controller {
         Login loginPage = (Login) frame.getPage(Screen.LOGIN_SCREEN);
         new LoginController(app, loginPage);
 
+        // initialize controller for patron dashboard
         new com.github.creme332.controller.patron.DashboardController(app,
                 (com.github.creme332.view.patron.Dashboard) frame
                         .getPage(Screen.PATRON_DASHBOARD_SCREEN));
 
-        frameController.playAnimation();
+        // initialize controller for librarian dashboard
+        new com.github.creme332.controller.librarian.DashboardController(app,
+                (com.github.creme332.view.librarian.Dashboard) frame
+                        .getPage(Screen.LIBRARIAN_DASHBOARD_SCREEN));
+
+        if (app.getAutoLogin() != null) {
+            // auto login enabled
+            app.autoLogin(app.getAutoLogin());
+        } else {
+            // start application normally
+            frameController.playAnimation();
+        }
     }
 }

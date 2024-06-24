@@ -9,6 +9,9 @@ import java.util.List;
 
 import com.github.creme332.utils.DatabaseConnection;
 
+/**
+ * Stores information about which vendor sells which material.
+ */
 public class VendorMaterial {
     private int vendorId;
     private int materialId;
@@ -32,7 +35,7 @@ public class VendorMaterial {
         return unitPrice;
     }
 
-    public static List<VendorMaterial> findBy(String column, String value) {
+    public static List<VendorMaterial> findBy(String column, String value) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         List<VendorMaterial> vendorMaterials = new ArrayList<>();
         String query = "SELECT * FROM vendor_material WHERE " + column + " = ?";
@@ -46,16 +49,15 @@ public class VendorMaterial {
                         resultSet.getDouble("unit_price"));
                 vendorMaterials.add(vendorMaterial);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return vendorMaterials;
     }
 
-    public static List<VendorMaterial> findAll() {
+    public static List<VendorMaterial> findAll() throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         List<VendorMaterial> vendorMaterials = new ArrayList<>();
         String query = "SELECT * FROM vendor_material";
+
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -65,22 +67,19 @@ public class VendorMaterial {
                         resultSet.getDouble("unit_price"));
                 vendorMaterials.add(vendorMaterial);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return vendorMaterials;
     }
 
-    public static void save(VendorMaterial vendorMaterial) {
+    public static void save(VendorMaterial vendorMaterial) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "INSERT INTO vendor_material (vendor_id, material_id, unit_price) VALUES (?, ?, ?)";
+
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setInt(1, vendorMaterial.getVendorId());
             preparedStatement.setInt(2, vendorMaterial.getMaterialId());
             preparedStatement.setDouble(3, vendorMaterial.getUnitPrice());
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }

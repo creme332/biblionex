@@ -129,15 +129,16 @@ public class Loan {
         return renewalCount;
     }
 
-    public static List<Loan> findBy(String column, String value) {
+    public static Loan findById(int loanId) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
-        List<Loan> loans = new ArrayList<>();
-        String query = "SELECT * FROM loan WHERE " + column + " = ?";
+        String query = "SELECT * FROM loan WHERE loan_id = ?";
+        Loan loan = null;
+
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setString(1, value);
+            preparedStatement.setInt(1, loanId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Loan loan = new Loan(
+            if (resultSet.next()) {
+                loan = new Loan(
                         resultSet.getInt("loan_id"),
                         resultSet.getInt("patron_id"),
                         resultSet.getInt("barcode"),
@@ -147,15 +148,12 @@ public class Loan {
                         resultSet.getDate("return_date"),
                         resultSet.getDate("due_date"),
                         resultSet.getInt("renewal_count"));
-                loans.add(loan);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return loans;
+        return loan;
     }
 
-    public static List<Loan> findAll() {
+    public static List<Loan> findAll() throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         List<Loan> loans = new ArrayList<>();
         String query = "SELECT * FROM loan";
@@ -174,13 +172,11 @@ public class Loan {
                         resultSet.getInt("renewal_count"));
                 loans.add(loan);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return loans;
     }
 
-    public static void save(Loan loan) {
+    public static void save(Loan loan) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = """
                 INSERT INTO loan (barcode, checkout_librarian_id, checkin_librarian_id,
@@ -196,12 +192,10 @@ public class Loan {
             createLoan.setDate(6, new java.sql.Date(loan.getDueDate().getTime()));
             createLoan.setInt(7, loan.getRenewalCount());
             createLoan.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    public static void update(Loan loan) {
+    public static void update(Loan loan) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = """
                 UPDATE loan
@@ -226,19 +220,15 @@ public class Loan {
             preparedStatement.setInt(8, loan.getRenewalCount());
             preparedStatement.setInt(9, loan.getLoanId());
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    public static void delete(int loanId) {
+    public static void delete(int loanId) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "DELETE FROM loan WHERE loan_id = ?";
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setInt(1, loanId);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }
