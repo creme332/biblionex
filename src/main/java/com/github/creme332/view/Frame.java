@@ -94,6 +94,7 @@ public class Frame extends JFrame {
 
     public void switchToScreen(Screen screenName) {
         cardLayout.show(cardPanels, screenName.getScreenName());
-        patronSidebar.setVisible(screenName.name().startsWith("PATRON_"));
+        patronSidebar
+                .setVisible(screenName.name().startsWith("PATRON_") && screenName != Screen.PATRON_REGISTRATION_SCREEN);
     }
 }
