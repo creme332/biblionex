@@ -72,7 +72,11 @@ public class Patron extends User {
             preparedStatement.setString(5, patron.getPhoneNo());
             preparedStatement.setString(6, patron.getEmail());
             preparedStatement.setString(7, patron.getCreditCardNo());
-            preparedStatement.setDate(8, new java.sql.Date(patron.getBirthDate().getTime()));
+            if (patron.getBirthDate() != null) {
+                preparedStatement.setDate(8, new java.sql.Date(patron.getBirthDate().getTime()));
+            } else {
+                preparedStatement.setNull(8, java.sql.Types.DATE);
+            }            
             preparedStatement.executeUpdate();
         }
     }
