@@ -7,6 +7,7 @@ public enum Screen {
     // screens common to both patron and librarian
     SPLASH_SCREEN("splashScreen"),
     LOGIN_SCREEN("loginScreen"),
+    FORGET_PASSWORD("forgetPassword"),
 
     // patron screens
     PATRON_REGISTRATION_SCREEN("patronRegistrationScreen"),
