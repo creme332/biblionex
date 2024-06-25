@@ -12,7 +12,7 @@ import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.librarian.ListPage;
 import com.github.creme332.view.librarian.RegistrationForm;
 import com.github.creme332.view.patron.Registration;
-import com.github.creme332.view.patron.Sidebar;
+import com.github.creme332.view.patron.SideBar;
 
 /**
  * Frame of the GUI application.
@@ -29,7 +29,7 @@ public class Frame extends JFrame {
     // a map that maps a screen name to screen
     private Map<Screen, JPanel> screenMapper = new EnumMap<>(Screen.class);
 
-    Sidebar patronSidebar = new Sidebar();
+    SideBar patronSidebar = new SideBar();
 
     public Frame() throws InvalidPathException {
         // set frame title
