@@ -1,13 +1,23 @@
 package com.github.creme332.model;
 
+import java.io.UnsupportedEncodingException;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Properties;
+
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.*;
 
 import com.github.creme332.utils.DatabaseConnection;
-import com.github.creme332.utils.PasswordAuthentication;
+
+import io.github.cdimascio.dotenv.Dotenv;
+
+import com.github.creme332.model.User;
 
 public abstract class User {
     protected String email;
@@ -50,7 +60,7 @@ public abstract class User {
             return false;
         }
 
-        PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
+        com.github.creme332.utils.PasswordAuthentication passwordAuthentication = new com.github.creme332.utils.PasswordAuthentication();
         isCorrect = passwordAuthentication.authenticate(enteredPassword, this.password);
 
         // Zero out the password for security purposes.
@@ -70,7 +80,7 @@ public abstract class User {
         final Connection conn = DatabaseConnection.getConnection();
         String query;
 
-        PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
+        com.github.creme332.utils.PasswordAuthentication passwordAuthentication = new com.github.creme332.utils.PasswordAuthentication();
         String hashedPassword = passwordAuthentication.hash(newPassword);
 
         if (user.getUserType() == UserType.PATRON) {
@@ -95,7 +105,7 @@ public abstract class User {
     public static boolean validateEmail(String email) {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "SELECT COUNT(*) FROM patron WHERE email = ? UNION SELECT COUNT(*) FROM librarian WHERE email = ?";
-        
+
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, email);
@@ -111,6 +121,65 @@ public abstract class User {
             e.printStackTrace();
         }
         return true; // Email is unique
+    }
+
+    /**
+     * Sends an email with a password reset token to user.
+     * 
+     * @return Password reset token found in email
+     * @throws MessagingException
+     */
+    public String sendPasswordResetEmail()
+            throws MessagingException {
+        Dotenv dotenv = Dotenv.load();
+        final String SENDER_EMAIL = dotenv.get("EMAIL_USERNAME");
+        final String SENDER_PASSWORD = dotenv.get("EMAIL_PASSWORD");
+
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(SENDER_EMAIL, SENDER_PASSWORD);
+            }
+        });
+
+        SecureRandom random = new SecureRandom();
+        String passwordResetCode = String.valueOf(100000 + random.nextInt(900000));
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(SENDER_EMAIL, "Biblionex"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+            message.setSubject("Biblionex: Password Reset");
+
+            final String emailTemplate = """
+                    <html>
+                        <body>
+                            <h1>Password Reset Verification</h1>
+                            <p>Dear %s,</p>
+                            <p>Your password reset code is: <strong>%s</strong></p>.
+                            <p>Please enter this code in the application to reset your password.</p>
+                            <p>Best regards,</p>
+                            <p>Biblionex Team</p>
+                            <hr>
+                            <p style='font-size:0.8em;'>&copy; 2024 Biblionex. All rights reserved.</p>
+                        </body>
+                    </html>
+                    """;
+            String forrmattedEmail = String.format(emailTemplate, firstName, passwordResetCode);
+
+            message.setContent(forrmattedEmail, "text/html");
+
+            Transport.send(message);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return passwordResetCode;
     }
 
     public String getEmail() {
