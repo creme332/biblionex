@@ -119,6 +119,6 @@ public class ForgotPassword extends JPanel {
     }
 
     public String showVerificationDialog() {
-        return JOptionPane.showInputDialog(this, "A email is sent to your email, Please enter the digit shown on your email", "Email Verification", JOptionPane.PLAIN_MESSAGE);
+        return JOptionPane.showInputDialog(this, "An email was sent to you. Please enter the verification code in the email:", "Email Verification", JOptionPane.PLAIN_MESSAGE);
     }
 }
