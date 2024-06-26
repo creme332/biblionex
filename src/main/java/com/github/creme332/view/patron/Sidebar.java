@@ -17,7 +17,7 @@ public class SideBar extends JPanel {
 
     public SideBar() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBackground(Color.white);
+        setBackground(Color.BLACK);
         setPreferredSize(new Dimension(400, getHeight()));
 
         // User Info Section
@@ -25,21 +25,22 @@ public class SideBar extends JPanel {
         userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.Y_AXIS));
         userInfoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         userInfoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        userInfoPanel.setBackground(Color.white);
+        userInfoPanel.setBackground(Color.BLACK);
 
         iconLabel = new JLabel();
         FontIcon icon = FontIcon.of(BootstrapIcons.PERSON_CIRCLE, 150);
+        icon.setIconColor(Color.WHITE);
         iconLabel.setIcon(icon);
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         nameLabel = new JLabel();
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        nameLabel.setForeground(Color.black);
+        nameLabel.setForeground(Color.WHITE);
         nameLabel.setFont(nameLabel.getFont().deriveFont(Font.BOLD));
 
         roleLabel = new JLabel("Patron");
         roleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        roleLabel.setForeground(Color.black);
+        roleLabel.setForeground(Color.WHITE);
         roleLabel.setFont(roleLabel.getFont().deriveFont(Font.BOLD));
 
         userInfoPanel.add(iconLabel);
@@ -69,15 +70,16 @@ public class SideBar extends JPanel {
     private JButton createButton(String text) {
         JButton button = new JButton(text);
         button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
-        button.setBackground(Color.white);
-        button.setForeground(Color.black); // Set text color to black
-        button.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        button.setBackground(Color.BLACK);
+        button.setForeground(Color.WHITE);
+        button.setBorder(BorderFactory.createLineBorder(Color.WHITE));
         return button;
     }
 
     private JPanel createButtonPanel(JButton button) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
+        panel.setBackground(Color.BLACK);
         panel.add(button, BorderLayout.CENTER);
         return panel;
     }
@@ -107,15 +109,15 @@ public class SideBar extends JPanel {
     }
 
     public void highlightButton(JButton button) {
-        dashboardButton.setBackground(Color.white);
-        dashboardButton.setForeground(Color.black);
-        loansButton.setBackground(Color.white);
-        loansButton.setForeground(Color.black);
-        catalogButton.setBackground(Color.white);
-        catalogButton.setForeground(Color.black);
-        accountButton.setBackground(Color.white);
-        accountButton.setForeground(Color.black);
+        dashboardButton.setBackground(Color.BLACK);
+        dashboardButton.setForeground(Color.WHITE);
+        loansButton.setBackground(Color.BLACK);
+        loansButton.setForeground(Color.WHITE);
+        catalogButton.setBackground(Color.BLACK);
+        catalogButton.setForeground(Color.WHITE);
+        accountButton.setBackground(Color.BLACK);
+        accountButton.setForeground(Color.WHITE);
         button.setBackground(Color.BLUE);
-        button.setForeground(Color.white);
+        button.setForeground(Color.WHITE);
     }
 }

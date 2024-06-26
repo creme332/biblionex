@@ -10,10 +10,9 @@ public class SideBarController {
     private AppState app;
     private Patron patron;
 
-    public SideBarController(AppState app, SideBar sideBar, Patron patron) {
+    public SideBarController(AppState app, SideBar sideBar) {
         this.sideBar = sideBar;
         this.app = app;
-        this.patron = patron;
 
         this.sideBar.setPatronDetails(patron.getFirstName(), patron.getLastName());
 
@@ -23,17 +22,17 @@ public class SideBarController {
         });
 
         this.sideBar.getLoansButton().addActionListener(e -> {
-            // app.setCurrentScreen(Screen.LOANS);
+            // app.setCurrentScreen(Screen.PATRON_LOANS_SCREEN);
             // sideBar.highlightButton(sideBar.getLoansButton());
         });
 
         this.sideBar.getCatalogButton().addActionListener(e -> {
-            // app.setCurrentScreen(Screen.CATALOG);
+            // app.setCurrentScreen(Screen.PATRON_CATALOG_SCREEN);
             // sideBar.highlightButton(sideBar.getCatalogButton());
         });
 
         this.sideBar.getAccountButton().addActionListener(e -> {
-            // app.setCurrentScreen(Screen.ACCOUNT);
+            // app.setCurrentScreen(Screen.PATRON_ACCOUNT_SCREEN);
             // sideBar.highlightButton(sideBar.getAccountButton());
         });
 
@@ -50,13 +49,13 @@ public class SideBarController {
             case PATRON_DASHBOARD_SCREEN:
                 sideBar.highlightButton(sideBar.getDashboardButton());
                 break;
-            // case LOANS:
+            // case PATRON_LOANS_SCREEN:
             //     sideBar.highlightButton(sideBar.getLoansButton());
             //     break;
-            // case CATALOG:
+            // case PATRON_CATALOG_SCREEN:
             //     sideBar.highlightButton(sideBar.getCatalogButton());
             //     break;
-            // case ACCOUNT:
+            // case PATRON_ACCOUNT_SCREEN:
             //     sideBar.highlightButton(sideBar.getAccountButton());
             //     break;
             default:
