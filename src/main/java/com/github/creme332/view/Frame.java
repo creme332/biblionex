@@ -59,6 +59,7 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.PATRON_DASHBOARD_SCREEN, new com.github.creme332.view.patron.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_DASHBOARD_SCREEN, new com.github.creme332.view.librarian.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
+        screenMapper.put(Screen.FORGET_PASSWORD, new ForgotPassword());
         screenMapper.put(Screen.LIBRARIAN_LIST_SCREEN, new ListPage());
 
         // add screens to cardPanels
@@ -93,6 +94,7 @@ public class Frame extends JFrame {
 
     public void switchToScreen(Screen screenName) {
         cardLayout.show(cardPanels, screenName.getScreenName());
-        patronSidebar.setVisible(screenName.name().startsWith("PATRON_"));
+        patronSidebar
+                .setVisible(screenName.name().startsWith("PATRON_") && screenName != Screen.PATRON_REGISTRATION_SCREEN);
     }
 }

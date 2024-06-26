@@ -1,12 +1,15 @@
 package com.github.creme332.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import org.kordamp.ikonli.swing.FontIcon;
@@ -21,27 +24,28 @@ public class Login extends JPanel {
 
     private JButton loginButton;
     private JButton registerButton;
+    private JButton forgotPasswordButton;
 
     private final Border redBorder = new LineBorder(Color.red);
+    public static final int WIDTH = 600;
+    public static final int HEIGHT = 600;
 
     public Login() {
         this.setLayout(new GridBagLayout());
 
-        JPanel main = new JPanel(); // a container which will appear in middle of screen
-        main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
-        add(main);
+        JPanel centerPanel = new JPanel(new BorderLayout()); // a container which will appear in middle of screen
+        centerPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        add(centerPanel);
 
-        JPanel imgContainer = getImgContainer();
-        main.add(imgContainer);
+        JPanel imgContainer = createImageContainer(); // child of bodyPanel
+        imgContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centerPanel.add(imgContainer, BorderLayout.NORTH);
 
-        // add gap between imgContainer and formContainer
-        main.add(Box.createRigidArea(new Dimension(0, 60)));
-
-        JPanel formContainer = new JPanel();
+        JPanel formContainer = new JPanel(); // child of bodyPanel
+        formContainer.setBorder(new EmptyBorder(new Insets(20, 0, 0, 0)));
         formContainer.setLayout(new BoxLayout(formContainer, BoxLayout.Y_AXIS));
         formContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        main.add(formContainer);
+        centerPanel.add(formContainer, BorderLayout.CENTER);
 
         JLabel emailLabel = new JLabel("Email");
         emailLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -51,39 +55,47 @@ public class Login extends JPanel {
         // Create text field for email
         emailField = new JTextField(20);
         emailField.setAlignmentX(Component.LEFT_ALIGNMENT);
-
         formContainer.add(emailField);
 
         formContainer.add(Box.createRigidArea(new Dimension(0, 20)));
 
         // Create JLabel for password
-        JLabel passwordLabel = new JLabel("Password");
+        JLabel passwordLabel = new JLabel("Password", SwingConstants.LEFT);
         passwordLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
         formContainer.add(passwordLabel);
 
         // Create text field for password
         passwordField = new JPasswordField(20);
         passwordField.setAlignmentX(Component.LEFT_ALIGNMENT);
-
         formContainer.add(passwordField);
 
+        // add gap
         formContainer.add(Box.createRigidArea(new Dimension(0, 60)));
 
         // Create login button
         JPanel buttonContainer = getLoginButtonContainer();
+        buttonContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
         formContainer.add(buttonContainer);
 
         formContainer.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        // Create registration button
-        registerButton = new JButton("Create a new account");
-        registerButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        // Create registration and forgot password buttons
+        JPanel footerPanel = new JPanel(new BorderLayout());
 
+        registerButton = new JButton("Create a new account");
+        registerButton.setHorizontalTextPosition(SwingConstants.LEFT);
         registerButton.setBorderPainted(false);
         registerButton.setFocusPainted(false);
         registerButton.setBackground(null);
-        formContainer.add(registerButton);
+
+        forgotPasswordButton = new JButton("Forgot Password?");
+        forgotPasswordButton.setBorderPainted(false);
+        forgotPasswordButton.setFocusPainted(false);
+        forgotPasswordButton.setBackground(null);
+
+        footerPanel.add(registerButton, BorderLayout.WEST);
+        footerPanel.add(forgotPasswordButton, BorderLayout.EAST);
+        centerPanel.add(footerPanel, BorderLayout.SOUTH);
     }
 
     public String getEmail() {
@@ -96,6 +108,10 @@ public class Login extends JPanel {
 
     public JButton getLoginButton() {
         return loginButton;
+    }
+
+    public JButton getForgotPasswordButton() {
+        return forgotPasswordButton;
     }
 
     public char[] getPassword() {
@@ -111,7 +127,7 @@ public class Login extends JPanel {
         return emailField;
     }
 
-    public void resetFields(){
+    public void resetFields() {
         emailField.setText("");
         passwordField.setText("");
     }
@@ -122,18 +138,14 @@ public class Login extends JPanel {
 
     private JPanel getLoginButtonContainer() {
         JPanel buttonContainer = new JPanel(new GridBagLayout());
-        buttonContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
-
         loginButton = new JButton("Login");
-
-        loginButton.setPreferredSize(new Dimension(500, 50));
+        loginButton.setPreferredSize(new Dimension(WIDTH, 50));
         buttonContainer.add(loginButton);
         return buttonContainer;
     }
 
-    private JPanel getImgContainer() {
+    private JPanel createImageContainer() {
         JPanel imgContainer = new JPanel(new GridBagLayout());
-        imgContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel image = new JLabel();
         FontIcon icon = FontIcon.of(BootstrapIcons.PERSON_CIRCLE, 200);

@@ -27,9 +27,11 @@ Create a `.env` file with the following contents:
 DB_URL=jdbc:mysql://localhost:3306/biblionex
 DB_USERNAME=root
 DB_PASSWORD=aaa
+EMAIL_USERNAME=steamy.sip@gmail.com
+EMAIL_PASSWORD=aoheaoedbuewhmnw
 ```
-
-Update the values assigned to `DB_USERNAME` and `DB_PASSWORD` with your MySQL login details.
+- `EMAIL_USERNAME` and `EMAIL_PASSWORD` are the credentials of the Gmail account from which emails will be sent when a patron resets his password. It is recommended to use a Gmail App password for `EMAIL_USERNAME` instead of the true gmail account password.
+- Update the values assigned to `DB_USERNAME` and `DB_PASSWORD` with your MySQL login details.
 
 
 Install Maven dependencies:
