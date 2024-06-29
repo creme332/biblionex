@@ -97,4 +97,8 @@ public class Frame extends JFrame {
         patronSidebar
                 .setVisible(screenName.name().startsWith("PATRON_") && screenName != Screen.PATRON_REGISTRATION_SCREEN);
     }
+
+    public Sidebar getSidebar() {
+        return patronSidebar;
+    }
 }
