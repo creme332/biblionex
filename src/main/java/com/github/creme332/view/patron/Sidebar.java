@@ -1,11 +1,13 @@
 package com.github.creme332.view.patron;
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
+
 import java.awt.*;
 import org.kordamp.ikonli.swing.FontIcon;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
-public class SideBar extends JPanel {
+public class Sidebar extends JPanel {
     private JButton dashboardButton;
     private JButton loansButton;
     private JButton catalogButton;
@@ -15,17 +17,22 @@ public class SideBar extends JPanel {
     private JLabel roleLabel;
     private JLabel iconLabel;
 
-    public SideBar() {
+    JButton activeButton;
+
+    Color sidebarBackgroundColor;
+
+    public Sidebar() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBackground(Color.BLACK);
         setPreferredSize(new Dimension(400, getHeight()));
+        setBorder(new MatteBorder(0, 0, 0, 2, Color.white));
 
         // User Info Section
         JPanel userInfoPanel = new JPanel();
         userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.Y_AXIS));
         userInfoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         userInfoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        userInfoPanel.setBackground(Color.BLACK);
+
+        sidebarBackgroundColor = userInfoPanel.getBackground();
 
         iconLabel = new JLabel();
         FontIcon icon = FontIcon.of(BootstrapIcons.PERSON_CIRCLE, 150);
@@ -35,13 +42,11 @@ public class SideBar extends JPanel {
 
         nameLabel = new JLabel();
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        nameLabel.setForeground(Color.WHITE);
-        nameLabel.setFont(nameLabel.getFont().deriveFont(Font.BOLD));
+        nameLabel.putClientProperty("FlatLaf.style", "font: $large.font");
 
         roleLabel = new JLabel("Patron");
+        roleLabel.putClientProperty("FlatLaf.style", "font: $small.font");
         roleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        roleLabel.setForeground(Color.WHITE);
-        roleLabel.setFont(roleLabel.getFont().deriveFont(Font.BOLD));
 
         userInfoPanel.add(iconLabel);
         userInfoPanel.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -55,7 +60,10 @@ public class SideBar extends JPanel {
         loansButton = createButton("Loans");
         catalogButton = createButton("Catalog");
         accountButton = createButton("Account");
-        logOutButton = createButton("Log out");
+        logOutButton = createButton("");
+        FontIcon logoutIcon = FontIcon.of(BootstrapIcons.BOX_ARROW_IN_LEFT, 40);
+        logoutIcon.setIconColor(Color.white);
+        logOutButton.setIcon(logoutIcon);
 
         add(createButtonPanel(dashboardButton));
         add(createButtonPanel(loansButton));
@@ -69,9 +77,9 @@ public class SideBar extends JPanel {
 
     private JButton createButton(String text) {
         JButton button = new JButton(text);
-        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
-        button.setBackground(Color.BLACK);
-        button.setForeground(Color.WHITE);
+        button.putClientProperty("FlatLaf.style", "font: $h3.font");
+        button.setMaximumSize(new Dimension(getWidth(), 30));
+        button.setBackground(sidebarBackgroundColor);
         button.setBorder(BorderFactory.createLineBorder(Color.WHITE));
         return button;
     }
@@ -79,7 +87,6 @@ public class SideBar extends JPanel {
     private JPanel createButtonPanel(JButton button) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBackground(Color.BLACK);
         panel.add(button, BorderLayout.CENTER);
         return panel;
     }
@@ -109,15 +116,16 @@ public class SideBar extends JPanel {
     }
 
     public void highlightButton(JButton button) {
-        dashboardButton.setBackground(Color.BLACK);
-        dashboardButton.setForeground(Color.WHITE);
-        loansButton.setBackground(Color.BLACK);
-        loansButton.setForeground(Color.WHITE);
-        catalogButton.setBackground(Color.BLACK);
-        catalogButton.setForeground(Color.WHITE);
-        accountButton.setBackground(Color.BLACK);
-        accountButton.setForeground(Color.WHITE);
-        button.setBackground(Color.BLUE);
-        button.setForeground(Color.WHITE);
+        // reset style of current active button
+        if (activeButton != null) {
+            activeButton.setBackground(getBackground());
+            activeButton.setForeground(Color.white);
+        }
+
+        // update style of new active button
+        button.setBackground(new Color(187, 134, 252));
+        button.setForeground(Color.black);
+
+        activeButton = button;
     }
 }
