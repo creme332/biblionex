@@ -50,7 +50,6 @@ public class SidebarController implements PropertyChangeListener {
         if (propertyName.equals("loggedInUser")) {
             // user just logged in
             patron = (Patron) evt.getNewValue();
-            System.out.println(patron);
             this.sidebar.setPatronDetails(patron.getFirstName(), patron.getLastName());
         }
 

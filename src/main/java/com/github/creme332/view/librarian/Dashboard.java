@@ -59,7 +59,6 @@ public class Dashboard extends JPanel {
     }
 
     public JButton getLogOutButton() {
-        System.out.println("hereeee");
         return logOutButton;
     }
 
