@@ -40,12 +40,14 @@ public class AppState {
         final Librarian defaultLibrarian = new Librarian("librarian@biblionex.com", DEFAULT_PASSWORD,
                 defaultPatron.getAddress(), "Admin", "Test", "4324532423", "Admin test");
 
+        User user = null;
         if (type == UserType.LIBRARIAN) {
             try {
-                loggedInUser = Librarian.findByEmail(defaultLibrarian.getEmail());
-                if (loggedInUser == null) {
+                user = Librarian.findByEmail(defaultLibrarian.getEmail());
+                if (user == null) {
+                    // account does not exist yet so create it
                     Librarian.save(defaultLibrarian);
-                    loggedInUser = Librarian.findByEmail(defaultLibrarian.getEmail());
+                    user = Librarian.findByEmail(defaultLibrarian.getEmail());
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -55,21 +57,25 @@ public class AppState {
         }
         if (type == UserType.PATRON) {
             try {
-                loggedInUser = Patron.findByEmail(defaultPatron.getEmail());
-                if (loggedInUser == null) {
+                user = Patron.findByEmail(defaultPatron.getEmail());
+                if (user == null) {
+                    // account does not exist yet so create it
                     Patron.save(defaultPatron);
-                    loggedInUser = Patron.findByEmail(defaultPatron.getEmail());
+                    user = Patron.findByEmail(defaultPatron.getEmail());
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
                 System.exit(1);
             }
             setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
+            setLoggedInUser(user);
         }
+
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener("currentScreen", listener);
+        support.addPropertyChangeListener("loggedInUser", listener);
     }
 
     public Screen getCurrentScreen() {
@@ -84,6 +90,7 @@ public class AppState {
     }
 
     public void setLoggedInUser(User newUser) {
+        support.firePropertyChange("loggedInUser", loggedInUser, newUser);
         loggedInUser = newUser;
     }
 

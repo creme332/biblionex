@@ -3,6 +3,7 @@ package com.github.creme332.controller;
 import com.github.creme332.controller.librarian.RegistrationController;
 import com.github.creme332.controller.librarian.ListPageController;
 import com.github.creme332.controller.patron.RegisterController;
+import com.github.creme332.controller.patron.SidebarController;
 import com.github.creme332.model.AppState;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
@@ -38,6 +39,8 @@ public class Controller {
 
         Login loginPage = (Login) frame.getPage(Screen.LOGIN_SCREEN);
         new LoginController(app, loginPage);
+
+        new SidebarController(app, frame.getSidebar());
 
         // initialize controller for patron dashboard
         new com.github.creme332.controller.patron.DashboardController(app,
