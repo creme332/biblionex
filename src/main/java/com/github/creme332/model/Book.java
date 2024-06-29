@@ -13,6 +13,7 @@ import java.util.List;
 public class Book extends Material {
     private int pageCount;
     private String isbn;
+    private int authorId;
 
     public Book(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
             String title, int pageCount, String isbn) {
@@ -55,6 +56,18 @@ public class Book extends Material {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
+
+    public int getPublisherId() {
+        return this.publisherId;
     }
 
     /**
@@ -236,7 +249,7 @@ public class Book extends Material {
             connection.rollback();
             throw e;
         }
-        
+
         connection.commit();
     }
 

@@ -1,10 +1,11 @@
 package com.github.creme332.view.patron;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.List;
 import com.github.creme332.model.Book;
+import com.github.creme332.model.Author;
+import com.github.creme332.model.Publisher;
 
 public class Dashboard extends JPanel {
     JLabel pendingFinesLabel;
@@ -17,11 +18,10 @@ public class Dashboard extends JPanel {
 
         // Create the panel with labels and add a border
         JPanel topPanel = new JPanel(new GridLayout(1, 3));
-        topPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Patron Dashboard", TitledBorder.CENTER, TitledBorder.TOP));
 
-        pendingFinesLabel = new JLabel("Pending fines: Rs 1000");
-        totalFinesPaidLabel = new JLabel("Total fines paid: Rs 453");
-        activeLoansLabel = new JLabel("Active loans: 4");
+        pendingFinesLabel = new JLabel("Pending fines: Rs 0");
+        totalFinesPaidLabel = new JLabel("Total fines paid: Rs 0");
+        activeLoansLabel = new JLabel("Active loans: 0");
 
         pendingFinesLabel.setHorizontalAlignment(SwingConstants.CENTER);
         totalFinesPaidLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -56,21 +56,27 @@ public class Dashboard extends JPanel {
         activeLoansLabel.setText("Active loans: " + loans);
     }
 
-    public void setBookRecommendations(List<Book> books) {
-        String[] columnNames = {"Title", "Author", "Action"};
-        Object[][] data = new Object[books.size()][3];
+    public void setBookRecommendations(List<Book> books, List<Author> authors, List<Publisher> publishers) {
+        String[] columnNames = {"Title", "Author", "Description", "Age Restriction", "Publisher Name", "Author Name", "Action"};
+        Object[][] data = new Object[books.size()][7];
 
         for (int i = 0; i < books.size(); i++) {
             Book book = books.get(i);
+            Author author = authors.get(i);
+            Publisher publisher = publishers.get(i);
             data[i][0] = book.getTitle();
-            // data[i][1] = book.getAuthor();
-            data[i][2] = "View";
+            data[i][1] = author.getFirstName() + " " + author.getLastName();
+            data[i][2] = book.getDescription();
+            data[i][3] = book.getAgeRestriction();
+            data[i][4] = publisher.getName();
+            data[i][5] = author.getFirstName() + " " + author.getLastName();
+            data[i][6] = "View";
         }
 
         bookRecommendationsTable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 2;  // Only the "Action" column is editable
+                return column == 6;  // Only the "Action" column is editable
             }
         });
 
@@ -83,6 +89,8 @@ public class Dashboard extends JPanel {
 class ButtonRenderer extends JButton implements javax.swing.table.TableCellRenderer {
     public ButtonRenderer() {
         setOpaque(true);
+        setBackground(Color.BLUE);
+        setForeground(Color.WHITE);
     }
 
     @Override
