@@ -4,6 +4,7 @@ import com.github.creme332.controller.librarian.RegistrationController;
 import com.github.creme332.controller.librarian.LibrarianListPageController;
 import com.github.creme332.controller.librarian.PatronListPageController;
 import com.github.creme332.controller.patron.RegisterController;
+import com.github.creme332.controller.patron.SidebarController;
 import com.github.creme332.model.AppState;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
@@ -38,8 +39,12 @@ public class Controller {
 
         new LibrarianListPageController (app, (LibrarianListPage) frame.getPage(Screen.LIBRARIAN_LIST_SCREEN));
 
+        new ForgotPasswordController(app, (ForgotPassword) frame.getPage(Screen.FORGET_PASSWORD));
+
         Login loginPage = (Login) frame.getPage(Screen.LOGIN_SCREEN);
         new LoginController(app, loginPage);
+
+        new SidebarController(app, frame.getSidebar());
 
         // initialize controller for patron dashboard
         new com.github.creme332.controller.patron.DashboardController(app,
