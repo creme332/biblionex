@@ -57,6 +57,7 @@ public class AppState {
             }
             setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN);
         }
+
         if (type == UserType.PATRON) {
             try {
                 user = Patron.findByEmail(defaultPatron.getEmail());
@@ -70,9 +71,9 @@ public class AppState {
                 System.exit(1);
             }
             setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
-            setLoggedInUser(user);
         }
 
+        setLoggedInUser(user);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
