@@ -35,9 +35,9 @@ public class Controller {
 
         new RegistrationController(app, (RegistrationForm) frame.getPage(Screen.LIBRARIAN_REGISTRATION_SCREEN));
 
-        new PatronListPageController(app, (PatronListPage) frame.getPage(Screen.PATRON_LIST_SCREEN));
+        new PatronListPageController(app, (PatronListPage) frame.getPage(Screen.LIBRARIAN_PATRON_LIST_SCREEN));
 
-        new LibrarianListPageController (app, (LibrarianListPage) frame.getPage(Screen.LIBRARIAN_LIST_SCREEN));
+        new LibrarianListPageController (app, (LibrarianListPage) frame.getPage(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN));
 
         new ForgotPasswordController(app, (ForgotPassword) frame.getPage(Screen.FORGET_PASSWORD));
 
