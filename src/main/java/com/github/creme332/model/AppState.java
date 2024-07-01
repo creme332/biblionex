@@ -35,6 +35,11 @@ public class AppState {
      * @param type
      */
     public void autoLogin(UserType type) {
+        /**
+         * Password for default librarian and patron accounts. if you have changed the
+         * password previously, this password may be inaccurate but auto login will
+         * still succeed.
+         */
         final String DEFAULT_PASSWORD = "1234";
         final Patron defaultPatron = new Patron("patron@biblionex.com", DEFAULT_PASSWORD, "Royal Road", "Patron",
                 "Test",
