@@ -60,13 +60,13 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.PATRON_DASHBOARD_SCREEN, new com.github.creme332.view.patron.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_DASHBOARD_SCREEN, new com.github.creme332.view.librarian.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
-        screenMapper.put(Screen.PATRON_LIST_SCREEN, new PatronListPage());
-        screenMapper.put(Screen.LIBRARIAN_LIST_SCREEN, new LibrarianListPage());
+        screenMapper.put(Screen.LIBRARIAN_PATRON_LIST_SCREEN, new PatronListPage());
+        screenMapper.put(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN, new LibrarianListPage());
         screenMapper.put(Screen.FORGET_PASSWORD, new ForgotPassword());
 
         // add screens to cardPanels
         for (Map.Entry<Screen, JPanel> entry : screenMapper.entrySet()) {
-            cardPanels.add(entry.getValue(), entry.getKey().getScreenName());
+            cardPanels.add(entry.getValue(), entry.getKey().name());
         }
 
         // hide patron sidebar by default
@@ -88,14 +88,14 @@ public class Frame extends JFrame {
     public JPanel getPage(Screen name) {
         JPanel screen = screenMapper.get(name);
         if (screen == null) {
-            System.out.println("Invalid screen: " + name.getScreenName());
+            System.out.println("Invalid screen: " + name.name());
             System.exit(0);
         }
         return screen;
     }
 
     public void switchToScreen(Screen screenName) {
-        cardLayout.show(cardPanels, screenName.getScreenName());
+        cardLayout.show(cardPanels, screenName.name());
         patronSidebar
                 .setVisible(screenName.name().startsWith("PATRON_") && screenName != Screen.PATRON_REGISTRATION_SCREEN);
     }
