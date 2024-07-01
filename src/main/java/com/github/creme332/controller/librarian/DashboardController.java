@@ -61,12 +61,8 @@ public class DashboardController {
             }
         });
 
-        dashboard.getLibrariansButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Librarians button click
-            }
-        });
+        dashboard.getLibrariansButton()
+                .addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN));
 
         dashboard.getAcquisitionsButton().addActionListener(new ActionListener() {
             @Override
