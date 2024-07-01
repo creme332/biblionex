@@ -179,18 +179,23 @@ public class Loan {
     public static void save(Loan loan) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = """
-                INSERT INTO loan (barcode, checkout_librarian_id, checkin_librarian_id,
+                INSERT INTO loan (patron_id, barcode, checkout_librarian_id, checkin_librarian_id,
                                  issue_date, return_date, due_date, renewal_count)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                  """;
         try (PreparedStatement createLoan = conn.prepareStatement(query)) {
-            createLoan.setInt(1, loan.getBarcode());
-            createLoan.setInt(2, loan.getCheckoutLibrarianId());
-            createLoan.setInt(3, loan.getCheckinLibrarianId());
-            createLoan.setDate(4, new java.sql.Date(loan.getIssueDate().getTime()));
-            createLoan.setDate(5, new java.sql.Date(loan.getReturnDate().getTime()));
-            createLoan.setDate(6, new java.sql.Date(loan.getDueDate().getTime()));
-            createLoan.setInt(7, loan.getRenewalCount());
+            createLoan.setInt(1, loan.getPatronId());
+            createLoan.setInt(2, loan.getBarcode());
+            createLoan.setInt(3, loan.getCheckoutLibrarianId());
+            createLoan.setInt(4, loan.getCheckinLibrarianId());
+            createLoan.setDate(5, new java.sql.Date(loan.getIssueDate().getTime()));
+            if (loan.getReturnDate() != null) {
+                createLoan.setDate(6, new java.sql.Date(loan.getReturnDate().getTime()));
+            } else {
+                createLoan.setNull(6, java.sql.Types.DATE);
+            }
+            createLoan.setDate(7, new java.sql.Date(loan.getDueDate().getTime()));
+            createLoan.setInt(8, loan.getRenewalCount());
             createLoan.executeUpdate();
         }
     }
@@ -215,8 +220,12 @@ public class Loan {
             preparedStatement.setInt(3, loan.getCheckoutLibrarianId());
             preparedStatement.setInt(4, loan.getCheckinLibrarianId());
             preparedStatement.setDate(5, new java.sql.Date(loan.getIssueDate().getTime()));
-            preparedStatement.setDate(6, new java.sql.Date(loan.getReturnDate().getTime()));
-            preparedStatement.setDate(7, new java.sql.Date(loan.getReturnDate().getTime()));
+            if (loan.getReturnDate() != null) {
+                preparedStatement.setDate(6, new java.sql.Date(loan.getReturnDate().getTime()));
+            } else {
+                preparedStatement.setNull(6, java.sql.Types.DATE);
+            }
+            preparedStatement.setDate(7, new java.sql.Date(loan.getDueDate().getTime()));
             preparedStatement.setInt(8, loan.getRenewalCount());
             preparedStatement.setInt(9, loan.getLoanId());
             preparedStatement.executeUpdate();

@@ -51,6 +51,10 @@ public class Controller {
                 (com.github.creme332.view.patron.Dashboard) frame
                         .getPage(Screen.PATRON_DASHBOARD_SCREEN));
 
+        new com.github.creme332.controller.patron.LoanController(app,
+                (com.github.creme332.view.patron.Loan) frame
+                        .getPage(Screen.PATRON_LOAN_SCREEN));
+
         // initialize controller for librarian dashboard
         new com.github.creme332.controller.librarian.DashboardController(app,
                 (com.github.creme332.view.librarian.Dashboard) frame

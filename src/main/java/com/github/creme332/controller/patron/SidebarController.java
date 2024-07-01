@@ -25,8 +25,8 @@ public class SidebarController implements PropertyChangeListener {
         });
 
         this.sidebar.getLoansButton().addActionListener(e -> {
-            // app.setCurrentScreen(Screen.PATRON_LOANS_SCREEN);
-            // sideBar.highlightButton(sideBar.getLoansButton());
+            app.setCurrentScreen(Screen.PATRON_LOAN_SCREEN);
+            sidebar.highlightButton(sidebar.getLoansButton());
         });
 
         this.sidebar.getCatalogButton().addActionListener(e -> {
