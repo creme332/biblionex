@@ -71,8 +71,6 @@ public class RegisterController {
         String phone = registrationPage.getPhone();
         String address = registrationPage.getAddress();
         String creditCardNo = registrationPage.getCreditCardNo();
-        String expiryDate = registrationPage.getExpiryDate();
-        String securityCode = registrationPage.getSecurityCode();
 
         if (!new String(password).equals(new String(confirmPassword))) {
             registrationPage.setErrorMessage("Passwords do not match!");

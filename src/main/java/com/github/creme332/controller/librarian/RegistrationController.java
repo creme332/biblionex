@@ -1,7 +1,5 @@
 package com.github.creme332.controller.librarian;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.SQLException;
@@ -20,12 +18,7 @@ public class RegistrationController {
         this.app = app;
 
         // Add action listener to register button
-        registrationForm.getRegisterButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                registerLibrarian();
-            }
-        });
+        registrationForm.getRegisterButton().addActionListener(e -> registerLibrarian());
 
         // Add action listener to back button
         registrationForm.getBackButton().addActionListener(e -> app.setCurrentScreen(app.getPreviousScreen()));

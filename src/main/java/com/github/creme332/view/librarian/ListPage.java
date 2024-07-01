@@ -3,8 +3,6 @@ package com.github.creme332.view.librarian;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import com.github.creme332.utils.ButtonRenderer;
 import com.github.creme332.utils.ButtonEditor;
@@ -19,9 +17,8 @@ public abstract class ListPage extends JPanel {
     private JTable userTable;
     private JButton newUserButton;
     private DefaultTableModel tableModel;
-    private String userType;
 
-    public ListPage() {
+    protected ListPage() {
         setLayout(new BorderLayout());
 
         // Top Panel
@@ -55,8 +52,8 @@ public abstract class ListPage extends JPanel {
         userTable.getColumn("Action").setCellRenderer(new ButtonRenderer());
         userTable.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox(), this));
         JScrollPane scrollPane = new JScrollPane(userTable);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane, BorderLayout.CENTER);
 
         // New User Button
