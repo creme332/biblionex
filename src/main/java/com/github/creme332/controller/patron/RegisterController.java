@@ -28,7 +28,7 @@ public class RegisterController {
         });
 
         // Add action listener to back button
-        registrationPage.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LOGIN_SCREEN));
+        registrationPage.getBackButton().addActionListener(e -> app.setCurrentScreen(app.getPreviousScreen()));
 
         // Add key listener for Enter key press in form fields
         addEnterKeyListener(registrationPage.getEmailField());

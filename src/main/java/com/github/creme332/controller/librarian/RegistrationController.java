@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import com.github.creme332.model.AppState;
 import com.github.creme332.controller.Screen;
 import com.github.creme332.model.Librarian;
-import com.github.creme332.model.Patron;
 import com.github.creme332.view.librarian.RegistrationForm;
 
 public class RegistrationController {
@@ -29,7 +28,7 @@ public class RegistrationController {
         });
 
         // Add action listener to back button
-        registrationForm.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN));
+        registrationForm.getBackButton().addActionListener(e -> app.setCurrentScreen(app.getPreviousScreen()));
 
         // Add key listener for Enter key press in form fields
         addEnterKeyListener(registrationForm.getEmailField());
