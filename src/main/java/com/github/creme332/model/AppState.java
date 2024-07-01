@@ -8,7 +8,9 @@ import java.util.Date;
 import com.github.creme332.controller.Screen;
 
 public class AppState {
+    private Screen previousScreen;
     private Screen currentScreen = Screen.LOGIN_SCREEN;
+
     private PropertyChangeSupport support;
     private User loggedInUser;
     /**
@@ -33,6 +35,11 @@ public class AppState {
      * @param type
      */
     public void autoLogin(UserType type) {
+        /**
+         * Password for default librarian and patron accounts. if you have changed the
+         * password previously, this password may be inaccurate but auto login will
+         * still succeed.
+         */
         final String DEFAULT_PASSWORD = "1234";
         final Patron defaultPatron = new Patron("patron@biblionex.com", DEFAULT_PASSWORD, "Royal Road", "Patron",
                 "Test",
@@ -55,6 +62,7 @@ public class AppState {
             }
             setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN);
         }
+
         if (type == UserType.PATRON) {
             try {
                 user = Patron.findByEmail(defaultPatron.getEmail());
@@ -68,9 +76,9 @@ public class AppState {
                 System.exit(1);
             }
             setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
-            setLoggedInUser(user);
         }
 
+        setLoggedInUser(user);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -82,10 +90,19 @@ public class AppState {
         return currentScreen;
     }
 
+    public Screen getPreviousScreen() {
+        return previousScreen;
+    }
+
     public void setCurrentScreen(Screen newScreen) {
-        // System.out.println("Switching screens: " + currentScreen.getScreenName() +
-        // "-> " + newScreen.getScreenName());
+        if (newScreen == null) {
+            System.out.println(
+                    "New screen should not be null. If you clicked on back button, ensure that you have previously visited the previous page.");
+            return;
+        }
+        System.out.println("Switching screens: " + currentScreen.name() + "-> " + newScreen.name());
         support.firePropertyChange("currentScreen", currentScreen, newScreen);
+        previousScreen = currentScreen;
         currentScreen = newScreen;
     }
 

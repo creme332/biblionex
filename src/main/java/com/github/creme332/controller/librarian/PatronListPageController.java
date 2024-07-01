@@ -4,7 +4,7 @@ import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Patron;
 import com.github.creme332.utils.StringUtil;
-import com.github.creme332.view.librarian.ListPage;
+import com.github.creme332.view.librarian.PatronListPage;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -15,16 +15,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListPageController {
+public class PatronListPageController {
     private AppState app;
-    private ListPage listPage;
+    private PatronListPage listPage;
 
-    public ListPageController(AppState app, ListPage listPage) {
+    public PatronListPageController(AppState app, PatronListPage listPage) {
         this.app = app;
         this.listPage = listPage;
 
         try {
-            listPage.populateTable(Patron.findAll());
+            listPage.populateTable(new ArrayList<>(Patron.findAll()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -33,7 +33,7 @@ public class ListPageController {
 
     private void initController() {
         listPage.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN));
-        listPage.getNewPatronButton().addActionListener(e -> app.setCurrentScreen(Screen.PATRON_REGISTRATION_SCREEN));
+        listPage.getNewUserButton().addActionListener(e -> app.setCurrentScreen(Screen.PATRON_REGISTRATION_SCREEN));
 
         listPage.getSearchButton().addActionListener(e -> searchPatrons());
         listPage.getSearchField().addActionListener(e -> searchPatrons());
@@ -55,13 +55,13 @@ public class ListPageController {
             }
         });
 
-        listPage.getPatronTable().getModel().addTableModelListener(new TableModelListener() {
+        listPage.getUserTable().getModel().addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
                 int row = e.getFirstRow();
                 int column = e.getColumn();
-                if (column != 0 && e.getType() == TableModelEvent.UPDATE) { // Exclude "Patron ID" from being editable
-                    listPage.updatePatronInDatabase(row);
+                if (column != 0 && e.getType() == TableModelEvent.UPDATE) {
+                    updatePatronInDatabase(row);
                 }
             }
         });
@@ -83,19 +83,40 @@ public class ListPageController {
                 } else {
                     try {
                         Patron patron = Patron.findById(Integer.parseInt(searchText));
-                        if (patron != null)
+                        if (patron != null) {
                             matchingPatrons.add(patron);
+                        }
                     } catch (NumberFormatException e) {
-                        // entered data is not an integer
+                        matchingPatrons = new ArrayList<>();
                     }
-
                 }
+            }
+
+            listPage.populateTable(new ArrayList<>(matchingPatrons));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updatePatronInDatabase(int row) {
+        Integer userId = (Integer) listPage.getTableModel().getValueAt(row, 0);
+        String firstName = (String) listPage.getTableModel().getValueAt(row, 1);
+        String lastName = (String) listPage.getTableModel().getValueAt(row, 2);
+        String email = (String) listPage.getTableModel().getValueAt(row, 3);
+        String phoneNo = (String) listPage.getTableModel().getValueAt(row, 4);
+
+        try {
+            Patron patron = Patron.findById(userId);
+            if (patron != null) {
+                patron.setFirstName(firstName);
+                patron.setLastName(lastName);
+                patron.setEmail(email);
+                patron.setPhoneNo(phoneNo);
+                Patron.update(patron);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(0);
         }
-
-        listPage.populateTable(matchingPatrons);
     }
+
 }

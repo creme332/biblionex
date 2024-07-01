@@ -23,7 +23,7 @@ public class ForgotPasswordController {
         this.app = app;
 
         // Add action listener for the back button
-        forgotPasswordPage.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LOGIN_SCREEN));
+        forgotPasswordPage.getBackButton().addActionListener(e -> app.setCurrentScreen(app.getPreviousScreen()));
 
         // Add action listener for the submit button
         forgotPasswordPage.getSubmitButton().addActionListener(new ActionListener() {
