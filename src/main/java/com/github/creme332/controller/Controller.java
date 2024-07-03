@@ -3,6 +3,7 @@ package com.github.creme332.controller;
 import com.github.creme332.controller.patron.RegisterController;
 import com.github.creme332.model.AppState;
 import com.github.creme332.utils.exception.InvalidPathException;
+
 import com.github.creme332.view.ForgotPassword;
 import com.github.creme332.view.Frame;
 import com.github.creme332.view.Login;
