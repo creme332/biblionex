@@ -8,7 +8,7 @@ import java.util.Date;
 import com.github.creme332.controller.Screen;
 
 public class AppState {
-    private Screen currentScreen = Screen.PATRON_CATALOG_SCREEN;
+    private Screen currentScreen = Screen.LOGIN_SCREEN;
     private PropertyChangeSupport support;
     private User loggedInUser;
     /**
