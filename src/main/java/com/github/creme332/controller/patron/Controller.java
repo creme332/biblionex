@@ -3,6 +3,7 @@ package com.github.creme332.controller.patron;
 import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.view.Frame;
+import com.github.creme332.view.patron.Account;
 import com.github.creme332.view.patron.Catalog;
 import com.github.creme332.view.patron.Dashboard;
 
@@ -21,5 +22,8 @@ public class Controller {
 
         // controller for page listing all materials
         new CatalogController(app, (Catalog) frame.getPage(Screen.PATRON_CATALOG_SCREEN));
+
+        // controller for account page
+        new AccountController(app, (Account) frame.getPage(Screen.PATRON_ACCOUNT_SCREEN));
     }
 }

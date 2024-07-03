@@ -37,8 +37,8 @@ public class SidebarController implements PropertyChangeListener {
         });
 
         this.sidebar.getAccountButton().addActionListener(e -> {
-            // app.setCurrentScreen(Screen.PATRON_ACCOUNT_SCREEN);
-            // sideBar.highlightButton(sideBar.getAccountButton());
+            app.setCurrentScreen(Screen.PATRON_ACCOUNT_SCREEN);
+            sidebar.highlightButton(sidebar.getAccountButton());
         });
 
         this.sidebar.getLogOutButton().addActionListener(e -> {
