@@ -14,6 +14,14 @@ Run the application:
 mvn exec:java -Dexec.mainClass=com.github.creme332.App
 ```
 
+## Auto-login
+
+To automatically login without going through registration or sign in, make the following modifications to `model/AppState.java`:
+
+```java
+    private UserType autoLogin = UserType.LIBRARIAN; // or UserType.PATRON to login as patron
+```
+
 ## Run tests
 
 ```bash

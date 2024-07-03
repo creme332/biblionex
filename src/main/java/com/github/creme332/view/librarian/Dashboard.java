@@ -5,9 +5,15 @@ import java.awt.*;
 
 public class Dashboard extends JPanel {
     private JButton logOutButton;
-    private JButton checkInButton, materialsButton, catalogingButton;
-    private JButton checkOutButton, patronsButton, overduesButton;
-    private JButton renewButton, librariansButton, acquisitionsButton;
+    private JButton checkInButton;
+    private JButton materialsButton;
+    private JButton catalogingButton;
+    private JButton checkOutButton;
+    private JButton patronsButton;
+    private JButton overduesButton;
+    private JButton renewButton;
+    private JButton librariansButton;
+    private JButton acquisitionsButton;
     private JButton reportsButton;
 
     public Dashboard() {
@@ -16,7 +22,7 @@ public class Dashboard extends JPanel {
         // Header panel with back button and title
         JPanel headerPanel = new JPanel(new BorderLayout());
         logOutButton = new JButton("Log out");
-        JLabel titleLabel = new JLabel("Admin Dashboard", JLabel.CENTER);
+        JLabel titleLabel = new JLabel("Admin Dashboard", javax.swing.SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         headerPanel.add(logOutButton, BorderLayout.WEST);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
@@ -50,8 +56,8 @@ public class Dashboard extends JPanel {
 
         // Scroll pane for the main panel
         JScrollPane scrollPane = new JScrollPane(mainPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         // Add panels to the main layout
         add(headerPanel, BorderLayout.NORTH);
@@ -59,7 +65,6 @@ public class Dashboard extends JPanel {
     }
 
     public JButton getLogOutButton() {
-        System.out.println("hereeee");
         return logOutButton;
     }
 

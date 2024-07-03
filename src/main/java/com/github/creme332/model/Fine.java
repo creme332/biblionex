@@ -5,17 +5,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.github.creme332.utils.DatabaseConnection;
 
+/**
+ * Fine paid by a patron after overdue loan.
+ */
 public class Fine {
     private int patronId;
     private int loanId;
-    private String date;
+    private Date date;
     private double amount;
 
-    public Fine(int patronId, int loanId, String date, double amount) {
+    public Fine(int patronId, int loanId, Date date, double amount) {
         this.patronId = patronId;
         this.loanId = loanId;
         this.date = date;
@@ -30,7 +34,7 @@ public class Fine {
         return loanId;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -49,9 +53,8 @@ public class Fine {
                 Fine fine = new Fine(
                         resultSet.getInt("patron_id"),
                         resultSet.getInt("loan_id"),
-                        resultSet.getString("date"),
-                        resultSet.getDouble("amount")
-                );
+                        resultSet.getDate("date"),
+                        resultSet.getDouble("amount"));
                 fines.add(fine);
             }
         } catch (SQLException e) {
@@ -70,9 +73,8 @@ public class Fine {
                 Fine fine = new Fine(
                         resultSet.getInt("patron_id"),
                         resultSet.getInt("loan_id"),
-                        resultSet.getString("date"),
-                        resultSet.getDouble("amount")
-                );
+                        resultSet.getDate("date"),
+                        resultSet.getDouble("amount"));
                 fines.add(fine);
             }
         } catch (SQLException e) {
@@ -87,7 +89,7 @@ public class Fine {
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setInt(1, fine.getPatronId());
             preparedStatement.setInt(2, fine.getLoanId());
-            preparedStatement.setString(3, fine.getDate());
+            preparedStatement.setDate(3, new java.sql.Date(fine.getDate().getTime()));
             preparedStatement.setDouble(4, fine.getAmount());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

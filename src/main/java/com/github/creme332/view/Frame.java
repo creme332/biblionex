@@ -2,19 +2,20 @@ package com.github.creme332.view;
 
 import java.awt.*;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
 
 import com.github.creme332.controller.Screen;
-import com.github.creme332.model.Patron;
 import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.librarian.MaterialForm;
-import com.github.creme332.view.librarian.ListPage;
 import com.github.creme332.view.librarian.RegistrationForm;
+import com.github.creme332.view.patron.Catalog;
+import com.github.creme332.view.librarian.PatronListPage;
+import com.github.creme332.view.librarian.LibrarianListPage;
 import com.github.creme332.view.patron.Registration;
+import com.github.creme332.view.patron.Sidebar;
 
 /**
  * Frame of the GUI application.
@@ -30,6 +31,8 @@ public class Frame extends JFrame {
 
     // a map that maps a screen name to screen
     private Map<Screen, JPanel> screenMapper = new EnumMap<>(Screen.class);
+
+    Sidebar patronSidebar = new Sidebar();
 
     public Frame() throws InvalidPathException {
         // set frame title
@@ -61,19 +64,26 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
         screenMapper.put(Screen.LIBRARIAN_MATERIAL_SCREEN, new MaterialForm());
 
-
         // Fetch the list of patrons and pass it to the ListPage constructor
-        List<Patron> patrons = Patron.findAll();
-        screenMapper.put(Screen.LIBRARIAN_LIST_SCREEN, new ListPage(patrons));
-        // to add new screens to frame, add a new line here...
+        screenMapper.put(Screen.LIBRARIAN_PATRON_LIST_SCREEN, new PatronListPage());
+        screenMapper.put(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN, new LibrarianListPage());
+        screenMapper.put(Screen.FORGET_PASSWORD, new ForgotPassword());
+        screenMapper.put(Screen.PATRON_CATALOG_SCREEN, new Catalog());
 
         // add screens to cardPanels
         for (Map.Entry<Screen, JPanel> entry : screenMapper.entrySet()) {
-            cardPanels.add(entry.getValue(), entry.getKey().getScreenName());
+            cardPanels.add(entry.getValue(), entry.getKey().name());
         }
 
-        // add cardPanels to frame
-        this.add(cardPanels);
+        // hide patron sidebar by default
+        patronSidebar.setVisible(false);
+
+        // setup frame
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(patronSidebar, BorderLayout.WEST);
+        mainPanel.add(cardPanels, BorderLayout.CENTER);
+
+        this.add(mainPanel);
 
         this.pack();
 
@@ -84,13 +94,19 @@ public class Frame extends JFrame {
     public JPanel getPage(Screen name) {
         JPanel screen = screenMapper.get(name);
         if (screen == null) {
-            System.out.println("Invalid screen: " + name.getScreenName());
+            System.out.println("Invalid screen: " + name.name());
             System.exit(0);
         }
         return screen;
     }
 
     public void switchToScreen(Screen screenName) {
-        cardLayout.show(cardPanels, screenName.getScreenName());
+        cardLayout.show(cardPanels, screenName.name());
+        patronSidebar
+                .setVisible(screenName.name().startsWith("PATRON_") && screenName != Screen.PATRON_REGISTRATION_SCREEN);
+    }
+
+    public Sidebar getSidebar() {
+        return patronSidebar;
     }
 }

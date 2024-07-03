@@ -28,8 +28,8 @@ public class RegisterController {
         });
 
         // Add action listener to back button
-        registrationPage.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LOGIN_SCREEN));
-        
+        registrationPage.getBackButton().addActionListener(e -> app.setCurrentScreen(app.getPreviousScreen()));
+
         // Add key listener for Enter key press in form fields
         addEnterKeyListener(registrationPage.getEmailField());
         addEnterKeyListener(registrationPage.getPasswordField());
@@ -71,8 +71,6 @@ public class RegisterController {
         String phone = registrationPage.getPhone();
         String address = registrationPage.getAddress();
         String creditCardNo = registrationPage.getCreditCardNo();
-        String expiryDate = registrationPage.getExpiryDate();
-        String securityCode = registrationPage.getSecurityCode();
 
         if (!new String(password).equals(new String(confirmPassword))) {
             registrationPage.setErrorMessage("Passwords do not match!");
@@ -87,13 +85,16 @@ public class RegisterController {
 
         Patron patron = new Patron(email, new String(password), address, firstName, lastName, phone,
                 creditCardNo, null);
-
         try {
             Patron.save(patron);
             registrationPage.setSuccessMessage("Registration successful. Please log in.");
             app.setCurrentScreen(Screen.LOGIN_SCREEN);
-        } catch (IllegalArgumentException e) {
-            registrationPage.setErrorMessage(e.getMessage());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
         }
+
+        registrationPage.setSuccessMessage("Registration successful. Please log in.");
+        app.setCurrentScreen(Screen.LOGIN_SCREEN);
     }
 }

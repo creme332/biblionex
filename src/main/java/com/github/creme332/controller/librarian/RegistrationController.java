@@ -1,14 +1,12 @@
 package com.github.creme332.controller.librarian;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.SQLException;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.controller.Screen;
 import com.github.creme332.model.Librarian;
-import com.github.creme332.model.Patron;
 import com.github.creme332.view.librarian.RegistrationForm;
 
 public class RegistrationController {
@@ -20,15 +18,10 @@ public class RegistrationController {
         this.app = app;
 
         // Add action listener to register button
-        registrationForm.getRegisterButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                registerLibrarian();
-            }
-        });
+        registrationForm.getRegisterButton().addActionListener(e -> registerLibrarian());
 
         // Add action listener to back button
-        registrationForm.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LOGIN_SCREEN));
+        registrationForm.getBackButton().addActionListener(e -> app.setCurrentScreen(app.getPreviousScreen()));
 
         // Add key listener for Enter key press in form fields
         addEnterKeyListener(registrationForm.getEmailField());
@@ -81,8 +74,14 @@ public class RegistrationController {
             return;
         }
 
-        Librarian librarian = new Librarian(email, new String(password), address, firstName, lastName, phone, "Librarian");
-        Librarian.save(librarian);
+        Librarian librarian = new Librarian(email, new String(password), address, firstName, lastName, phone,
+                "Librarian");
+        try {
+            Librarian.save(librarian);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
 
         try {
             registrationForm.setSuccessMessage("Registration successful. Please log in.");
