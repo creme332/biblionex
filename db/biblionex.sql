@@ -1,6 +1,6 @@
 -- MySQL dump 10.19  Distrib 10.3.39-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: bib_test
+-- Host: localhost    Database: biblionex
 -- ------------------------------------------------------
 -- Server version	10.3.39-MariaDB-0ubuntu0.20.04.2
 
@@ -256,7 +256,7 @@ CREATE TABLE `material` (
 
 LOCK TABLES `material` WRITE;
 /*!40000 ALTER TABLE `material` DISABLE KEYS */;
-INSERT INTO `material` VALUES (1,1,'A gripping thriller novel','http://example.com/book_image.jpg',0,'Book','Thriller Novel'),(2,1,'An epic fantasy saga','http://example.com/book_image.jpg',0,'Book','Epic Fantasy Saga'),(3,2,'A heartwarming romance story','http://example.com/book_image.jpg',0,'Book','Romance Story'),(4,3,'A scientific exploration','http://example.com/book_image.jpg',0,'Book','Scientific Exploration'),(5,4,'A historical drama','http://example.com/book_image.jpg',0,'Book','Historical Drama'),(6,5,'Cutting-edge scientific journal','http://example.com/journal_image.jpg',0,'Journal','Scientific Journal'),(7,6,'Biomedical research journal','http://example.com/journal_image.jpg',0,'Journal','Biomedical Research Journal'),(8,7,'Environmental sustainability journal','http://example.com/journal_image.jpg',0,'Journal','Environmental Sustainability Journal'),(9,8,'Educational psychology journal','http://example.com/journal_image.jpg',0,'Journal','Educational Psychology Journal'),(10,9,'Historical review journal','http://example.com/journal_image.jpg',0,'Journal','Historical Review Journal'),(16,1,'Action-packed thriller','http://example.com/video_image.jpg',0,'Video','Action Thriller'),(17,2,'Comedy entertainment','http://example.com/video_image.jpg',0,'Video','Comedy Entertainment'),(18,3,'Educational documentary','http://example.com/video_image.jpg',0,'Video','Educational Documentary'),(19,4,'Historical drama series','http://example.com/video_image.jpg',0,'Video','Historical Drama Series'),(20,5,'Sci-fi adventure','http://example.com/video_image.jpg',0,'Video','Sci-Fi Adventure');
+INSERT INTO `material` VALUES (1,1,'A gripping thriller novel','http://example.com/book_image.jpg',0,'Book','Treasure Island'),(2,1,'An epic fantasy saga','http://example.com/book_image.jpg',0,'Book','Pride and Prejudice'),(3,2,'A heartwarming romance story','http://example.com/book_image.jpg',0,'Book','Wuthering Heights'),(4,3,'A scientific exploration','http://example.com/book_image.jpg',0,'Book','Guide to Galaxy'),(5,4,'A historical drama','http://example.com/book_image.jpg',0,'Book','Absalom'),(6,5,'Cutting-edge scientific journal','http://example.com/journal_image.jpg',0,'Journal','American Journal of Applied Sciences'),(7,6,'Biomedical research journal','http://example.com/journal_image.jpg',0,'Journal',' American Journal of Biochemistry and Biotechnology'),(8,7,'Environmental sustainability journal','http://example.com/journal_image.jpg',0,'Journal',' Energy Research Journal'),(9,8,'Educational psychology journal','http://example.com/journal_image.jpg',0,'Journal','Educational Psychology Journal'),(10,9,'Historical review journal','http://example.com/journal_image.jpg',0,'Journal','Journal of Mechatronics and Robotics'),(16,1,'Action-packed thriller','http://example.com/video_image.jpg',0,'Video','Oppenheimer'),(17,2,'Comedy entertainment','http://example.com/video_image.jpg',0,'Video','Back to Black'),(18,3,'Educational documentary','http://example.com/video_image.jpg',0,'Video','Raging Bull'),(19,4,'Historical drama series','http://example.com/video_image.jpg',0,'Video','The Wolf of Wall Street'),(20,5,'Sci-fi adventure','http://example.com/video_image.jpg',0,'Video','Eternal Sunshine of the Spotless Mind');
 /*!40000 ALTER TABLE `material` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -508,4 +508,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-03 13:09:18
+-- Dump completed on 2024-07-03 13:52:28
