@@ -1,6 +1,7 @@
 package com.github.creme332.controller;
 
 import com.github.creme332.controller.librarian.RegistrationController;
+import com.github.creme332.controller.patron.CatalogController;
 import com.github.creme332.controller.librarian.LibrarianListPageController;
 import com.github.creme332.controller.librarian.PatronListPageController;
 import com.github.creme332.controller.patron.RegisterController;
@@ -12,6 +13,7 @@ import com.github.creme332.view.librarian.RegistrationForm;
 import com.github.creme332.view.librarian.LibrarianListPage;
 import com.github.creme332.view.librarian.PatronListPage;
 import com.github.creme332.view.patron.Registration;
+import com.github.creme332.view.patron.Catalog;
 
 /**
  * Main controller of application.
@@ -40,6 +42,8 @@ public class Controller {
         new LibrarianListPageController (app, (LibrarianListPage) frame.getPage(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN));
 
         new ForgotPasswordController(app, (ForgotPassword) frame.getPage(Screen.FORGET_PASSWORD));
+
+        new CatalogController(app, (Catalog) frame.getPage(Screen.PATRON_CATALOG_SCREEN));
 
         Login loginPage = (Login) frame.getPage(Screen.LOGIN_SCREEN);
         new LoginController(app, loginPage);

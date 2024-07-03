@@ -176,7 +176,7 @@ public class Journal extends Material {
                         resultSet.getString("title"),
                         resultSet.getString("issn"),
                         resultSet.getString("website"),
-                        JournalFrequency.valueOf(resultSet.getString("frequency")),
+                        JournalFrequency.fromString(resultSet.getString("frequency")),
                         resultSet.getDate("start_date")));
             }
         }

@@ -12,6 +12,7 @@ public enum Screen {
     // patron screens
     PATRON_REGISTRATION_SCREEN,
     PATRON_DASHBOARD_SCREEN,
+    PATRON_CATALOG_SCREEN,
 
     // librarian screens
     LIBRARIAN_DASHBOARD_SCREEN,
