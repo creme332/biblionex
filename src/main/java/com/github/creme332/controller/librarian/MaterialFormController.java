@@ -1,9 +1,12 @@
 package com.github.creme332.controller.librarian;
 
 import com.github.creme332.model.AppState;
+import com.github.creme332.model.Author;
 import com.github.creme332.model.Book;
 import com.github.creme332.model.Journal;
+import com.github.creme332.model.Publisher;
 import com.github.creme332.model.JournalFrequency;
+import com.github.creme332.model.MaterialType;
 import com.github.creme332.model.Video;
 import com.github.creme332.view.librarian.MaterialForm;
 import com.github.creme332.controller.Screen;
@@ -12,6 +15,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.sql.Date;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -56,48 +61,60 @@ public class MaterialFormController {
     }
 
     private void loadDropdownData() {
-        // Retrieve data from the database and populate dropdowns
-        // This is just an example, you need to implement actual data fetching
-        materialForm.getMaterialTypeDropdown().addItem("Book");
-        materialForm.getMaterialTypeDropdown().addItem("Journal");
-        materialForm.getMaterialTypeDropdown().addItem("Video");
+        try {
+            // Load material types
+            for (MaterialType type : MaterialType.values()) {
+                materialForm.getMaterialTypeDropdown().addItem(type.toString());
+            }
 
-        materialForm.getPublisherComboBox().addItem("Publisher 1");
-        materialForm.getPublisherComboBox().addItem("Publisher 2");
+            // Load publishers
+            List<Publisher> publishers = Publisher.findAll();
+            for (Publisher publisher : publishers) {
+                materialForm.getPublisherComboBox().addItem(publisher.getName());
+            }
 
-        materialForm.getAuthorComboBox().addItem("Author 1");
-        materialForm.getAuthorComboBox().addItem("Author 2");
+            // Load authors
+            List<Author> authors = Author.findAll();
+            for (Author author : authors) {
+                materialForm.getAuthorComboBox().addItem(author.getFirstName() + " " + author.getLastName());
+            }
 
-        materialForm.getFrequencyComboBox().addItem("Monthly");
-        materialForm.getFrequencyComboBox().addItem("Weekly");
+            // Load journal frequencies
+            for (JournalFrequency frequency : JournalFrequency.values()) {
+                materialForm.getFrequencyComboBox().addItem(frequency.toString());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to load dropdown data!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void handleBookSubmission() {
-        // Retrieve data from the form
-        String publisher = (String) materialForm.getPublisherComboBox().getSelectedItem();
-        String title = materialForm.getTitleField().getText();
-        String genre = materialForm.getGenreField().getText();
-        String description = materialForm.getDescriptionField().getText();
-        int age = (int) materialForm.getAgeSpinner().getValue();
-        String imageUrl = materialForm.getImageUrlField().getText();
-        int pageCount = (int) materialForm.getPageCountSpinner().getValue();
-        String isbn = materialForm.getIsbnField().getText();
-        String author = (String) materialForm.getAuthorComboBox().getSelectedItem();
-
-        // Create a new Book object
-        Book book = new Book(
-                getPublisherIdByName(publisher), // Replace with actual method to get publisher ID
-                description,
-                imageUrl,
-                age,
-                title,
-                pageCount,
-                isbn
-        );
-
         try {
+            // Retrieve data from the form
+            String publisher = (String) materialForm.getPublisherComboBox().getSelectedItem();
+            String title = materialForm.getTitleField().getText();
+            String genre = materialForm.getGenreField().getText();
+            String description = materialForm.getDescriptionField().getText();
+            int age = (int) materialForm.getAgeSpinner().getValue();
+            String imageUrl = materialForm.getImageUrlField().getText();
+            int pageCount = (int) materialForm.getPageCountSpinner().getValue();
+            String isbn = materialForm.getIsbnField().getText();
+            String author = (String) materialForm.getAuthorComboBox().getSelectedItem();
+
+            // Create a new Book object
+            Book book = new Book(
+                    Publisher.getPublisherIdByName(publisher),
+                    description,
+                    imageUrl,
+                    age,
+                    title,
+                    pageCount,
+                    isbn);
+
             Book.save(book);
-            JOptionPane.showMessageDialog(null, "Book submited successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Book submitted successfully!", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to submit book!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -105,34 +122,34 @@ public class MaterialFormController {
     }
 
     private void handleJournalSubmission() {
-        // Retrieve data from the form
-        String publisher = (String) materialForm.getPublisherComboBox().getSelectedItem();
-        String title = materialForm.getTitleField().getText();
-        String genre = materialForm.getGenreField().getText();
-        String description = materialForm.getDescriptionField().getText();
-        int age = (int) materialForm.getAgeSpinner().getValue();
-        String imageUrl = materialForm.getImageUrlField().getText();
-        String issn = materialForm.getIssnField().getText();
-        String website = materialForm.getWebsiteField().getText();
-        String frequency = (String) materialForm.getFrequencyComboBox().getSelectedItem();
-        Date startDate = parseDate(materialForm.getStartDateField().getText());
-
-        // Create a new Journal object
-        Journal journal = new Journal(
-                getPublisherIdByName(publisher), 
-                description,
-                imageUrl,
-                age,
-                title,
-                issn,
-                website,
-                JournalFrequency.valueOf(frequency),
-                startDate
-        );
-
         try {
+            // Retrieve data from the form
+            String publisher = (String) materialForm.getPublisherComboBox().getSelectedItem();
+            String title = materialForm.getTitleField().getText();
+            String genre = materialForm.getGenreField().getText();
+            String description = materialForm.getDescriptionField().getText();
+            int age = (int) materialForm.getAgeSpinner().getValue();
+            String imageUrl = materialForm.getImageUrlField().getText();
+            String issn = materialForm.getIssnField().getText();
+            String website = materialForm.getWebsiteField().getText();
+            String frequency = (String) materialForm.getFrequencyComboBox().getSelectedItem();
+            Date startDate = Date.valueOf(materialForm.getStartDateField().getText());
+
+            // Create a new Journal object
+            Journal journal = new Journal(
+                    Publisher.getPublisherIdByName(publisher),
+                    description,
+                    imageUrl,
+                    age,
+                    title,
+                    issn,
+                    website,
+                    JournalFrequency.valueOf(frequency.toUpperCase()),
+                    startDate);
+
             Journal.save(journal);
-            JOptionPane.showMessageDialog(null, "Journal submited successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Journal submitted successfully!", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to submit journal!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -140,34 +157,34 @@ public class MaterialFormController {
     }
 
     private void handleVideoSubmission() {
-        // Retrieve data from the form
-        String publisher = (String) materialForm.getPublisherComboBox().getSelectedItem();
-        String title = materialForm.getTitleField().getText();
-        String genre = materialForm.getGenreField().getText();
-        String description = materialForm.getDescriptionField().getText();
-        int age = (int) materialForm.getAgeSpinner().getValue();
-        String imageUrl = materialForm.getImageUrlField().getText();
-        String language = materialForm.getLanguageField().getText();
-        int rating = (int) materialForm.getRatingSpinner().getValue();
-        int duration = Integer.parseInt(materialForm.getDurationField().getText());
-        String format = materialForm.getFormatField().getText();
-
-        // Create a new Video object
-        Video video = new Video(
-                getPublisherIdByName(publisher), 
-                description,
-                imageUrl,
-                age,
-                title,
-                language,
-                duration,
-                rating,
-                format
-        );
-
         try {
+            // Retrieve data from the form
+            String publisher = (String) materialForm.getPublisherComboBox().getSelectedItem();
+            String title = materialForm.getTitleField().getText();
+            String genre = materialForm.getGenreField().getText();
+            String description = materialForm.getDescriptionField().getText();
+            int age = (int) materialForm.getAgeSpinner().getValue();
+            String imageUrl = materialForm.getImageUrlField().getText();
+            String language = materialForm.getLanguageField().getText();
+            int rating = (int) materialForm.getRatingSpinner().getValue();
+            int duration = Integer.parseInt(materialForm.getDurationField().getText());
+            String format = materialForm.getFormatField().getText();
+
+            // Create a new Video object
+            Video video = new Video(
+                    Publisher.getPublisherIdByName(publisher),
+                    description,
+                    imageUrl,
+                    age,
+                    title,
+                    language,
+                    duration,
+                    rating,
+                    format);
+
             Video.save(video);
-            JOptionPane.showMessageDialog(null, "Video submited successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Video submitted successfully!", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to submit video!", "Error", JOptionPane.ERROR_MESSAGE);
