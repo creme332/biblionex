@@ -28,7 +28,7 @@ public class ButtonEditor extends DefaultCellEditor {
 
     private void deleteRow() {
         if (row >= 0) {
-            listPage.deletePatronFromDatabase(row);
+            listPage.notifyDeleteUser(row);
         }
     }
 

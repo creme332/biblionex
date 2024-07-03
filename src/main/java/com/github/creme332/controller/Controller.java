@@ -1,15 +1,17 @@
 package com.github.creme332.controller;
 
 import com.github.creme332.controller.librarian.RegistrationController;
-import com.github.creme332.controller.librarian.ListPageController;
 import com.github.creme332.controller.patron.CatalogController;
+import com.github.creme332.controller.librarian.LibrarianListPageController;
+import com.github.creme332.controller.librarian.PatronListPageController;
 import com.github.creme332.controller.patron.RegisterController;
 import com.github.creme332.controller.patron.SidebarController;
 import com.github.creme332.model.AppState;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
 import com.github.creme332.view.librarian.RegistrationForm;
-import com.github.creme332.view.librarian.ListPage;
+import com.github.creme332.view.librarian.LibrarianListPage;
+import com.github.creme332.view.librarian.PatronListPage;
 import com.github.creme332.view.patron.Registration;
 import com.github.creme332.view.patron.Catalog;
 
@@ -35,7 +37,9 @@ public class Controller {
 
         new RegistrationController(app, (RegistrationForm) frame.getPage(Screen.LIBRARIAN_REGISTRATION_SCREEN));
 
-        new ListPageController(app, (ListPage) frame.getPage(Screen.LIBRARIAN_LIST_SCREEN));
+        new PatronListPageController(app, (PatronListPage) frame.getPage(Screen.LIBRARIAN_PATRON_LIST_SCREEN));
+
+        new LibrarianListPageController (app, (LibrarianListPage) frame.getPage(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN));
 
         new ForgotPasswordController(app, (ForgotPassword) frame.getPage(Screen.FORGET_PASSWORD));
 
