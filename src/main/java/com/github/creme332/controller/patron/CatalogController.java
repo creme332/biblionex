@@ -6,7 +6,7 @@ import com.github.creme332.model.Journal;
 import com.github.creme332.model.Video;
 import com.github.creme332.view.patron.Catalog;
 
-import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -19,6 +19,9 @@ public class CatalogController {
     public CatalogController(AppState app, Catalog catalog) {
         this.app = app;
         this.catalog = catalog;
+
+        // Add the scroll pane
+        catalog.add(catalog.getScrollPane(), BorderLayout.CENTER);
 
         Thread th = new Thread() {
             @Override
@@ -75,9 +78,5 @@ public class CatalogController {
                 // app.setCurrentScreen(Screen.JOURNAL);
                 break;
         }
-    }
-
-    public JScrollPane getScrollableCatalog() {
-        return catalog.createScrollableCatalog();
     }
 }

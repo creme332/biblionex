@@ -1,6 +1,7 @@
 package com.github.creme332.view.patron;
 
 import com.github.creme332.utils.IconLoader;
+import com.github.creme332.utils.WrapLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -9,9 +10,11 @@ import java.awt.event.MouseAdapter;
 
 public class Catalog extends JPanel {
     private static final Dimension ITEM_DIMENSION = new Dimension(200, 200);
+    private JScrollPane scrollPane;
 
     public Catalog() {
-        setLayout(new FlowLayout(FlowLayout.CENTER, 50, 50));
+        setLayout(new WrapLayout(FlowLayout.CENTER, 50, 50));
+        scrollPane = createScrollableCatalog();
     }
 
     public void addCatalogItem(String title, String iconPath, MouseAdapter mouseAdapter) {
@@ -53,10 +56,14 @@ public class Catalog extends JPanel {
         }
     }
 
-    public JScrollPane createScrollableCatalog() {
+    private JScrollPane createScrollableCatalog() {
         JScrollPane scrollPane = new JScrollPane(this);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        return scrollPane;
+    }
+
+    public JScrollPane getScrollPane() {
         return scrollPane;
     }
 }
