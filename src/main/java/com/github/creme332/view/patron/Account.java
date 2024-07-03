@@ -22,14 +22,14 @@ public class Account extends JPanel {
         gbc.gridy = 0;
         gbc.gridwidth = 2;
 
-        JLabel titleLabel = new JLabel("Updating Details", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel titleLabel = new JLabel("Update Profile Details", SwingConstants.CENTER);
+        titleLabel.putClientProperty("FlatLaf.style", "font: bold $h2.font");
         add(titleLabel, gbc);
 
         gbc.gridwidth = 1;
         gbc.gridy++;
 
-        JLabel firstNameLabel = new JLabel("First Name:");
+        JLabel firstNameLabel = new JLabel("First Name");
         add(firstNameLabel, gbc);
         gbc.gridx++;
         firstNameField = new JTextField(15);
@@ -37,7 +37,7 @@ public class Account extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy++;
-        JLabel lastNameLabel = new JLabel("Last Name:");
+        JLabel lastNameLabel = new JLabel("Last Name");
         add(lastNameLabel, gbc);
         gbc.gridx++;
         lastNameField = new JTextField(15);
@@ -45,7 +45,7 @@ public class Account extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy++;
-        JLabel emailLabel = new JLabel("Email:");
+        JLabel emailLabel = new JLabel("Email");
         add(emailLabel, gbc);
         gbc.gridx++;
         emailField = new JTextField(15);
@@ -53,7 +53,7 @@ public class Account extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy++;
-        JLabel addressLabel = new JLabel("Address:");
+        JLabel addressLabel = new JLabel("Address");
         add(addressLabel, gbc);
         gbc.gridx++;
         addressField = new JTextField(15);
@@ -61,7 +61,7 @@ public class Account extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy++;
-        JLabel phoneLabel = new JLabel("Phone Number:");
+        JLabel phoneLabel = new JLabel("Phone Number");
         add(phoneLabel, gbc);
         gbc.gridx++;
         phoneField = new JTextField(15);
@@ -75,7 +75,7 @@ public class Account extends JPanel {
 
         gbc.gridwidth = 1;
         gbc.gridy++;
-        JLabel passwordLabel = new JLabel("Password:");
+        JLabel passwordLabel = new JLabel("Password");
         add(passwordLabel, gbc);
         gbc.gridx++;
         passwordField = new JPasswordField(15);
@@ -83,7 +83,7 @@ public class Account extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy++;
-        JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
+        JLabel confirmPasswordLabel = new JLabel("Confirm Password");
         add(confirmPasswordLabel, gbc);
         gbc.gridx++;
         confirmPasswordField = new JPasswordField(15);
@@ -94,6 +94,19 @@ public class Account extends JPanel {
         gbc.gridwidth = 2;
         submitButton = new JButton("Submit Changes");
         add(submitButton, gbc);
+    }
+
+    /**
+     * Clears all field on form
+     */
+    public void resetForm() {
+        firstNameField.setText("");
+        lastNameField.setText("");
+        addressField.setText("");
+        emailField.setText("");
+        phoneField.setText("");
+        passwordField.setText("");
+        confirmPasswordField.setText("");
     }
 
     public JTextField getFirstNameField() {
