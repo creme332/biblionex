@@ -52,4 +52,11 @@ public class Catalog extends JPanel {
             e.printStackTrace();
         }
     }
+
+    public JScrollPane createScrollableCatalog() {
+        JScrollPane scrollPane = new JScrollPane(this);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        return scrollPane;
+    }
 }

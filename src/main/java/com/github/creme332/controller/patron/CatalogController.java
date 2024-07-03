@@ -6,6 +6,7 @@ import com.github.creme332.model.Journal;
 import com.github.creme332.model.Video;
 import com.github.creme332.view.patron.Catalog;
 
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -67,5 +68,9 @@ public class CatalogController {
                 // app.setCurrentScreen(Screen.JOURNAL);
                 break;
         }
+    }
+
+    public JScrollPane getScrollableCatalog() {
+        return catalog.createScrollableCatalog();
     }
 }
