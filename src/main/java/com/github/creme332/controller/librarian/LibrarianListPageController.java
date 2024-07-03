@@ -22,13 +22,20 @@ public class LibrarianListPageController {
     public LibrarianListPageController(AppState app, LibrarianListPage listPage) {
         this.app = app;
         this.listPage = listPage;
-
-        try {
-            listPage.populateTable(new ArrayList<>(Librarian.findAll()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         initController();
+
+        Thread th = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    listPage.populateTable(new ArrayList<>(Librarian.findAll()));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+        th.start();
     }
 
     private void initController() {
