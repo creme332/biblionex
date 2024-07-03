@@ -375,7 +375,7 @@ CREATE TABLE `patron` (
   PRIMARY KEY (`patron_id`),
   UNIQUE KEY `patron_email_uindex` (`email`),
   UNIQUE KEY `patron_credit_card_no_uindex` (`credit_card_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -384,7 +384,6 @@ CREATE TABLE `patron` (
 
 LOCK TABLES `patron` WRITE;
 /*!40000 ALTER TABLE `patron` DISABLE KEYS */;
-INSERT INTO `patron` VALUES (1,'Royal Road','$31$16$hENHOkJPAK_NRXKYN0GEg52DZ-WxyxuO0S-zvatpFRA','Test','Patron','54353534','patron@biblionex.com','2024-06-26 13:12:12','2024-06-26 00:00:00','45325435354');
 /*!40000 ALTER TABLE `patron` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -508,4 +507,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-03 13:52:28
+-- Dump completed on 2024-07-03 14:00:32
