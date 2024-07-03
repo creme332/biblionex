@@ -41,9 +41,9 @@ public class MaterialForm extends JPanel {
         add(createHeaderPanel(), BorderLayout.NORTH);
 
         formPanel = new JPanel(new CardLayout());
-        formPanel.add(createBookPanel(), "Book");
-        formPanel.add(createJournalPanel(), "Journal");
-        formPanel.add(createVideoPanel(), "Video");
+        formPanel.add(createBookPanel(), "BOOK");
+        formPanel.add(createJournalPanel(), "JOURNAL");
+        formPanel.add(createVideoPanel(), "VIDEO");
 
         JScrollPane scrollPane = new JScrollPane(formPanel);
         add(scrollPane, BorderLayout.CENTER);
@@ -222,7 +222,7 @@ public class MaterialForm extends JPanel {
         gbc.gridy = 5;
         videoPanel.add(new JLabel("Rating:"), gbc);
         gbc.gridx = 3;
-        ratingSpinner = new JSpinner(new SpinnerNumberModel(100, 0, 100, 1));
+        ratingSpinner = new JSpinner(new SpinnerNumberModel(5, 1, 5, 1));
         videoPanel.add(ratingSpinner, gbc);
 
         gbc.gridx = 0;
