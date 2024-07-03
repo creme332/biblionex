@@ -8,9 +8,22 @@ import java.util.Date;
 import com.github.creme332.controller.Screen;
 
 public class AppState {
-    private Screen currentScreen = Screen.LOGIN_SCREEN;
     private PropertyChangeSupport support;
+    /**
+     * Account of currently logged in user.
+     */
     private User loggedInUser;
+    /**
+     * Last screen displayed.
+     */
+    private Screen previousScreen;
+
+    /**
+     * Current screen displayed. The initial value of this variable is the first
+     * screen displayed after SPLASH_SCREEN.
+     */
+    private Screen currentScreen = Screen.LOGIN_SCREEN;
+
     /**
      * Determines whether to automatically login as librarian or patron or none.
      * This is meant to be used for debugging only.
@@ -33,6 +46,11 @@ public class AppState {
      * @param type
      */
     public void autoLogin(UserType type) {
+        /**
+         * Password for default librarian and patron accounts. if you have changed the
+         * password previously, this password may be inaccurate but auto login will
+         * still succeed.
+         */
         final String DEFAULT_PASSWORD = "1234";
         final Patron defaultPatron = new Patron("patron@biblionex.com", DEFAULT_PASSWORD, "Royal Road", "Patron",
                 "Test",
@@ -40,12 +58,14 @@ public class AppState {
         final Librarian defaultLibrarian = new Librarian("librarian@biblionex.com", DEFAULT_PASSWORD,
                 defaultPatron.getAddress(), "Admin", "Test", "4324532423", "Admin test");
 
+        User user = null;
         if (type == UserType.LIBRARIAN) {
             try {
-                loggedInUser = Librarian.findByEmail(defaultLibrarian.getEmail());
-                if (loggedInUser == null) {
+                user = Librarian.findByEmail(defaultLibrarian.getEmail());
+                if (user == null) {
+                    // account does not exist yet so create it
                     Librarian.save(defaultLibrarian);
-                    loggedInUser = Librarian.findByEmail(defaultLibrarian.getEmail());
+                    user = Librarian.findByEmail(defaultLibrarian.getEmail());
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -53,12 +73,14 @@ public class AppState {
             }
             setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN);
         }
+
         if (type == UserType.PATRON) {
             try {
-                loggedInUser = Patron.findByEmail(defaultPatron.getEmail());
-                if (loggedInUser == null) {
+                user = Patron.findByEmail(defaultPatron.getEmail());
+                if (user == null) {
+                    // account does not exist yet so create it
                     Patron.save(defaultPatron);
-                    loggedInUser = Patron.findByEmail(defaultPatron.getEmail());
+                    user = Patron.findByEmail(defaultPatron.getEmail());
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -66,24 +88,37 @@ public class AppState {
             }
             setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
         }
+
+        setLoggedInUser(user);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener("currentScreen", listener);
+        support.addPropertyChangeListener("loggedInUser", listener);
     }
 
     public Screen getCurrentScreen() {
         return currentScreen;
     }
 
+    public Screen getPreviousScreen() {
+        return previousScreen;
+    }
+
     public void setCurrentScreen(Screen newScreen) {
-        // System.out.println("Switching screens: " + currentScreen.getScreenName() +
-        // "-> " + newScreen.getScreenName());
+        if (newScreen == null) {
+            System.out.println(
+                    "New screen should not be null. If you clicked on back button, ensure that you have previously visited the previous page.");
+            return;
+        }
+        System.out.println("Switching screens: " + currentScreen.name() + "-> " + newScreen.name());
         support.firePropertyChange("currentScreen", currentScreen, newScreen);
+        previousScreen = currentScreen;
         currentScreen = newScreen;
     }
 
     public void setLoggedInUser(User newUser) {
+        support.firePropertyChange("loggedInUser", loggedInUser, newUser);
         loggedInUser = newUser;
     }
 

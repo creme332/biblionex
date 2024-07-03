@@ -1,7 +1,5 @@
 package com.github.creme332.controller;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
@@ -23,22 +21,23 @@ public class FrameController implements PropertyChangeListener {
      * Show splash screen animation
      */
     public void playAnimation() {
-        Timer timer = new Timer();
-        TimerTask showNextScreen;
         final long animationDuration = 800; // ms
 
-        frame.switchToScreen(Screen.SPLASH_SCREEN);
-
-        // show screen set by AppState when timer has elapsed
-        showNextScreen = new TimerTask() {
+        Thread th = new Thread() {
             @Override
             public void run() {
+                frame.switchToScreen(Screen.SPLASH_SCREEN);
+
+                try {
+                    Thread.sleep(animationDuration);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    System.exit(0);
+                }
                 frame.switchToScreen(app.getCurrentScreen());
-                timer.cancel();
-                timer.purge();
             }
         };
-        timer.schedule(showNextScreen, animationDuration);
+        th.start();
     }
 
     @Override
