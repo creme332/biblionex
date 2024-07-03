@@ -8,11 +8,22 @@ import java.util.Date;
 import com.github.creme332.controller.Screen;
 
 public class AppState {
+    private PropertyChangeSupport support;
+    /**
+     * Account of currently logged in user.
+     */
+    private User loggedInUser;
+    /**
+     * Last screen displayed.
+     */
     private Screen previousScreen;
+
+    /**
+     * Current screen displayed. The initial value of this variable is the first
+     * screen displayed after SPLASH_SCREEN.
+     */
     private Screen currentScreen = Screen.LOGIN_SCREEN;
 
-    private PropertyChangeSupport support;
-    private User loggedInUser;
     /**
      * Determines whether to automatically login as librarian or patron or none.
      * This is meant to be used for debugging only.
