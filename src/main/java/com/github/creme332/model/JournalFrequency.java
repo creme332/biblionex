@@ -22,6 +22,13 @@ public enum JournalFrequency {
     return stringInDB;
   }
 
+  /**
+   * Converts a string to a JournalFrequency enum. Use this function over
+   * valueOf() if strings comes from database.
+   * 
+   * @param str
+   * @return
+   */
   public static JournalFrequency fromString(String str) {
     for (JournalFrequency value : JournalFrequency.values()) {
       if (value.toString().equals(str)) {

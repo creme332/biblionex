@@ -19,7 +19,14 @@ public class CatalogController {
     public CatalogController(AppState app, Catalog catalog) {
         this.app = app;
         this.catalog = catalog;
-        initCatalogItems();
+
+        Thread th = new Thread() {
+            @Override
+            public void run() {
+                initCatalogItems();
+            }
+        };
+        th.start();
     }
 
     private void initCatalogItems() {
@@ -27,19 +34,19 @@ public class CatalogController {
             // Load books from the database
             List<Book> books = Book.findAll();
             for (Book book : books) {
-                addItemToCatalog(book.getTitle(), "/catalog/book.png");  
+                addItemToCatalog(book.getTitle(), "/catalog/book.png");
             }
 
             // Load videos from the database
             List<Video> videos = Video.findAll();
             for (Video video : videos) {
-                addItemToCatalog(video.getTitle(), "/catalog/video.png");  
+                addItemToCatalog(video.getTitle(), "/catalog/video.png");
             }
 
             // Load journals from the database
             List<Journal> journals = Journal.findAll();
             for (Journal journal : journals) {
-                addItemToCatalog(journal.getTitle(), "/catalog/journal.png");  
+                addItemToCatalog(journal.getTitle(), "/catalog/journal.png");
             }
         } catch (SQLException e) {
             e.printStackTrace();
