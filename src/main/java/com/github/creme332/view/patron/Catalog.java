@@ -8,17 +8,17 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 
 public class Catalog extends JPanel {
-    private static final Dimension ITEM_DIMENSION = new Dimension(200, 150);
+    private static final Dimension ITEM_DIMENSION = new Dimension(200, 200);
 
     public Catalog() {
-        setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        setupUI();
+        setLayout(new FlowLayout(FlowLayout.CENTER, 50, 50));
     }
 
     public void addCatalogItem(String title, String iconPath, MouseAdapter mouseAdapter) {
         try {
             IconLoader iconLoader = new IconLoader();
             Icon icon = iconLoader.loadIcon(iconPath, 100, 150);
+
             JPanel itemPanel = new JPanel();
             itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
             itemPanel.setPreferredSize(ITEM_DIMENSION);
@@ -32,10 +32,14 @@ public class Catalog extends JPanel {
             imageContainer.add(image, BorderLayout.CENTER);
 
             // Create title container
-            JPanel titleContainer = new JPanel();
-            JLabel titleLabel = new JLabel(title);
-            titleContainer.add(titleLabel);
-            titleLabel.setBorder(new EmptyBorder(5, 0, 0, 0));
+            JPanel titleContainer = new JPanel(new BorderLayout());
+
+            // create a title label with word wrapping
+            JLabel titleLabel = new JLabel("<html>" + title + "</html>");
+            titleLabel.putClientProperty("FlatLaf.style", "font: $semibold.font");
+
+            titleContainer.add(titleLabel, BorderLayout.NORTH);
+            titleLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
             titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
             // Add components to the item panel
@@ -47,18 +51,5 @@ public class Catalog extends JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void setupUI() {
-        JFrame frame = new JFrame("Catalog Page");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-
-        // Add the catalog to the center
-        frame.add(new JScrollPane(this), BorderLayout.CENTER);
-
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 }
