@@ -9,6 +9,7 @@ import com.github.creme332.view.patron.Loan;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Fine;
 import com.github.creme332.model.Fine.LoanFineData;
+import com.github.creme332.model.Patron;
 
 public class LoanController {
     private Loan loan;
@@ -21,9 +22,12 @@ public class LoanController {
         loadData();
     }
 
+    // fetch patron account
+    Patron patron = (Patron) app.getLoggedInUser();
+
     public void loadData() {
         try {
-            List<LoanFineData> records = Fine.findAllLoanFineRecords();
+            List<LoanFineData> records = Fine.findLoanFineRecordsByPatronId(patron.getUserId());
             loan.setLoanFineRecords(records);
         } catch (SQLException e) {
             e.printStackTrace();

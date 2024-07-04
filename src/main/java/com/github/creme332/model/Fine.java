@@ -103,15 +103,17 @@ public class Fine {
         }
     }
 
-    public static List<LoanFineData> findAllLoanFineRecords() throws SQLException {
+    public static List<LoanFineData> findLoanFineRecordsByPatronId(int patronId) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         List<LoanFineData> records = new ArrayList<>();
         String query = """
                 SELECT loan.loan_id, loan.barcode, loan.issue_date, loan.return_date, loan.due_date, fine.amount
                 FROM loan
                 LEFT JOIN fine ON loan.loan_id = fine.loan_id
+                WHERE loan.patron_id = ?
                 """;
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, patronId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 LoanFineData record = new LoanFineData(
