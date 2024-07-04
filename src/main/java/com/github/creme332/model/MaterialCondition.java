@@ -22,6 +22,13 @@ public enum MaterialCondition {
     return stringInDB;
   }
 
+  /**
+   * Converts a string to a MaterialCondition enum. Use this function over
+   * valueOf() if strings comes from database.
+   * 
+   * @param str
+   * @return
+   */
   public static MaterialCondition fromString(String str) {
     for (MaterialCondition value : MaterialCondition.values()) {
       if (value.toString().equals(str)) {

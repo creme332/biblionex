@@ -3,25 +3,22 @@ package com.github.creme332.view.librarian;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.sql.SQLException;
 import java.util.List;
 import com.github.creme332.utils.ButtonRenderer;
 import com.github.creme332.utils.ButtonEditor;
-import com.github.creme332.model.Patron;
+import com.github.creme332.model.User;
 
-public class ListPage extends JPanel {
+public abstract class ListPage extends JPanel {
     private JButton backButton;
     private JTextField searchField;
     private JButton searchButton;
     private JRadioButton byNameRadio;
     private JRadioButton byIdRadio;
-    private JTable patronTable;
-    private JButton newPatronButton;
+    private JTable userTable;
+    private JButton newUserButton;
     private DefaultTableModel tableModel;
 
-    public ListPage() {
+    protected ListPage() {
         setLayout(new BorderLayout());
 
         // Top Panel
@@ -44,92 +41,55 @@ public class ListPage extends JPanel {
         add(topPanel, BorderLayout.NORTH);
 
         // Table
-        String[] columnNames = { "Patron ID", "First Name", "Last Name", "Email", "Phone No", "Action" };
+        String[] columnNames = { getUserType() + " ID", "First Name", "Last Name", "Email", "Phone No", "Action" };
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column != 0; // Prevent editing of Patron ID
+                return column != 0; // Prevent editing of User ID
             }
         };
-        patronTable = new JTable(tableModel);
-        patronTable.getColumn("Action").setCellRenderer(new ButtonRenderer());
-        patronTable.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox(), this));
-        JScrollPane scrollPane = new JScrollPane(patronTable);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        userTable = new JTable(tableModel);
+        userTable.getColumn("Action").setCellRenderer(new ButtonRenderer());
+        userTable.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox(), this));
+        JScrollPane scrollPane = new JScrollPane(userTable);
+        scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane, BorderLayout.CENTER);
 
-        // New Patron Button
+        // New User Button
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        newPatronButton = new JButton("+ New patron");
-        bottomPanel.add(newPatronButton);
+        newUserButton = new JButton("+ New " + getUserType());
+        bottomPanel.add(newUserButton);
         add(bottomPanel, BorderLayout.SOUTH);
-
-        // Handle cell updates
-        patronTable.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                int row = patronTable.getSelectedRow();
-                int column = patronTable.getSelectedColumn();
-                if (row != -1 && column != -1) {
-                    updatePatronInDatabase(row);
-                }
-            }
-        });
     }
 
+    protected abstract String getUserType();
+
+    public abstract void notifyDeleteUser(int row);
+
     /**
-     * Display a list of patrons in the table.
+     * Display a list of users in the table.
      * 
-     * @param patrons
+     * @param users
      */
-    public void populateTable(List<Patron> patrons) {
+    public void populateTable(List<User> users) {
         tableModel.setRowCount(0);
-        if (patrons.isEmpty())
+        if (users.isEmpty())
             return;
 
-        for (Patron patron : patrons) {
+        for (User user : users) {
             Object[] rowData = {
-                    patron.getUserId(),
-                    patron.getFirstName(),
-                    patron.getLastName(),
-                    patron.getEmail(),
-                    patron.getPhoneNo(),
+                    user.getUserId(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getPhoneNo(),
                     "Delete"
             };
             tableModel.addRow(rowData);
         }
     }
 
-    // Update patron in the database method
-    public void updatePatronInDatabase(int row) {
-        int patronId = (int) tableModel.getValueAt(row, 0);
-        String firstName = (String) tableModel.getValueAt(row, 1);
-        String lastName = (String) tableModel.getValueAt(row, 2);
-        String email = (String) tableModel.getValueAt(row, 3);
-        String phoneNo = (String) tableModel.getValueAt(row, 4);
-
-        // Patron patron = new Patron(email, "", );
-        // patron.setUserId(patronId);
-        // patron.setFirstName(firstName);
-        // patron.setLastName(lastName);
-        // patron.setEmail(email);
-        // patron.setPhoneNo(phoneNo);
-
-        // Patron.update(patron);
-    }
-
-    public void deletePatronFromDatabase(int row) {
-        int patronId = (int) tableModel.getValueAt(row, 0);
-        try {
-            Patron.delete(patronId);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
-        tableModel.removeRow(row);
-    }
-
-    // Getter methods for controller
     public JButton getBackButton() {
         return backButton;
     }
@@ -150,15 +110,15 @@ public class ListPage extends JPanel {
         return byIdRadio;
     }
 
-    public JTable getPatronTable() {
-        return patronTable;
+    public JTable getUserTable() {
+        return userTable;
     }
 
     public DefaultTableModel getTableModel() {
         return tableModel;
     }
 
-    public JButton getNewPatronButton() {
-        return newPatronButton;
+    public JButton getNewUserButton() {
+        return newUserButton;
     }
 }

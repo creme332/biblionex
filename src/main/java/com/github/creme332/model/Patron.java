@@ -106,7 +106,12 @@ public class Patron extends User {
             updatePatron.setString(3, patron.getFirstName());
             updatePatron.setString(4, patron.getPhoneNo());
             updatePatron.setString(5, patron.getEmail());
-            updatePatron.setDate(6, new java.sql.Date(patron.getBirthDate().getTime()));
+            if (patron.getBirthDate() != null) {
+                updatePatron.setDate(6, new java.sql.Date(patron.getBirthDate().getTime()));
+            } else {
+                updatePatron.setNull(6, java.sql.Types.DATE);
+            }
+            // updatePatron.setDate(6, new java.sql.Date(patron.getBirthDate().getTime()));
             updatePatron.setString(7, patron.getCreditCardNo());
             updatePatron.setInt(8, patron.getUserId());
             updatePatron.executeUpdate();
