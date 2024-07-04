@@ -74,9 +74,29 @@ public class VendorForm extends JPanel {
         return headerPanel;
     }
 
-    public JTextField getEmailField() { return emailField; }
-    public JTextField getNameField() { return nameField; }
-    public JTextField getContactPersonField() { return contactPersonField; }
-    public JButton getSaveButton() { return saveButton; }
-    public JButton getBackButton() { return backButton; }
+    public void clearForm() {
+        emailField.setText("");
+        nameField.setText("");
+        contactPersonField.setText("");
+    }
+
+    public JTextField getEmailField() {
+        return emailField;
+    }
+
+    public JTextField getNameField() {
+        return nameField;
+    }
+
+    public JTextField getContactPersonField() {
+        return contactPersonField;
+    }
+
+    public JButton getSaveButton() {
+        return saveButton;
+    }
+
+    public JButton getBackButton() {
+        return backButton;
+    }
 }

@@ -38,7 +38,9 @@ public class VendorController {
         Vendor vendor = new Vendor(0, email, name, contactPerson);
         try {
             Vendor.save(vendor);
-            JOptionPane.showMessageDialog(vendorForm, "Vendor saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(vendorForm, "Vendor saved successfully!", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            vendorForm.clearForm();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(vendorForm, "Failed to save vendor.", "Error", JOptionPane.ERROR_MESSAGE);
         }
