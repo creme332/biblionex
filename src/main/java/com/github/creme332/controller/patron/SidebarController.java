@@ -2,6 +2,8 @@ package com.github.creme332.controller.patron;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Patron;
+import com.github.creme332.model.User;
+import com.github.creme332.model.UserType;
 import com.github.creme332.view.patron.Sidebar;
 
 import java.beans.PropertyChangeEvent;
@@ -30,13 +32,13 @@ public class SidebarController implements PropertyChangeListener {
         });
 
         this.sidebar.getCatalogButton().addActionListener(e -> {
-            // app.setCurrentScreen(Screen.PATRON_CATALOG_SCREEN);
-            // sideBar.highlightButton(sideBar.getCatalogButton());
+            app.setCurrentScreen(Screen.PATRON_CATALOG_SCREEN);
+            sidebar.highlightButton(sidebar.getCatalogButton());
         });
 
         this.sidebar.getAccountButton().addActionListener(e -> {
-            // app.setCurrentScreen(Screen.PATRON_ACCOUNT_SCREEN);
-            // sideBar.highlightButton(sideBar.getAccountButton());
+            app.setCurrentScreen(Screen.PATRON_ACCOUNT_SCREEN);
+            sidebar.highlightButton(sidebar.getAccountButton());
         });
 
         this.sidebar.getLogOutButton().addActionListener(e -> {
@@ -47,8 +49,8 @@ public class SidebarController implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         String propertyName = evt.getPropertyName();
-        if (propertyName.equals("loggedInUser")) {
-            // user just logged in
+        if (propertyName.equals("loggedInUser") && ((User) evt.getNewValue()).getUserType() == UserType.PATRON) {
+            // patron just logged in
             patron = (Patron) evt.getNewValue();
             this.sidebar.setPatronDetails(patron.getFirstName(), patron.getLastName());
         }

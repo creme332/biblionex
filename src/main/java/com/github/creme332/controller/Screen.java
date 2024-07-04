@@ -5,28 +5,21 @@ package com.github.creme332.controller;
  */
 public enum Screen {
     // screens common to both patron and librarian
-    SPLASH_SCREEN("splashScreen"),
-    LOGIN_SCREEN("loginScreen"),
-    FORGET_PASSWORD("forgetPassword"),
+    SPLASH_SCREEN,
+    LOGIN_SCREEN,
+    FORGET_PASSWORD,
 
     // patron screens
-    PATRON_REGISTRATION_SCREEN("patronRegistrationScreen"),
-    PATRON_DASHBOARD_SCREEN("patronDashboardScreen"),
-    PATRON_LOAN_SCREEN("patronLoanScreen"),
+    PATRON_REGISTRATION_SCREEN,
+    PATRON_DASHBOARD_SCREEN,
+    PATRON_ACCOUNT_SCREEN,
+    PATRON_CATALOG_SCREEN,
+    PATRON_LOAN_SCREEN,
 
     // librarian screens
-    LIBRARIAN_DASHBOARD_SCREEN("librarianDashboardScreen"),
-    LIBRARIAN_VENDOR_SCREEN("librarianVendorScreen"),
-    LIBRARIAN_LIST_SCREEN("PatronListScreen"),
-    LIBRARIAN_REGISTRATION_SCREEN("librarianRegistrationScreen");
-
-    private final String screenName;
-
-    Screen(String screenName) {
-        this.screenName = screenName;
-    }
-
-    public String getScreenName() {
-        return screenName;
-    }
+    LIBRARIAN_DASHBOARD_SCREEN,
+    LIBRARIAN_LIBRARIAN_LIST_SCREEN,
+    LIBRARIAN_PATRON_LIST_SCREEN,
+    LIBRARIAN_REGISTRATION_SCREEN,
+    LIBRARIAN_VENDOR_SCREEN;
 }

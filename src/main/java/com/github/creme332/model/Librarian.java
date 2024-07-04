@@ -78,21 +78,24 @@ public class Librarian extends User {
         }
     }
 
+    /**
+     * Updates all attributes except password and librarian ID.
+     * 
+     * @param librarian
+     * @throws SQLException
+     */
     public static void update(Librarian librarian) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
-        PasswordAuthentication passwordAuthentication = new PasswordAuthentication();
-        String hashedPassword = passwordAuthentication.hash(librarian.getPassword().toCharArray());
 
-        String query = "UPDATE librarian SET address = ?, password = ?, last_name = ?, first_name = ?, phone_no = ?, email = ? WHERE librarian_id = ?";
+        String query = "UPDATE librarian SET address = ?, last_name = ?, first_name = ?, phone_no = ?, email = ? WHERE librarian_id = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, librarian.getAddress());
-            preparedStatement.setString(2, hashedPassword); // Save hashed password
-            preparedStatement.setString(3, librarian.getLastName());
-            preparedStatement.setString(4, librarian.getFirstName());
-            preparedStatement.setString(5, librarian.getPhoneNo());
-            preparedStatement.setString(6, librarian.getEmail());
-            preparedStatement.setInt(7, librarian.getUserId());
+            preparedStatement.setString(2, librarian.getLastName());
+            preparedStatement.setString(3, librarian.getFirstName());
+            preparedStatement.setString(4, librarian.getPhoneNo());
+            preparedStatement.setString(5, librarian.getEmail());
+            preparedStatement.setInt(6, librarian.getUserId());
             preparedStatement.executeUpdate();
         }
     }

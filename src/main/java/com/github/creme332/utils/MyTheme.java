@@ -1,4 +1,4 @@
-package com.github.creme332.view;
+package com.github.creme332.utils;
 
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -10,7 +10,7 @@ public class MyTheme extends FlatDarculaLaf {
     public static boolean setup() {
         installFonts();
         // look for properties file in theme folder (relative to resource)
-        MyTheme.registerCustomDefaultsSource("theme");
+        registerCustomDefaultsSource("theme");
         return setup(new MyTheme());
     }
 
