@@ -3,25 +3,43 @@ package com.github.creme332.controller.patron;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Fine;
 import com.github.creme332.model.Loan;
+import com.github.creme332.model.Patron;
 import com.github.creme332.model.Book;
 import com.github.creme332.model.Author;
 import com.github.creme332.model.Publisher;
+import com.github.creme332.model.User;
+import com.github.creme332.model.UserType;
 import com.github.creme332.view.patron.Dashboard;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.*;
 
-public class DashboardController {
+public class DashboardController implements PropertyChangeListener {
     AppState app;
     Dashboard dashboard;
+
+    /**
+     * Currently logged in user.
+     */
+    Patron patron;
 
     public DashboardController(AppState app, Dashboard dashboard) {
         this.app = app;
         this.dashboard = dashboard;
+        this.patron = null;
+        app.addPropertyChangeListener(this);
+    }
 
+    /**
+     * This method should be called only AFTER user has logged in. Inside
+     * constructor of DashboardController(), USER HAS NOT LOGGED IN YET.
+     */
+    private void refreshDashboard() {
         // Fetch data from the database and update the view
         try {
-            int patronId = app.getLoggedInUser().getUserId();
+            int patronId = patron.getUserId();
             int pendingFines = calculatePendingFines(patronId);
             int totalFinesPaid = calculateTotalFinesPaid(patronId);
             int activeLoans = calculateActiveLoans(patronId);
@@ -40,7 +58,7 @@ public class DashboardController {
         }
     }
 
-    private int calculatePendingFines(int patronId) throws SQLException {
+    private int calculatePendingFines(int patronId) {
         // Calculate the sum of unpaid fines for the patron
         List<Fine> fines = Fine.findBy("patron_id", String.valueOf(patronId));
         return fines.stream()
@@ -49,7 +67,7 @@ public class DashboardController {
                 .sum();
     }
 
-    private int calculateTotalFinesPaid(int patronId) throws SQLException {
+    private int calculateTotalFinesPaid(int patronId) {
         // Calculate the sum of all fines paid by the patron
         List<Fine> fines = Fine.findBy("patron_id", String.valueOf(patronId));
         return fines.stream()
@@ -87,5 +105,14 @@ public class DashboardController {
             }
         }
         return publishers;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        String propertyName = evt.getPropertyName();
+        if (propertyName.equals("loggedInUser") && ((User) evt.getNewValue()).getUserType() == UserType.PATRON) {
+            patron = (Patron) evt.getNewValue();
+            refreshDashboard();
+        }
     }
 }
