@@ -1,14 +1,6 @@
 package com.github.creme332.controller.patron;
 
-import com.github.creme332.model.AppState;
-import com.github.creme332.model.Fine;
-import com.github.creme332.model.Loan;
-import com.github.creme332.model.Patron;
-import com.github.creme332.model.Book;
-import com.github.creme332.model.Author;
-import com.github.creme332.model.Publisher;
-import com.github.creme332.model.User;
-import com.github.creme332.model.UserType;
+import com.github.creme332.model.*;
 import com.github.creme332.view.patron.Dashboard;
 
 import java.beans.PropertyChangeEvent;
@@ -91,7 +83,7 @@ public class DashboardController implements PropertyChangeListener {
     private List<Author> fetchAuthors(List<Book> books) throws SQLException {
         List<Author> authors = new ArrayList<>();
         for (Book book : books) {
-            authors.add(Author.findById(book.getAuthorId()));
+            authors.addAll(Book.findAuthorsByBookId(book.getMaterialId()));
         }
         return authors;
     }

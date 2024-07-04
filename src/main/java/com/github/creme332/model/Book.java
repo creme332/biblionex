@@ -13,7 +13,6 @@ import java.util.List;
 public class Book extends Material {
     private int pageCount;
     private String isbn;
-    private int authorId;
 
     public Book(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
             String title, int pageCount, String isbn) {
@@ -58,14 +57,6 @@ public class Book extends Material {
         this.isbn = isbn;
     }
 
-    public int getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
-    }
-
     public int getPublisherId() {
         return this.publisherId;
     }
@@ -80,9 +71,9 @@ public class Book extends Material {
         Connection connection = DatabaseConnection.getConnection();
         String materialQuery = """
                 INSERT INTO material
-                 (publisher_id, description, image_url, age_restriction, type, title)
-                 VALUES (?, ?, ?, ?, ?, ?, ?)
-                 """;
+                (publisher_id, description, image_url, age_restriction, type, title)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """;
 
         // start a transaction
         connection.setAutoCommit(false);
@@ -104,7 +95,7 @@ public class Book extends Material {
 
             if (affectedRows == 0) {
                 connection.rollback();
-                throw new SQLException("Creating user failed, no rows affected.");
+                throw new SQLException("Creating book failed, no rows affected.");
             }
 
             try (ResultSet generatedKeys = createMaterial.getGeneratedKeys()) {
@@ -251,6 +242,36 @@ public class Book extends Material {
         }
 
         connection.commit();
+    }
+
+    /**
+     * Retrieves a list of authors for a given book.
+     *
+     * @param materialId The material ID of the book.
+     * @return A list of authors for the book.
+     * @throws SQLException
+     */
+    public static List<Author> findAuthorsByBookId(int materialId) throws SQLException {
+        Connection connection = DatabaseConnection.getConnection();
+        List<Author> authors = new ArrayList<>();
+        String query = """
+                SELECT author.* FROM author
+                INNER JOIN book_author ON author.author_id = book_author.author_id
+                WHERE book_author.material_id = ?
+                """;
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, materialId);
+            ResultSet resultSet = pstmt.executeQuery();
+            while (resultSet.next()) {
+                authors.add(new Author(
+                        resultSet.getInt("author_id"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("email")));
+            }
+        }
+        return authors;
     }
 
     @Override

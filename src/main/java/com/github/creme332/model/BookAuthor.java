@@ -37,12 +37,12 @@ public class BookAuthor {
      * 
      * @throws SQLException
      */
-    public void save() throws SQLException {
+    public static void save(BookAuthor bookAuthor) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String query = "INSERT INTO book_author (material_id, author_id) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, this.materialId);
-            statement.setInt(2, this.authorId);
+            statement.setInt(1, bookAuthor.getMaterialId());
+            statement.setInt(2, bookAuthor.getAuthorId());
             statement.executeUpdate();
         }
     }
@@ -52,12 +52,12 @@ public class BookAuthor {
      * 
      * @throws SQLException
      */
-    public void delete() throws SQLException {
+    public static void delete(BookAuthor bookAuthor) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String query = "DELETE FROM book_author WHERE material_id = ? AND author_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, this.materialId);
-            statement.setInt(2, this.authorId);
+            statement.setInt(1, bookAuthor.getMaterialId());
+            statement.setInt(2, bookAuthor.getAuthorId());
             statement.executeUpdate();
         }
     }
@@ -67,12 +67,12 @@ public class BookAuthor {
      * 
      * @throws SQLException
      */
-    public boolean exists() throws SQLException {
+    public static boolean exists(BookAuthor bookAuthor) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String query = "SELECT 1 FROM book_author WHERE material_id = ? AND author_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, this.materialId);
-            statement.setInt(2, this.authorId);
+            statement.setInt(1, bookAuthor.getMaterialId());
+            statement.setInt(2, bookAuthor.getAuthorId());
             try (ResultSet resultSet = statement.executeQuery()) {
                 return resultSet.next();
             }
