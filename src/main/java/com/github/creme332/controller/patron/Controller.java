@@ -6,6 +6,7 @@ import com.github.creme332.view.Frame;
 import com.github.creme332.view.patron.Account;
 import com.github.creme332.view.patron.Catalog;
 import com.github.creme332.view.patron.Dashboard;
+import com.github.creme332.view.patron.Loan;
 
 /**
  * Instantiates all controllers for pages accessible by patron only after log
@@ -25,5 +26,8 @@ public class Controller {
 
         // controller for account page
         new AccountController(app, (Account) frame.getPage(Screen.PATRON_ACCOUNT_SCREEN));
+
+        // controller for loan page
+        new LoanController(app, (Loan) frame.getPage(Screen.PATRON_LOAN_SCREEN));
     }
 }
