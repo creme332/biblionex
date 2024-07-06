@@ -35,6 +35,109 @@ public class Patron extends User {
     }
 
     /**
+     * Performs payment for a particular loan. Payment amount is determined by
+     * getAmountDue() in the loan class.
+     * 
+     * @param loan
+     * @return True if payment was successful.
+     */
+    public boolean payFine(Loan loan) {
+        Fine newFine = new Fine(userId, loan.getLoanId(), new Date(), loan.getAmountDue());
+        try {
+            Fine.save(newFine);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 
+     * @return A list of active loans for patron. A loan is active if the material
+     *         loaned has not been returned yet.
+     * @throws SQLException
+     */
+    public List<Loan> getActiveLoans() throws SQLException {
+        final Connection conn = DatabaseConnection.getConnection();
+        List<Loan> activeLoans = new ArrayList<>();
+
+        String query = """
+                SELECT * from loan
+                WHERE patron_id = ?
+                AND return_date is NULL
+                """;
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Loan loan = new Loan(
+                        resultSet.getInt("loan_id"),
+                        resultSet.getInt("patron_id"),
+                        resultSet.getInt("barcode"),
+                        resultSet.getInt("checkout_librarian_id"),
+                        resultSet.getInt("checkin_librarian_id"),
+                        resultSet.getDate("issue_date"),
+                        resultSet.getDate("return_date"),
+                        resultSet.getDate("due_date"),
+                        resultSet.getInt("renewal_count"));
+                activeLoans.add(loan);
+            }
+        }
+        return activeLoans;
+    }
+
+    /**
+     * 
+     * @return A list of all loans for patron sorted in chronological order of issue
+     *         date.
+     * @throws SQLException
+     */
+    public List<Loan> getLoans() throws SQLException {
+        final Connection conn = DatabaseConnection.getConnection();
+        List<Loan> allLoans = new ArrayList<>();
+
+        String query = """
+                SELECT * from loan
+                WHERE patron_id = ?
+                ORDER BY issue_date DESC
+                """;
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Loan loan = new Loan(
+                        resultSet.getInt("loan_id"),
+                        resultSet.getInt("patron_id"),
+                        resultSet.getInt("barcode"),
+                        resultSet.getInt("checkout_librarian_id"),
+                        resultSet.getInt("checkin_librarian_id"),
+                        resultSet.getDate("issue_date"),
+                        resultSet.getDate("return_date"),
+                        resultSet.getDate("due_date"),
+                        resultSet.getInt("renewal_count"));
+                allLoans.add(loan);
+            }
+        }
+        return allLoans;
+    }
+
+    /**
+     * 
+     * @return A list of overdue loans for patron. A loan is overdue if the material
+     *         loaned has not been returned yet and the due date is less than the
+     *         current date.
+     */
+    public List<Loan> getOverdueLoans() {
+        // TODO: Complete
+        return new ArrayList<>();
+    }
+
+    /**
      * Saves a patron to database. patron ID and registration date are automatically
      * set by database.
      * 
@@ -76,7 +179,7 @@ public class Patron extends User {
                 preparedStatement.setDate(8, new java.sql.Date(patron.getBirthDate().getTime()));
             } else {
                 preparedStatement.setNull(8, java.sql.Types.DATE);
-            }            
+            }
             preparedStatement.executeUpdate();
         }
     }
@@ -111,7 +214,6 @@ public class Patron extends User {
             } else {
                 updatePatron.setNull(6, java.sql.Types.DATE);
             }
-            // updatePatron.setDate(6, new java.sql.Date(patron.getBirthDate().getTime()));
             updatePatron.setString(7, patron.getCreditCardNo());
             updatePatron.setInt(8, patron.getUserId());
             updatePatron.executeUpdate();
