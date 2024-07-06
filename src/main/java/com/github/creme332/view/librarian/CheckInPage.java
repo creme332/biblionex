@@ -7,14 +7,14 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-public class CheckInRenew extends JPanel {
+public class CheckInPage extends JPanel {
     private JTextField barcodeField;
     private JButton searchButton;
     private JTable loanTable;
     private DefaultTableModel tableModel;
     private JButton backButton;
 
-    public CheckInRenew() {
+    public CheckInPage() {
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel();

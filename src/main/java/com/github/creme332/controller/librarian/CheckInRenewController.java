@@ -13,13 +13,13 @@ import javax.swing.table.DefaultTableModel;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Loan;
 import com.github.creme332.model.Librarian;
-import com.github.creme332.view.librarian.CheckInRenew;
+import com.github.creme332.view.librarian.CheckInPage;
 
 public class CheckInRenewController {
     private AppState app;
-    private CheckInRenew checkInRenew;
+    private CheckInPage checkInRenew;
 
-    public CheckInRenewController(AppState app, CheckInRenew checkInRenew) {
+    public CheckInRenewController(AppState app, CheckInPage checkInRenew) {
         this.app = app;
         this.checkInRenew = checkInRenew;
 
@@ -37,7 +37,7 @@ public class CheckInRenewController {
             }
         });
 
-        checkInRenew.getLoanTable().getColumn("Action").setCellEditor(new CheckInRenew.ActionEditor(new JCheckBox()) {
+        checkInRenew.getLoanTable().getColumn("Action").setCellEditor(new CheckInPage.ActionEditor(new JCheckBox()) {
             @Override
             public Component getTableCellEditorComponent(JTable table, Object value,
                     boolean isSelected, int row, int column) {
