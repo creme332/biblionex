@@ -140,16 +140,13 @@ public class CheckInController implements PropertyChangeListener {
     public void renewLoan(int loanId) {
         try {
             Loan loan = Loan.findById(loanId);
-            if (loan.getRenewalCount() >= Loan.RENEWAL_LIMIT) {
-                JOptionPane.showMessageDialog(view, "This loan has reached the maximum renewal limit.",
-                        "Renewal Limit Reached", JOptionPane.WARNING_MESSAGE);
-            } else {
-                Date newDueDate = new Date(loan.getDueDate().getTime() + (7L * 24 * 60 * 60 * 1000)); // Add 7 days
-                loan.setDueDate(newDueDate);
-                loan.setRenewalCount(loan.getRenewalCount() + 1);
-                JOptionPane.showMessageDialog(view, "Loan renewed successfully.", "Success",
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
+            Librarian loggedInLibrarian = (Librarian) app.getLoggedInUser();
+            loggedInLibrarian.renewLoan(loan);
+            JOptionPane.showMessageDialog(view, "Loan renewed successfully.", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            displayActiveLoans();
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(view, e.getMessage(), "Renewal Limit Reached", JOptionPane.WARNING_MESSAGE);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(view, "Error occurred while renewing the loan.", "Database Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -161,10 +158,10 @@ public class CheckInController implements PropertyChangeListener {
         try {
             Loan loan = Loan.findById(loanId);
             Librarian loggedInLibrarian = (Librarian) app.getLoggedInUser();
-            loan.setCheckinLibrarianId(loggedInLibrarian.getUserId());
-            loan.setReturnDate(new Date()); // Set the return date to the current date
+            loggedInLibrarian.checkIn(loan);
             JOptionPane.showMessageDialog(view, "Loan checked in successfully.", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
+            displayActiveLoans();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(view, "Error occurred while checking in the loan.", "Database Error",
                     JOptionPane.ERROR_MESSAGE);

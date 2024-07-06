@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import com.github.creme332.utils.DatabaseConnection;
 import com.github.creme332.utils.PasswordAuthentication;
@@ -46,13 +47,41 @@ public class Librarian extends User {
         this.role = role;
     }
 
-    public void renewLoan(Loan loan) {
-        // TODO: update the renewal count of the loan in the database 
-        // perform any validation checks
+    public void renewLoan(Loan loan) throws SQLException {
+        if (loan.getRenewalCount() >= Loan.RENEWAL_LIMIT) {
+            throw new IllegalArgumentException("This loan has reached the maximum renewal limit.");
+        }
+
+        Date newDueDate = new Date(loan.getDueDate().getTime() + (7L * 24 * 60 * 60 * 1000)); // Add 7 days
+        loan.setDueDate(newDueDate);
+        loan.setRenewalCount(loan.getRenewalCount() + 1);
+
+        // Update the loan in the database
+        final Connection conn = DatabaseConnection.getConnection();
+        String query = "UPDATE loan SET due_date = ?, renewal_count = ? WHERE loan_id = ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setDate(1, new java.sql.Date(loan.getDueDate().getTime()));
+            preparedStatement.setInt(2, loan.getRenewalCount());
+            preparedStatement.setInt(3, loan.getLoanId());
+            preparedStatement.executeUpdate();
+        }
     }
 
-    public void checkIn(Loan loan) {
-        // TODO: update the return data of the loan in the database
+    public void checkIn(Loan loan) throws SQLException {
+        loan.setReturnDate(new Date()); // Set the return date to the current date
+        loan.setCheckinLibrarianId(this.getUserId());
+
+        // Update the loan in the database
+        final Connection conn = DatabaseConnection.getConnection();
+        String query = "UPDATE loan SET return_date = ?, checkin_librarian_id = ? WHERE loan_id = ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setDate(1, new java.sql.Date(loan.getReturnDate().getTime()));
+            preparedStatement.setInt(2, loan.getCheckinLibrarianId());
+            preparedStatement.setInt(3, loan.getLoanId());
+            preparedStatement.executeUpdate();
+        }
     }
 
     /**
