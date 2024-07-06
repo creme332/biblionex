@@ -32,7 +32,8 @@ public class Loan {
     private int checkoutLibrarianId;
 
     /**
-     * ID of librarian who carried out check-in.
+     * ID of librarian who carried out check-in. If not checked in yet, value is
+     * negative.
      */
     private int checkinLibrarianId;
     private Date issueDate;
@@ -172,6 +173,13 @@ public class Loan {
                         resultSet.getDate("return_date"),
                         resultSet.getDate("due_date"),
                         resultSet.getInt("renewal_count"));
+
+                // deal with possible null values since getInt() returns 0 for null
+                resultSet.getInt("checkin_librarian_id");
+                if (resultSet.wasNull()) {
+                    loan.setCheckinLibrarianId(-1);
+                }
+
             }
         }
         return loan;
@@ -322,5 +330,20 @@ public class Loan {
             }
         }
         return loan;
+    }
+
+    @Override
+    public String toString() {
+        return "Loan{" +
+                "loanId=" + loanId +
+                ", patronId=" + patronId +
+                ", barcode=" + barcode +
+                ", checkoutLibrarianId=" + checkoutLibrarianId +
+                ", checkinLibrarianId=" + checkinLibrarianId +
+                ", issueDate=" + issueDate +
+                ", returnDate=" + returnDate +
+                ", dueDate=" + dueDate +
+                ", renewalCount=" + renewalCount +
+                '}';
     }
 }
