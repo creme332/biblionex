@@ -3,6 +3,8 @@ package com.github.creme332.controller.librarian;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -12,16 +14,20 @@ import javax.swing.table.DefaultTableModel;
 import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Loan;
+import com.github.creme332.model.User;
+import com.github.creme332.model.UserType;
 import com.github.creme332.model.Librarian;
 import com.github.creme332.view.librarian.CheckInPage;
 
-public class CheckInController {
+public class CheckInController implements PropertyChangeListener {
     private AppState app;
     private CheckInPage view;
+    private Librarian librarian;
 
     public CheckInController(AppState app, CheckInPage view) {
         this.app = app;
         this.view = view;
+        app.addPropertyChangeListener(this);
 
         view.getSearchButton().addActionListener(new ActionListener() {
             @Override
@@ -141,7 +147,6 @@ public class CheckInController {
                 Date newDueDate = new Date(loan.getDueDate().getTime() + (7L * 24 * 60 * 60 * 1000)); // Add 7 days
                 loan.setDueDate(newDueDate);
                 loan.setRenewalCount(loan.getRenewalCount() + 1);
-                Loan.update(loan);
                 JOptionPane.showMessageDialog(view, "Loan renewed successfully.", "Success",
                         JOptionPane.INFORMATION_MESSAGE);
             }
@@ -158,13 +163,29 @@ public class CheckInController {
             Librarian loggedInLibrarian = (Librarian) app.getLoggedInUser();
             loan.setCheckinLibrarianId(loggedInLibrarian.getUserId());
             loan.setReturnDate(new Date()); // Set the return date to the current date
-            Loan.update(loan);
             JOptionPane.showMessageDialog(view, "Loan checked in successfully.", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(view, "Error occurred while checking in the loan.", "Database Error",
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        String propertyName = evt.getPropertyName();
+        if (propertyName.equals("loggedInUser")) {
+
+            // ignore event if logged in user is not a librarian
+            User newUser = (User) evt.getNewValue();
+            if (newUser == null
+                    || newUser.getUserType() != UserType.LIBRARIAN)
+                return;
+
+            // initialize librarian
+            librarian = (Librarian) newUser;
+            System.out.println(librarian);
         }
     }
 }
