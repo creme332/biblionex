@@ -7,6 +7,7 @@ import com.github.creme332.view.librarian.Dashboard;
 import com.github.creme332.view.librarian.LibrarianListPage;
 import com.github.creme332.view.librarian.PatronListPage;
 import com.github.creme332.view.librarian.RegistrationForm;
+import com.github.creme332.view.librarian.VendorForm;
 
 /**
  * Instantiates all controllers for pages accessible by librarian only after log
@@ -24,7 +25,10 @@ public class Controller {
         // controller for listing librarian details
         new LibrarianListPageController(app, (LibrarianListPage) frame.getPage(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN));
 
-        // initialize controller for librarian dashboard
+        // controller for librarian dashboard
         new DashboardController(app, (Dashboard) frame.getPage(Screen.LIBRARIAN_DASHBOARD_SCREEN));
+
+        // controller for vendor creation form
+        new VendorController(app, (VendorForm) frame.getPage(Screen.LIBRARIAN_VENDOR_SCREEN));
     }
 }
