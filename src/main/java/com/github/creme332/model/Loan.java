@@ -232,38 +232,6 @@ public class Loan {
         }
     }
 
-    public static void update(Loan loan) throws SQLException {
-        final Connection conn = DatabaseConnection.getConnection();
-        String query = """
-                UPDATE loan
-                    SET patron_id = ?,
-                    barcode = ?,
-                    checkout_librarian_id = ?,
-                    checkin_librarian_id = ?,
-                    issue_date = ?,
-                    return_date = ?,
-                    due_date = ?,
-                    renewal_count = ?
-                WHERE loan_id = ?
-                """;
-        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setInt(1, loan.getPatronId());
-            preparedStatement.setInt(2, loan.getBarcode());
-            preparedStatement.setInt(3, loan.getCheckoutLibrarianId());
-            preparedStatement.setInt(4, loan.getCheckinLibrarianId());
-            preparedStatement.setDate(5, new java.sql.Date(loan.getIssueDate().getTime()));
-            if (loan.getReturnDate() != null) {
-                preparedStatement.setDate(6, new java.sql.Date(loan.getReturnDate().getTime()));
-            } else {
-                preparedStatement.setNull(6, java.sql.Types.DATE);
-            }
-            preparedStatement.setDate(7, new java.sql.Date(loan.getDueDate().getTime()));
-            preparedStatement.setInt(8, loan.getRenewalCount());
-            preparedStatement.setInt(9, loan.getLoanId());
-            preparedStatement.executeUpdate();
-        }
-    }
-
     public static void delete(int loanId) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "DELETE FROM loan WHERE loan_id = ?";
