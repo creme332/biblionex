@@ -71,7 +71,7 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.LIBRARIAN_VENDOR_SCREEN, new VendorForm());
         screenMapper.put(Screen.PATRON_ACCOUNT_SCREEN, new Account());
         screenMapper.put(Screen.PATRON_CATALOG_SCREEN, new Catalog());
-        screenMapper.put(Screen.LIBRARIAN_CHECKIN_RENEW_SCREEN, new CheckInRenew());
+        screenMapper.put(Screen.LIBRARIAN_CHECKIN_SCREEN, new CheckInRenew());
 
         // add screens to cardPanels
         for (Map.Entry<Screen, JPanel> entry : screenMapper.entrySet()) {
