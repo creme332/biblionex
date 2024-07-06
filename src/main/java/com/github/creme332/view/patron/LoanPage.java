@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import com.github.creme332.model.Loan;
 
 /**
- * A page that displays all active loans of a patron.
+ * A page that displays loans of a patron.
  */
 public class LoanPage extends JPanel {
     private JTable table;
@@ -27,7 +27,7 @@ public class LoanPage extends JPanel {
         table = new JTable(tableModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 6; // Only the "Action" column is editable
+                return column == tableModel.getColumnCount() - 1; // Only the "Action" column is editable
             }
         };
         table.getColumn("Action").setCellRenderer(new ButtonRenderer());
