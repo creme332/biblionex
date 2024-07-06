@@ -6,24 +6,26 @@ import javax.swing.table.DefaultTableModel;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import com.github.creme332.utils.ButtonEditor;
-import com.github.creme332.utils.ButtonRenderer;
-import com.github.creme332.model.Fine;
+import com.github.creme332.model.Loan;
 
-public class Loan extends JPanel {
+/**
+ * A page that displays all active loans of a patron.
+ */
+public class LoanPage extends JPanel {
     private JTable table;
     private DefaultTableModel tableModel;
-    private ActionListener actionListener;
+    private transient ActionListener actionListener;
 
-    public Loan() {
+    public LoanPage() {
         setLayout(new BorderLayout());
-        tableModel = new DefaultTableModel(new Object[]{"Loan ID", "Barcode", "Issue Date", "Return Date", "Due Date", "Amount", "Action"}, 0);
+        tableModel = new DefaultTableModel(
+                new Object[] { "Loan ID", "Barcode", "Issue Date", "Return Date", "Due Date", "Action" }, 0);
         table = new JTable(tableModel) {
+            @Override
             public boolean isCellEditable(int row, int column) {
                 return column == 6; // Only the "Action" column is editable
             }
@@ -33,10 +35,12 @@ public class Loan extends JPanel {
         add(new JScrollPane(table), BorderLayout.CENTER);
     }
 
-    public void setLoanFineRecords(List<Fine.LoanFineData> records) {
+    public void updateTableModel(List<Loan> loans) {
         tableModel.setRowCount(0); // Clear existing rows
-        for (Fine.LoanFineData record : records) {
-            tableModel.addRow(new Object[]{record.getLoanId(), record.getBarcode(), record.getIssueDate(), record.getReturnDate(), record.getDueDate(), record.getAmount(), "Pay"});
+
+        for (Loan loan : loans) {
+            tableModel.addRow(new Object[] { loan.getLoanId(), loan.getBarcode(), loan.getIssueDate(),
+                    loan.getReturnDate(), loan.getDueDate(), "Pay" });
         }
     }
 
@@ -44,18 +48,19 @@ public class Loan extends JPanel {
         this.actionListener = listener;
     }
 
-    class ButtonRenderer extends JButton implements TableCellRenderer {
+    private class ButtonRenderer extends JButton implements TableCellRenderer {
         public ButtonRenderer() {
             setOpaque(true);
         }
 
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
             setText((value == null) ? "" : value.toString());
             return this;
         }
     }
 
-    class ButtonEditor extends DefaultCellEditor {
+    private class ButtonEditor extends DefaultCellEditor {
         protected JButton button;
         private String label;
         private boolean isPushed;
@@ -65,14 +70,12 @@ public class Loan extends JPanel {
             super(checkBox);
             button = new JButton();
             button.setOpaque(true);
-            button.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    fireEditingStopped();
-                }
-            });
+            button.addActionListener(e -> fireEditingStopped());
         }
 
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+                int column) {
             label = (value == null) ? "" : value.toString();
             button.setText(label);
             isPushed = true;
@@ -80,6 +83,7 @@ public class Loan extends JPanel {
             return button;
         }
 
+        @Override
         public Object getCellEditorValue() {
             if (isPushed) {
                 firePayAction(loanId);
@@ -88,13 +92,10 @@ public class Loan extends JPanel {
             return new String(label);
         }
 
+        @Override
         public boolean stopCellEditing() {
             isPushed = false;
             return super.stopCellEditing();
-        }
-
-        protected void fireEditingStopped() {
-            super.fireEditingStopped();
         }
 
         private void firePayAction(int loanId) {

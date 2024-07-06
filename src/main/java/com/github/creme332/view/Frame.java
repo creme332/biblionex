@@ -61,7 +61,7 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.LOGIN_SCREEN, new Login());
         screenMapper.put(Screen.PATRON_REGISTRATION_SCREEN, new Registration());
         screenMapper.put(Screen.PATRON_DASHBOARD_SCREEN, new com.github.creme332.view.patron.Dashboard());
-        screenMapper.put(Screen.PATRON_LOAN_SCREEN, new com.github.creme332.view.patron.Loan());
+        screenMapper.put(Screen.PATRON_LOAN_SCREEN, new com.github.creme332.view.patron.LoanPage());
         screenMapper.put(Screen.LIBRARIAN_DASHBOARD_SCREEN, new com.github.creme332.view.librarian.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
         screenMapper.put(Screen.LIBRARIAN_PATRON_LIST_SCREEN, new PatronListPage());
