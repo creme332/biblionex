@@ -42,25 +42,6 @@ public class Fine {
         return amount;
     }
 
-    public static Fine findByLoanId(int loanId) throws SQLException {
-        final Connection conn = DatabaseConnection.getConnection();
-        String query = "SELECT * FROM fine WHERE loan_id = ?";
-        Fine fine = null;
-
-        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setInt(1, loanId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                fine = new Fine(
-                        resultSet.getInt("patron_id"),
-                        resultSet.getInt("loan_id"),
-                        resultSet.getDate("date"),
-                        resultSet.getDouble("amount"));
-            }
-        }
-        return fine;
-    }
-
     public static List<Fine> findAll() throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         List<Fine> fines = new ArrayList<>();
