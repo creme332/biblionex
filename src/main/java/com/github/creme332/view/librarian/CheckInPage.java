@@ -2,10 +2,13 @@ package com.github.creme332.view.librarian;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.EventObject;
 
 public class CheckInPage extends JPanel {
     private JTextField barcodeField;
@@ -13,15 +16,44 @@ public class CheckInPage extends JPanel {
     private JTable loanTable;
     private DefaultTableModel tableModel;
     private JButton backButton;
+    private ActionCellRenderer actionCellRenderer;
 
     public CheckInPage() {
         setLayout(new BorderLayout());
 
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        add(createTopPanel(), BorderLayout.NORTH);
+
+        String[] columnNames = { "Loan ID", "Patron ID", "Barcode", "Due Date", "Renewal Count", "Action" };
+        tableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Make only last column editable to allow button clicks
+                return column == columnNames.length - 1;
+            }
+        };
+        loanTable = new JTable(tableModel);
+
+        actionCellRenderer = new ActionCellRenderer();
+        loanTable.getColumn("Action").setCellRenderer(actionCellRenderer);
+        loanTable.getColumn("Action").setCellEditor(actionCellRenderer);
+
+        JScrollPane scrollPane = new JScrollPane(loanTable);
+        add(scrollPane, BorderLayout.CENTER);
+    }
+
+    public JPanel createTopPanel() {
+        JPanel topPanel = new JPanel(new BorderLayout());
+        add(topPanel, BorderLayout.NORTH);
+
+        // add back button to topPanel
         backButton = new JButton("Back");
-        topPanel.add(backButton);
+        topPanel.add(backButton, BorderLayout.WEST);
+
+        JPanel searchContainer = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
         barcodeField = new JTextField(20);
+        searchContainer.add(barcodeField);
+
         barcodeField.setForeground(Color.GRAY);
         barcodeField.setText("Enter barcode");
         barcodeField.addFocusListener(new FocusAdapter() {
@@ -29,7 +61,7 @@ public class CheckInPage extends JPanel {
             public void focusGained(FocusEvent e) {
                 if (barcodeField.getText().equals("Enter barcode")) {
                     barcodeField.setText("");
-                    barcodeField.setForeground(Color.BLACK);
+                    barcodeField.setForeground(Color.WHITE);
                 }
             }
 
@@ -41,26 +73,12 @@ public class CheckInPage extends JPanel {
                 }
             }
         });
-        topPanel.add(barcodeField);
+        topPanel.add(searchContainer, BorderLayout.CENTER);
+
         searchButton = new JButton("Search");
-        topPanel.add(searchButton);
+        searchContainer.add(searchButton);
 
-        add(topPanel, BorderLayout.NORTH);
-
-        String[] columnNames = { "Loan ID", "Patron ID", "Barcode", "Due Date", "Renewal Count", "Action" };
-        tableModel = new DefaultTableModel(columnNames, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column == 5;
-            }
-        };
-        loanTable = new JTable(tableModel);
-
-        loanTable.getColumn("Action").setCellRenderer(new ActionRenderer());
-        loanTable.getColumn("Action").setCellEditor(new ActionEditor(new JCheckBox()));
-
-        JScrollPane scrollPane = new JScrollPane(loanTable);
-        add(scrollPane, BorderLayout.CENTER);
+        return topPanel;
     }
 
     public JButton getSearchButton() {
@@ -71,7 +89,7 @@ public class CheckInPage extends JPanel {
         return barcodeField;
     }
 
-    public JTable getLoanTable() {
+    public JTable getTable() {
         return loanTable;
     }
 
@@ -83,48 +101,68 @@ public class CheckInPage extends JPanel {
         return backButton;
     }
 
-    class ActionRenderer extends JPanel implements TableCellRenderer {
-        private final JButton renewButton;
-        private final JButton checkinButton;
-
-        public ActionRenderer() {
-            renewButton = new JButton("Renew");
-            checkinButton = new JButton("Check In");
-            setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
-            add(renewButton);
-            add(checkinButton);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
-            return this;
-        }
+    public ActionCellRenderer getActionCellRenderer() {
+        return actionCellRenderer;
     }
 
-    public static class ActionEditor extends DefaultCellEditor {
-        private final JPanel panel;
+    /**
+     * Class responsible for rendering all cells in Action column and setting action
+     * listeners to each button in the Action column.
+     */
+    public class ActionCellRenderer extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
         private final JButton renewButton;
-        private final JButton checkinButton;
+        private final JButton checkInButton;
+        private JPanel panel;
 
-        public ActionEditor(JCheckBox checkBox) {
-            super(checkBox);
-            panel = new JPanel();
+        public ActionCellRenderer() {
+            panel = new JPanel(new BorderLayout());
+            panel.setOpaque(false);
+
             renewButton = new JButton("Renew");
-            checkinButton = new JButton("Check In");
-            panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
-            panel.add(renewButton);
-            panel.add(checkinButton);
+            checkInButton = new JButton("Check In");
+
+            panel.add(renewButton, BorderLayout.WEST);
+            panel.add(checkInButton, BorderLayout.EAST);
+        }
+
+        public void setRenewButtonActionListener(ActionListener listener) {
+            for (ActionListener al : renewButton.getActionListeners()) {
+                renewButton.removeActionListener(al);
+            }
+            renewButton.addActionListener(listener);
+        }
+
+        public void setCheckInButtonActionListener(ActionListener listener) {
+            for (ActionListener al : checkInButton.getActionListeners()) {
+                checkInButton.removeActionListener(al);
+            }
+            checkInButton.addActionListener(listener);
         }
 
         @Override
-        public Component getTableCellEditorComponent(JTable table, Object value,
-                boolean isSelected, int row, int column) {
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+                int column) {
             return panel;
         }
 
         @Override
         public Object getCellEditorValue() {
+            return null;
+        }
+
+        @Override
+        public boolean isCellEditable(EventObject e) {
+            return true;
+        }
+
+        @Override
+        public boolean shouldSelectCell(EventObject anEvent) {
+            return true;
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable arg0, Object arg1, boolean arg2, boolean arg3, int arg4,
+                int arg5) {
             return panel;
         }
     }
