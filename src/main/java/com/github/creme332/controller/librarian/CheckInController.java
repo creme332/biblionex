@@ -1,7 +1,6 @@
 package com.github.creme332.controller.librarian;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -10,67 +9,75 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
+import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Loan;
 import com.github.creme332.model.Librarian;
 import com.github.creme332.view.librarian.CheckInPage;
 
-public class CheckInRenewController {
+public class CheckInController {
     private AppState app;
-    private CheckInPage checkInRenew;
+    private CheckInPage view;
 
-    public CheckInRenewController(AppState app, CheckInPage checkInRenew) {
+    public CheckInController(AppState app, CheckInPage view) {
         this.app = app;
-        this.checkInRenew = checkInRenew;
+        this.view = view;
 
-        checkInRenew.getSearchButton().addActionListener(new ActionListener() {
+        view.getSearchButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 searchLoans();
             }
         });
 
-        checkInRenew.getBackButton().addActionListener(new ActionListener() {
+        view.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN));
+
+        addTableButtonListeners();
+
+        Thread th = new Thread() {
+            @Override
+            public void run() {
+                displayActiveLoans();
+            }
+        };
+        th.start();
+    }
+
+    /**
+     * Add listeners to check in and renew buttons.
+     */
+    private void addTableButtonListeners() {
+        JTable table = view.getTable();
+        CheckInPage.ActionCellRenderer rendererEditor = view.getActionCellRenderer();
+
+        rendererEditor.setRenewButtonActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //
+                int selectedRow = table.getSelectedRow();
+
+                if (selectedRow != -1) {
+                    int loanId = (int) table.getValueAt(selectedRow, 0);
+                    System.out.println("Renew Loan ID " + loanId);
+                    renewLoan(loanId);
+                }
             }
         });
 
-        checkInRenew.getLoanTable().getColumn("Action").setCellEditor(new CheckInPage.ActionEditor(new JCheckBox()) {
+        rendererEditor.setCheckInButtonActionListener(new ActionListener() {
             @Override
-            public Component getTableCellEditorComponent(JTable table, Object value,
-                    boolean isSelected, int row, int column) {
-                Component component = super.getTableCellEditorComponent(table, value, isSelected, row, column);
-                JButton renewButton = (JButton) ((JPanel) component).getComponent(0);
-                JButton checkinButton = (JButton) ((JPanel) component).getComponent(1);
-
-                renewButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        renewLoan(row);
-                        stopCellEditing();
-                    }
-                });
-
-                checkinButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        checkInLoan(row);
-                        stopCellEditing();
-                    }
-                });
-
-                return component;
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+                    int loanId = (int) table.getValueAt(selectedRow, 0);
+                    System.out.println("Check in Loan ID " + loanId);
+                    checkInLoan(loanId);
+                }
             }
         });
-
-        // Display all active loans initially
-        displayActiveLoans();
     }
 
     private void displayActiveLoans() {
-        DefaultTableModel tableModel = checkInRenew.getTableModel();
+        DefaultTableModel tableModel = view.getTableModel();
         tableModel.setRowCount(0);
 
         try {
@@ -81,25 +88,29 @@ public class CheckInRenewController {
                 tableModel.addRow(rowData);
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(checkInRenew, "Error occurred while fetching loans.", "Database Error",
+            JOptionPane.showMessageDialog(view, "Error occurred while fetching loans.", "Database Error",
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
 
     public void searchLoans() {
-        String barcodeText = checkInRenew.getBarcodeField().getText();
+        String barcodeText = view.getBarcodeField().getText().trim();
+
+        if (barcodeText.length() == 0) {
+
+        }
         int barcode;
 
         try {
             barcode = Integer.parseInt(barcodeText);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(checkInRenew, "Please enter a valid barcode.", "Invalid Input",
+            JOptionPane.showMessageDialog(view, "Please enter a valid barcode.", "Invalid Input",
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        DefaultTableModel tableModel = checkInRenew.getTableModel();
+        DefaultTableModel tableModel = view.getTableModel();
         tableModel.setRowCount(0);
 
         try {
@@ -109,57 +120,49 @@ public class CheckInRenewController {
                         loan.getDueDate(), loan.getRenewalCount(), "Action" };
                 tableModel.addRow(rowData);
             } else {
-                JOptionPane.showMessageDialog(checkInRenew, "No active loans found for the given barcode.", "No Results",
+                JOptionPane.showMessageDialog(view, "No active loans found for the given barcode.",
+                        "No Results",
                         JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(checkInRenew, "Error occurred while fetching loans.", "Database Error",
+            JOptionPane.showMessageDialog(view, "Error occurred while fetching loans.", "Database Error",
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
 
-    public void renewLoan(int row) {
-        DefaultTableModel tableModel = checkInRenew.getTableModel();
-        int loanId = (int) tableModel.getValueAt(row, 0);
-
+    public void renewLoan(int loanId) {
         try {
             Loan loan = Loan.findById(loanId);
             if (loan.getRenewalCount() >= Loan.RENEWAL_LIMIT) {
-                JOptionPane.showMessageDialog(checkInRenew, "This loan has reached the maximum renewal limit.",
+                JOptionPane.showMessageDialog(view, "This loan has reached the maximum renewal limit.",
                         "Renewal Limit Reached", JOptionPane.WARNING_MESSAGE);
             } else {
                 Date newDueDate = new Date(loan.getDueDate().getTime() + (7L * 24 * 60 * 60 * 1000)); // Add 7 days
                 loan.setDueDate(newDueDate);
                 loan.setRenewalCount(loan.getRenewalCount() + 1);
                 Loan.update(loan);
-                tableModel.setValueAt(loan.getDueDate(), row, 3);
-                tableModel.setValueAt(loan.getRenewalCount(), row, 4);
-                JOptionPane.showMessageDialog(checkInRenew, "Loan renewed successfully.", "Success",
+                JOptionPane.showMessageDialog(view, "Loan renewed successfully.", "Success",
                         JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(checkInRenew, "Error occurred while renewing the loan.", "Database Error",
+            JOptionPane.showMessageDialog(view, "Error occurred while renewing the loan.", "Database Error",
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
 
-    public void checkInLoan(int row) {
-        DefaultTableModel tableModel = checkInRenew.getTableModel();
-        int loanId = (int) tableModel.getValueAt(row, 0);
-
+    public void checkInLoan(int loanId) {
         try {
             Loan loan = Loan.findById(loanId);
             Librarian loggedInLibrarian = (Librarian) app.getLoggedInUser();
             loan.setCheckinLibrarianId(loggedInLibrarian.getUserId());
             loan.setReturnDate(new Date()); // Set the return date to the current date
             Loan.update(loan);
-            tableModel.removeRow(row);
-            JOptionPane.showMessageDialog(checkInRenew, "Loan checked in successfully.", "Success",
+            JOptionPane.showMessageDialog(view, "Loan checked in successfully.", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(checkInRenew, "Error occurred while checking in the loan.", "Database Error",
+            JOptionPane.showMessageDialog(view, "Error occurred while checking in the loan.", "Database Error",
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }

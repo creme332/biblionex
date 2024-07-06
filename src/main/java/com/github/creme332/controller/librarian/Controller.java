@@ -27,7 +27,7 @@ public class Controller {
         new LibrarianListPageController(app, (LibrarianListPage) frame.getPage(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN));
 
         // controller for Check In and Renew
-        new CheckInRenewController(app, (CheckInPage) frame.getPage(Screen.LIBRARIAN_CHECKIN_SCREEN));
+        new CheckInController(app, (CheckInPage) frame.getPage(Screen.LIBRARIAN_CHECKIN_SCREEN));
 
         // controller for librarian dashboard
         new DashboardController(app, (Dashboard) frame.getPage(Screen.LIBRARIAN_DASHBOARD_SCREEN));
