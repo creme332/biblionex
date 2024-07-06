@@ -39,8 +39,15 @@ public class LoanPage extends JPanel {
         tableModel.setRowCount(0); // Clear existing rows
 
         for (Loan loan : loans) {
+
+            // determine return date
+            String returnDate = "Pending";
+            if (loan.getReturnDate() != null) {
+                returnDate = loan.getReturnDate().toString();
+            }
+
             tableModel.addRow(new Object[] { loan.getLoanId(), loan.getBarcode(), loan.getIssueDate(),
-                    loan.getReturnDate(), loan.getDueDate(), "Pay" });
+                    returnDate, loan.getDueDate(), "Pay" });
         }
     }
 
