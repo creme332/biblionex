@@ -11,7 +11,7 @@ import java.util.List;
 import com.github.creme332.utils.DatabaseConnection;
 
 /**
- * Stores data about material checkout and check-in.
+ * Stores data about the checkout and check-in of a material.
  */
 public class Loan {
     private int loanId;
@@ -91,6 +91,14 @@ public class Loan {
         this.returnDate = null;
         this.dueDate = dueDate;
         this.renewalCount = 0;
+    }
+
+    public boolean isOverdue() {
+        return dueDate.after(new Date());
+    }
+
+    public float getAmountDue() {
+        return isOverdue() ? 100 : 0;
     }
 
     public int getLoanId() {
