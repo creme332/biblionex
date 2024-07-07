@@ -3,6 +3,7 @@ package com.github.creme332.controller.librarian;
 import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.view.Frame;
+import com.github.creme332.view.librarian.AuthorForm;
 import com.github.creme332.view.librarian.Dashboard;
 import com.github.creme332.view.librarian.LibrarianListPage;
 import com.github.creme332.view.librarian.PatronListPage;
@@ -30,5 +31,8 @@ public class Controller {
 
         // controller for vendor creation form
         new VendorController(app, (VendorForm) frame.getPage(Screen.LIBRARIAN_VENDOR_SCREEN));
+
+        // controller for author creation form
+        new AuthorController(app, (AuthorForm) frame.getPage(Screen.LIBRARIAN_AUTHOR_SCREEN));
     }
 }
