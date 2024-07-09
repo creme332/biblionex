@@ -161,8 +161,9 @@ public class CheckInPage extends JPanel {
         }
 
         @Override
-        public Component getTableCellRendererComponent(JTable arg0, Object arg1, boolean arg2, boolean arg3, int arg4,
-                int arg5) {
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus,
+                int row, int column) {
             return panel;
         }
     }

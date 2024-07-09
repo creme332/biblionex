@@ -1,12 +1,9 @@
 package com.github.creme332.controller.librarian;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
@@ -20,30 +17,21 @@ import com.github.creme332.model.Librarian;
 import com.github.creme332.view.librarian.CheckInPage;
 
 public class CheckInController implements PropertyChangeListener {
-    private AppState app;
     private CheckInPage view;
     private Librarian librarian;
 
     public CheckInController(AppState app, CheckInPage view) {
-        this.app = app;
         this.view = view;
         app.addPropertyChangeListener(this);
 
-        view.getSearchButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                searchLoans();
-            }
-        });
+        view.getSearchButton().addActionListener(e -> searchLoans());
 
         view.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN));
-
-        addTableButtonListeners();
 
         Thread th = new Thread() {
             @Override
             public void run() {
-                displayActiveLoans();
+                refreshTable();
             }
         };
         th.start();
@@ -56,33 +44,28 @@ public class CheckInController implements PropertyChangeListener {
         JTable table = view.getTable();
         CheckInPage.ActionCellRenderer rendererEditor = view.getActionCellRenderer();
 
-        rendererEditor.setRenewButtonActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = table.getSelectedRow();
+        rendererEditor.setRenewButtonActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
 
-                if (selectedRow != -1) {
-                    int loanId = (int) table.getValueAt(selectedRow, 0);
-                    System.out.println("Renew Loan ID " + loanId);
-                    renewLoan(loanId);
-                }
+            if (selectedRow != -1) {
+                int loanId = (int) table.getValueAt(selectedRow, 0);
+                handleLoanRenew(loanId);
             }
         });
 
-        rendererEditor.setCheckInButtonActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = table.getSelectedRow();
-                if (selectedRow != -1) {
-                    int loanId = (int) table.getValueAt(selectedRow, 0);
-                    System.out.println("Check in Loan ID " + loanId);
-                    checkInLoan(loanId);
-                }
+        rendererEditor.setCheckInButtonActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                int loanId = (int) table.getValueAt(selectedRow, 0);
+                handleCheckIn(loanId);
             }
         });
     }
 
-    private void displayActiveLoans() {
+    /**
+     * Displays active loans in table and sets appropriate action listeners.
+     */
+    private void refreshTable() {
         DefaultTableModel tableModel = view.getTableModel();
         tableModel.setRowCount(0);
 
@@ -98,14 +81,12 @@ public class CheckInController implements PropertyChangeListener {
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+
+        addTableButtonListeners();
     }
 
     public void searchLoans() {
         String barcodeText = view.getBarcodeField().getText().trim();
-
-        if (barcodeText.length() == 0) {
-
-        }
         int barcode;
 
         try {
@@ -137,14 +118,13 @@ public class CheckInController implements PropertyChangeListener {
         }
     }
 
-    public void renewLoan(int loanId) {
+    public void handleLoanRenew(int loanId) {
         try {
             Loan loan = Loan.findById(loanId);
-            Librarian loggedInLibrarian = (Librarian) app.getLoggedInUser();
-            loggedInLibrarian.renewLoan(loan);
+            librarian.renewLoan(loan);
             JOptionPane.showMessageDialog(view, "Loan renewed successfully.", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
-            displayActiveLoans();
+            refreshTable();
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(view, e.getMessage(), "Renewal Limit Reached", JOptionPane.WARNING_MESSAGE);
         } catch (SQLException e) {
@@ -154,14 +134,13 @@ public class CheckInController implements PropertyChangeListener {
         }
     }
 
-    public void checkInLoan(int loanId) {
+    public void handleCheckIn(int loanId) {
         try {
             Loan loan = Loan.findById(loanId);
-            Librarian loggedInLibrarian = (Librarian) app.getLoggedInUser();
-            loggedInLibrarian.checkIn(loan);
+            librarian.checkIn(loan);
             JOptionPane.showMessageDialog(view, "Loan checked in successfully.", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
-            displayActiveLoans();
+            refreshTable();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(view, "Error occurred while checking in the loan.", "Database Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -182,7 +161,6 @@ public class CheckInController implements PropertyChangeListener {
 
             // initialize librarian
             librarian = (Librarian) newUser;
-            System.out.println(librarian);
         }
     }
 }
