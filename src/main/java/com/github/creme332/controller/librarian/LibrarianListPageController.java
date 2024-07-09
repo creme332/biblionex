@@ -72,6 +72,11 @@ public class LibrarianListPageController {
                 }
             }
         });
+
+        listPage.addPropertyChangeListener("deleteUser", evt -> {
+            Integer userId = (Integer) evt.getNewValue();
+            deleteLibrarian(userId);
+        });
     }
 
     private void searchLibrarians() {
@@ -121,6 +126,19 @@ public class LibrarianListPageController {
                 librarian.setPhoneNo(phoneNo);
                 Librarian.update(librarian);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteLibrarian(Integer userId) {
+        try {
+            Librarian librarian = Librarian.findById(userId);
+            if (librarian != null) {
+                Librarian.delete(librarian.getUserId());
+                searchLibrarians(); // Refresh the table after deletion
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

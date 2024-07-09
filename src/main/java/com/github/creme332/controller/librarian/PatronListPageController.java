@@ -72,6 +72,11 @@ public class PatronListPageController {
                 }
             }
         });
+
+        listPage.addPropertyChangeListener("deleteUser", evt -> {
+            Integer userId = (Integer) evt.getNewValue();
+            deletePatron(userId);
+        });
     }
 
     private void searchPatrons() {
@@ -84,8 +89,7 @@ public class PatronListPageController {
             } else {
                 if (listPage.getByNameRadio().isSelected()) {
                     matchingPatrons = Patron.findAll();
-                    matchingPatrons.removeIf(patron -> !StringUtil.isSimilar(patron.getFirstName(),
-                            searchText)
+                    matchingPatrons.removeIf(patron -> !StringUtil.isSimilar(patron.getFirstName(), searchText)
                             && !StringUtil.isSimilar(patron.getLastName(), searchText));
                 } else {
                     try {
@@ -126,4 +130,15 @@ public class PatronListPageController {
         }
     }
 
+    private void deletePatron(Integer userId) {
+        try {
+            Patron patron = Patron.findById(userId);
+            if (patron != null) {
+                Patron.delete(patron.getUserId());
+                searchPatrons(); // Refresh the table after deletion
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
