@@ -1,15 +1,12 @@
 package com.github.creme332.view.patron;
 
 import java.util.List;
-
 import javax.swing.table.DefaultTableModel;
-
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import com.github.creme332.model.Loan;
 
 /**
@@ -23,7 +20,7 @@ public class LoanPage extends JPanel {
     public LoanPage() {
         setLayout(new BorderLayout());
         tableModel = new DefaultTableModel(
-                new Object[] { "Loan ID", "Barcode", "Issue Date", "Return Date", "Due Date", "Action" }, 0);
+                new Object[] { "Loan ID", "Barcode", "Issue Date", "Return Date", "Due Date", "Status", "Action" }, 0);
         table = new JTable(tableModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -39,20 +36,26 @@ public class LoanPage extends JPanel {
         tableModel.setRowCount(0); // Clear existing rows
 
         for (Loan loan : loans) {
-
-            // determine return date
-            String returnDate = "Pending";
-            if (loan.getReturnDate() != null) {
-                returnDate = loan.getReturnDate().toString();
-            }
+            String returnDate = loan.getReturnDate() != null ? loan.getReturnDate().toString() : "Pending";
+            String status = determineLoanStatus(loan);
 
             tableModel.addRow(new Object[] { loan.getLoanId(), loan.getBarcode(), loan.getIssueDate(),
-                    returnDate, loan.getDueDate(), "Pay" });
+                    returnDate, loan.getDueDate(), status, status.equals("Overdue") ? "Pay" : "" });
         }
     }
 
     public void addLoanActionListener(ActionListener listener) {
         this.actionListener = listener;
+    }
+
+    private String determineLoanStatus(Loan loan) {
+        if (loan.getReturnDate() != null) {
+            return "Complete";
+        } else if (loan.getDueDate().before(new java.util.Date())) {
+            return "Overdue";
+        } else {
+            return "Pending";
+        }
     }
 
     private class ButtonRenderer extends JButton implements TableCellRenderer {
@@ -92,7 +95,7 @@ public class LoanPage extends JPanel {
 
         @Override
         public Object getCellEditorValue() {
-            if (isPushed) {
+            if (isPushed && "Pay".equals(label)) {
                 firePayAction(loanId);
             }
             isPushed = false;

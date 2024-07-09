@@ -4,9 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import com.github.creme332.view.patron.LoanPage;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Loan;
@@ -65,12 +63,15 @@ public class LoanController implements PropertyChangeListener {
 
         boolean paymentSuccessful = patron.payFine(currentLoan);
         if (paymentSuccessful) {
-            JOptionPane.showMessageDialog(loanView, "Payment Successful.", "Error",
+            JOptionPane.showMessageDialog(loanView, "Payment Successful.", "Message",
                     JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(loanView, "Payment is not possible yet.", "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
+
+        // Refresh the loan view to update the status and button
+        displayLoans();
     }
 
     @Override
