@@ -3,10 +3,12 @@ package com.github.creme332.controller.librarian;
 import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.view.Frame;
+import com.github.creme332.view.librarian.CheckInPage;
 import com.github.creme332.view.librarian.Dashboard;
 import com.github.creme332.view.librarian.LibrarianListPage;
 import com.github.creme332.view.librarian.PatronListPage;
 import com.github.creme332.view.librarian.RegistrationForm;
+import com.github.creme332.view.librarian.VendorForm;
 
 /**
  * Instantiates all controllers for pages accessible by librarian only after log
@@ -24,7 +26,13 @@ public class Controller {
         // controller for listing librarian details
         new LibrarianListPageController(app, (LibrarianListPage) frame.getPage(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN));
 
-        // initialize controller for librarian dashboard
+        // controller for Check In and Renew
+        new CheckInController(app, (CheckInPage) frame.getPage(Screen.LIBRARIAN_CHECKIN_SCREEN));
+
+        // controller for librarian dashboard
         new DashboardController(app, (Dashboard) frame.getPage(Screen.LIBRARIAN_DASHBOARD_SCREEN));
+
+        // controller for vendor creation form
+        new VendorController(app, (VendorForm) frame.getPage(Screen.LIBRARIAN_VENDOR_SCREEN));
     }
 }
