@@ -1,7 +1,6 @@
 package com.github.creme332.view.patron;
 
 import com.github.creme332.utils.IconLoader;
-import com.github.creme332.utils.WrapLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -11,10 +10,15 @@ import java.awt.event.MouseAdapter;
 public class Catalog extends JPanel {
     private static final Dimension ITEM_DIMENSION = new Dimension(200, 200);
     private JScrollPane scrollPane;
+    private JPanel itemContainer;
+    private int itemCounter = 0;
 
     public Catalog() {
-        setLayout(new WrapLayout(FlowLayout.CENTER, 50, 50));
+        setLayout(new BorderLayout());
+        itemContainer = new JPanel(new GridBagLayout());
+        itemContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         scrollPane = createScrollableCatalog();
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     public void addCatalogItem(String title, String iconPath, MouseAdapter mouseAdapter) {
@@ -50,15 +54,22 @@ public class Catalog extends JPanel {
             itemPanel.add(titleContainer);
 
             // Add item panel to the catalog
-            add(itemPanel);
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = itemCounter % 4;
+            gbc.gridy = itemCounter / 4;
+            gbc.insets = new Insets(5, 5, 5, 5);
+            itemContainer.add(itemPanel, gbc);
+            itemCounter++;
+            itemContainer.revalidate();
+            itemContainer.repaint();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private JScrollPane createScrollableCatalog() {
-        JScrollPane scrollPane = new JScrollPane(this);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        JScrollPane scrollPane = new JScrollPane(itemContainer);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         return scrollPane;
     }
