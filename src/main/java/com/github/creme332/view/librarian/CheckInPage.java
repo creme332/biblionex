@@ -5,7 +5,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.EventObject;
@@ -106,8 +105,7 @@ public class CheckInPage extends JPanel {
     }
 
     /**
-     * Class responsible for rendering all cells in Action column and setting action
-     * listeners to each button in the Action column.
+     * Class responsible for rendering all cells in Action column.
      */
     public class ActionCellRenderer extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
         private final JButton renewButton;
@@ -125,18 +123,12 @@ public class CheckInPage extends JPanel {
             panel.add(checkInButton, BorderLayout.EAST);
         }
 
-        public void setRenewButtonActionListener(ActionListener listener) {
-            for (ActionListener al : renewButton.getActionListeners()) {
-                renewButton.removeActionListener(al);
-            }
-            renewButton.addActionListener(listener);
+        public JButton getRenewButton() {
+            return renewButton;
         }
 
-        public void setCheckInButtonActionListener(ActionListener listener) {
-            for (ActionListener al : checkInButton.getActionListeners()) {
-                checkInButton.removeActionListener(al);
-            }
-            checkInButton.addActionListener(listener);
+        public JButton getCheckInButton() {
+            return checkInButton;
         }
 
         @Override

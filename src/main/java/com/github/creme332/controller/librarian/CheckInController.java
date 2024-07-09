@@ -28,6 +28,8 @@ public class CheckInController implements PropertyChangeListener {
 
         view.getBackButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN));
 
+        addTableButtonListeners();
+
         Thread th = new Thread() {
             @Override
             public void run() {
@@ -41,22 +43,20 @@ public class CheckInController implements PropertyChangeListener {
      * Add listeners to check in and renew buttons.
      */
     private void addTableButtonListeners() {
-        JTable table = view.getTable();
         CheckInPage.ActionCellRenderer rendererEditor = view.getActionCellRenderer();
 
-        rendererEditor.setRenewButtonActionListener(e -> {
-            int selectedRow = table.getSelectedRow();
-
+        rendererEditor.getRenewButton().addActionListener(e -> {
+            int selectedRow = view.getTable().getSelectedRow();
             if (selectedRow != -1) {
-                int loanId = (int) table.getValueAt(selectedRow, 0);
+                int loanId = (int) view.getTable().getValueAt(selectedRow, 0);
                 handleLoanRenew(loanId);
             }
         });
 
-        rendererEditor.setCheckInButtonActionListener(e -> {
-            int selectedRow = table.getSelectedRow();
+        rendererEditor.getCheckInButton().addActionListener(e -> {
+            int selectedRow = view.getTable().getSelectedRow();
             if (selectedRow != -1) {
-                int loanId = (int) table.getValueAt(selectedRow, 0);
+                int loanId = (int) view.getTable().getValueAt(selectedRow, 0);
                 handleCheckIn(loanId);
             }
         });
@@ -81,8 +81,6 @@ public class CheckInController implements PropertyChangeListener {
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
-
-        addTableButtonListeners();
     }
 
     public void searchLoans() {
