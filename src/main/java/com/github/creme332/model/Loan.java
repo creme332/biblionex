@@ -32,7 +32,8 @@ public class Loan {
     private int checkoutLibrarianId;
 
     /**
-     * ID of librarian who carried out check-in.
+     * ID of librarian who carried out check-in. If not checked in yet, value is
+     * negative.
      */
     private int checkinLibrarianId;
     private Date issueDate;
@@ -137,6 +138,22 @@ public class Loan {
         return renewalCount;
     }
 
+    public void setReturnDate(Date returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public void setRenewalCount(int renewalCount) {
+        this.renewalCount = renewalCount;
+    }
+
+    public void setCheckinLibrarianId(int checkinLibrarianId) {
+        this.checkinLibrarianId = checkinLibrarianId;
+    }
+
     public static Loan findById(int loanId) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "SELECT * FROM loan WHERE loan_id = ?";
@@ -156,6 +173,13 @@ public class Loan {
                         resultSet.getDate("return_date"),
                         resultSet.getDate("due_date"),
                         resultSet.getInt("renewal_count"));
+
+                // deal with possible null values since getInt() returns 0 for null
+                resultSet.getInt("checkin_librarian_id");
+                if (resultSet.wasNull()) {
+                    loan.setCheckinLibrarianId(-1);
+                }
+
             }
         }
         return loan;
@@ -189,7 +213,7 @@ public class Loan {
         String query = """
                 INSERT INTO loan (patron_id, barcode, checkout_librarian_id, checkin_librarian_id,
                                  issue_date, return_date, due_date, renewal_count)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                  """;
         try (PreparedStatement createLoan = conn.prepareStatement(query)) {
             createLoan.setInt(1, loan.getPatronId());
@@ -208,38 +232,6 @@ public class Loan {
         }
     }
 
-    public static void update(Loan loan) throws SQLException {
-        final Connection conn = DatabaseConnection.getConnection();
-        String query = """
-                UPDATE loan
-                    SET patron_id = ?,
-                    barcode = ?,
-                    checkout_librarian_id = ?,
-                    checkin_librarian_id = ?,
-                    issue_date = ?,
-                    return_date = ?,
-                    due_date = ?,
-                    renewal_count = ?
-                WHERE loan_id = ?
-                """;
-        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setInt(1, loan.getPatronId());
-            preparedStatement.setInt(2, loan.getBarcode());
-            preparedStatement.setInt(3, loan.getCheckoutLibrarianId());
-            preparedStatement.setInt(4, loan.getCheckinLibrarianId());
-            preparedStatement.setDate(5, new java.sql.Date(loan.getIssueDate().getTime()));
-            if (loan.getReturnDate() != null) {
-                preparedStatement.setDate(6, new java.sql.Date(loan.getReturnDate().getTime()));
-            } else {
-                preparedStatement.setNull(6, java.sql.Types.DATE);
-            }
-            preparedStatement.setDate(7, new java.sql.Date(loan.getDueDate().getTime()));
-            preparedStatement.setInt(8, loan.getRenewalCount());
-            preparedStatement.setInt(9, loan.getLoanId());
-            preparedStatement.executeUpdate();
-        }
-    }
-
     public static void delete(int loanId) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "DELETE FROM loan WHERE loan_id = ?";
@@ -247,5 +239,79 @@ public class Loan {
             preparedStatement.setInt(1, loanId);
             preparedStatement.executeUpdate();
         }
+    }
+
+    /**
+     * Finds all active loans where the return date is null.
+     * 
+     * @return List of active loans.
+     * @throws SQLException if a database access error occurs.
+     */
+    public static List<Loan> findAllActive() throws SQLException {
+        final Connection conn = DatabaseConnection.getConnection();
+        List<Loan> loans = new ArrayList<>();
+        String query = "SELECT * FROM loan WHERE return_date IS NULL";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Loan loan = new Loan(
+                        resultSet.getInt("loan_id"),
+                        resultSet.getInt("patron_id"),
+                        resultSet.getInt("barcode"),
+                        resultSet.getInt("checkout_librarian_id"),
+                        resultSet.getInt("checkin_librarian_id"),
+                        resultSet.getDate("issue_date"),
+                        resultSet.getDate("return_date"),
+                        resultSet.getDate("due_date"),
+                        resultSet.getInt("renewal_count"));
+                loans.add(loan);
+            }
+        }
+        return loans;
+    }
+
+    /**
+     * Finds an active loan by barcode where the return date is null.
+     * 
+     * @param barcode The barcode of the loan to find.
+     * @return The active loan with the given barcode, or null if not found.
+     * @throws SQLException if a database access error occurs.
+     */
+    public static Loan findActiveLoanByBarcode(int barcode) throws SQLException {
+        final Connection conn = DatabaseConnection.getConnection();
+        String query = "SELECT * FROM loan WHERE barcode = ? AND return_date IS NULL";
+        Loan loan = null;
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, barcode);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                loan = new Loan(
+                        resultSet.getInt("loan_id"),
+                        resultSet.getInt("patron_id"),
+                        resultSet.getInt("barcode"),
+                        resultSet.getInt("checkout_librarian_id"),
+                        resultSet.getInt("checkin_librarian_id"),
+                        resultSet.getDate("issue_date"),
+                        resultSet.getDate("return_date"),
+                        resultSet.getDate("due_date"),
+                        resultSet.getInt("renewal_count"));
+            }
+        }
+        return loan;
+    }
+
+    @Override
+    public String toString() {
+        return "Loan{" +
+                "loanId=" + loanId +
+                ", patronId=" + patronId +
+                ", barcode=" + barcode +
+                ", checkoutLibrarianId=" + checkoutLibrarianId +
+                ", checkinLibrarianId=" + checkinLibrarianId +
+                ", issueDate=" + issueDate +
+                ", returnDate=" + returnDate +
+                ", dueDate=" + dueDate +
+                ", renewalCount=" + renewalCount +
+                '}';
     }
 }
