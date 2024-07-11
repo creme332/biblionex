@@ -148,4 +148,14 @@ public class Publisher {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "Publisher{" +
+                "publisherId=" + publisherId +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", country='" + country + '\'' +
+                '}';
+    }
 }
