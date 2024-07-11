@@ -42,7 +42,7 @@ public class MaterialForm extends JPanel {
     // Book specific components
     private JSpinner pageCountSpinner;
     private JTextField isbnField;
-    private JComboBox<AuthorComboBoxItem> authorComboBox; // TODO: Use JList
+    private JList<Author> authorList; // TODO: Use JList
 
     // Journal specific components
     private JTextField issnField;
@@ -284,10 +284,13 @@ public class MaterialForm extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 6;
-        bookPanel.add(new JLabel("Author"), gbc);
+        bookPanel.add(new JLabel("Authors"), gbc);
         gbc.gridx = 1;
-        authorComboBox = new JComboBox<>();
-        bookPanel.add(authorComboBox, gbc);
+        authorList = new JList<>(); // Initialize JList for authors
+        authorList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        JScrollPane authorScrollPane = new JScrollPane(authorList);
+        authorScrollPane.setPreferredSize(new Dimension(150, 80)); // Adjust size as needed
+        bookPanel.add(authorScrollPane, gbc);
 
         return bookPanel;
     }
@@ -409,7 +412,7 @@ public class MaterialForm extends JPanel {
         // Book specific components
         pageCountSpinner.setValue(0); // Assuming pageCountSpinner starts from 0
         isbnField.setText("");
-        authorComboBox.setSelectedIndex(-1); // Deselect any selected item
+        authorList.clearSelection(); // Clear selection in JList
 
         // Journal specific components
         issnField.setText("");
@@ -517,15 +520,17 @@ public class MaterialForm extends JPanel {
                 pageCount,
                 isbn);
 
-        newBook.addAuthor(((AuthorComboBoxItem) authorComboBox.getSelectedItem()).getAuthor());
+        // Add all selected authors from the JList
+        Author[] selectedAuthors = authorList.getSelectedValuesList().toArray(new Author[0]);
+        for (Author author : selectedAuthors) {
+            newBook.addAuthor(author);
+        }
 
         return newBook;
     }
 
     public void loadAuthors(List<Author> authors) {
-        for (Author author : authors) {
-            authorComboBox.addItem(new AuthorComboBoxItem(author));
-        }
+        authorList.setListData(authors.toArray(new Author[0]));
     }
 
     /**
