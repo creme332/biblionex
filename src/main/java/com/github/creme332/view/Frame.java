@@ -9,6 +9,7 @@ import javax.swing.*;
 import com.github.creme332.controller.Screen;
 import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidPathException;
+import com.github.creme332.view.librarian.MaterialForm;
 import com.github.creme332.view.librarian.RegistrationForm;
 import com.github.creme332.view.librarian.VendorForm;
 import com.github.creme332.view.patron.Account;
@@ -65,6 +66,9 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.PATRON_LOAN_SCREEN, new com.github.creme332.view.patron.LoanPage());
         screenMapper.put(Screen.LIBRARIAN_DASHBOARD_SCREEN, new com.github.creme332.view.librarian.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
+        screenMapper.put(Screen.LIBRARIAN_MATERIAL_SCREEN, new MaterialForm());
+
+        // Fetch the list of patrons and pass it to the ListPage constructor
         screenMapper.put(Screen.LIBRARIAN_PATRON_LIST_SCREEN, new PatronListPage());
         screenMapper.put(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN, new LibrarianListPage());
         screenMapper.put(Screen.FORGET_PASSWORD, new ForgotPassword());
