@@ -8,11 +8,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Book extends Material {
     private int pageCount;
     private String isbn;
+    private Set<Author> authors = new HashSet<>();
 
     public Book(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
             String title, int pageCount, String isbn) {
@@ -55,6 +58,22 @@ public class Book extends Material {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void addAuthor(Author author) {
+        if (authors.add(author)) {
+            author.getBooks().add(this);
+        }
+    }
+
+    public void removeAuthor(Author author) {
+        if (authors.remove(author)) {
+            author.getBooks().remove(this);
+        }
     }
 
     /**
@@ -236,7 +255,7 @@ public class Book extends Material {
             connection.rollback();
             throw e;
         }
-        
+
         connection.commit();
     }
 
