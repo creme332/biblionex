@@ -1,6 +1,10 @@
 package com.github.creme332.view.librarian;
 
 import javax.swing.*;
+
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
+import org.kordamp.ikonli.swing.FontIcon;
+
 import java.awt.*;
 
 public class Dashboard extends JPanel {
@@ -16,14 +20,23 @@ public class Dashboard extends JPanel {
     private JButton acquisitionsButton;
     private JButton reportsButton;
 
+    private JLabel titleLabel = new JLabel("Admin Dashboard", javax.swing.SwingConstants.CENTER);
+
     public Dashboard() {
         setLayout(new BorderLayout());
 
         // Header panel with back button and title
         JPanel headerPanel = new JPanel(new BorderLayout());
-        logOutButton = new JButton("Log out");
-        JLabel titleLabel = new JLabel("Admin Dashboard", javax.swing.SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+
+        // Create log out button
+        FontIcon logoutIcon = FontIcon.of(BootstrapIcons.BOX_ARROW_IN_LEFT, 40);
+        logoutIcon.setIconColor(Color.white);
+        logOutButton = new JButton("Log out", logoutIcon);
+        logOutButton.setBackground(Color.red);
+
+        // update style of title
+        titleLabel.putClientProperty("FlatLaf.style", "font: bold $large.font");
+
         headerPanel.add(logOutButton, BorderLayout.WEST);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
 
@@ -62,6 +75,10 @@ public class Dashboard extends JPanel {
         // Add panels to the main layout
         add(headerPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+    }
+
+    public void updateWelcomeMessage(String firstName, String lastName) {
+        titleLabel.setText(String.format("Welcome %s %s (Admin)", firstName, lastName));
     }
 
     public JButton getLogOutButton() {

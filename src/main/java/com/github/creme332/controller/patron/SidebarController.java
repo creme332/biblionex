@@ -27,8 +27,8 @@ public class SidebarController implements PropertyChangeListener {
         });
 
         this.sidebar.getLoansButton().addActionListener(e -> {
-            // app.setCurrentScreen(Screen.PATRON_LOANS_SCREEN);
-            // sideBar.highlightButton(sideBar.getLoansButton());
+            app.setCurrentScreen(Screen.PATRON_LOAN_SCREEN);
+            sidebar.highlightButton(sidebar.getLoansButton());
         });
 
         this.sidebar.getCatalogButton().addActionListener(e -> {
@@ -37,8 +37,8 @@ public class SidebarController implements PropertyChangeListener {
         });
 
         this.sidebar.getAccountButton().addActionListener(e -> {
-            // app.setCurrentScreen(Screen.PATRON_ACCOUNT_SCREEN);
-            // sideBar.highlightButton(sideBar.getAccountButton());
+            app.setCurrentScreen(Screen.PATRON_ACCOUNT_SCREEN);
+            sidebar.highlightButton(sidebar.getAccountButton());
         });
 
         this.sidebar.getLogOutButton().addActionListener(e -> {
