@@ -6,6 +6,7 @@ import com.github.creme332.view.Frame;
 import com.github.creme332.view.librarian.CheckInPage;
 import com.github.creme332.view.librarian.Dashboard;
 import com.github.creme332.view.librarian.LibrarianListPage;
+import com.github.creme332.view.librarian.MaterialForm;
 import com.github.creme332.view.librarian.PatronListPage;
 import com.github.creme332.view.librarian.RegistrationForm;
 import com.github.creme332.view.librarian.VendorForm;
@@ -34,5 +35,8 @@ public class Controller {
 
         // controller for vendor creation form
         new VendorController(app, (VendorForm) frame.getPage(Screen.LIBRARIAN_VENDOR_SCREEN));
+
+        // controller for material form
+        new MaterialFormController(app, (MaterialForm) frame.getPage(Screen.LIBRARIAN_MATERIAL_SCREEN));
     }
 }
