@@ -154,10 +154,10 @@ public class MaterialForm extends JPanel {
         }
     }
 
-    private class AuthorComboBoxItem {
+    private class AuthorJList {
         private Author data;
 
-        public AuthorComboBoxItem(Author author) {
+        public AuthorJList(Author author) {
             this.data = author;
         }
 
