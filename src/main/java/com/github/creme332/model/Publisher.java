@@ -135,20 +135,6 @@ public class Publisher {
         }
     }
 
-    public static int getPublisherIdByName(String name) throws SQLException {
-        final Connection conn = DatabaseConnection.getConnection();
-        String query = "SELECT publisher_id FROM publisher WHERE name = ?";
-        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setString(1, name);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("publisher_id");
-            } else {
-                throw new SQLException("Publisher not found.");
-            }
-        }
-    }
-
     @Override
     public String toString() {
         return "Publisher{" +
