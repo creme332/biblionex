@@ -11,12 +11,15 @@ import com.github.creme332.model.MaterialType;
 import com.github.creme332.model.Publisher;
 import com.github.creme332.model.Video;
 
+import java.util.Date;
 import java.util.List;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.sql.SQLException;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class MaterialForm extends JPanel {
     /**
@@ -85,8 +88,8 @@ public class MaterialForm extends JPanel {
         JScrollPane scrollPane = new JScrollPane(formPanel);
         add(scrollPane, BorderLayout.CENTER);
 
-        // show book form by default
-        showForm(MaterialType.BOOK);
+        // show form that corresponds to the initial selected material
+        showForm(((MaterialTypeComboBox) materialTypeDropdown.getSelectedItem()).getMaterialType());
 
         // implement form switching logic based on selected material type
         materialTypeDropdown.addActionListener(e -> {
@@ -310,6 +313,23 @@ public class MaterialForm extends JPanel {
         journalPanel.add(new JLabel("Start Date"), gbc);
         gbc.gridx = 3;
         startDateField = new JTextField(15);
+        startDateField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (startDateField.getText().equals("DD-MM-YYYY")) {
+                    startDateField.setText("");
+                    startDateField.setForeground(Color.WHITE);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (startDateField.getText().isEmpty()) {
+                    startDateField.setText("DD-MM-YYYY");
+                    startDateField.setForeground(Color.GRAY);
+                }
+            }
+        });
         journalPanel.add(startDateField, gbc);
 
         gbc.gridx = 0;
@@ -414,7 +434,7 @@ public class MaterialForm extends JPanel {
      * @return Data from journal form
      */
     public Journal getJournalData() {
-        String publisher = ((PublisherComboBoxItem) publisherComboBox.getSelectedItem()).getPublisher().getName();
+        Publisher publisher = ((PublisherComboBoxItem) publisherComboBox.getSelectedItem()).getPublisher();
         String title = titleField.getText();
         String description = descriptionField.getText();
         int age = (int) ageSpinner.getValue();
@@ -423,24 +443,27 @@ public class MaterialForm extends JPanel {
         String website = websiteField.getText();
         JournalFrequency frequency = ((JournalFrequencyComboBoxItem) journalFrequencyComboBox.getSelectedItem())
                 .getJournalFrequency();
-        Date startDate = Date.valueOf(startDateField.getText());
 
-        // Create a new Journal object
+        // convert entered date to date object
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date startDate = null;
         try {
-            return new Journal(
-                    Publisher.getPublisherIdByName(publisher),
-                    description,
-                    imageUrl,
-                    age,
-                    title,
-                    issn,
-                    website,
-                    frequency,
-                    startDate);
-        } catch (SQLException e) {
+            startDate = dateFormat.parse(startDateField.getText());
+        } catch (ParseException e) {
             e.printStackTrace();
         }
-        return null;
+
+        return new Journal(
+                publisher.getPublisherId(),
+                description,
+                imageUrl,
+                age,
+                title,
+                issn,
+                website,
+                frequency,
+                startDate);
+
     }
 
     /**
@@ -448,7 +471,7 @@ public class MaterialForm extends JPanel {
      * @return Data from video form
      */
     public Video getVideoData() {
-        String publisher = (String) publisherComboBox.getSelectedItem();
+        Publisher publisher = ((PublisherComboBoxItem) publisherComboBox.getSelectedItem()).getPublisher();
         String title = titleField.getText();
         String description = descriptionField.getText();
         int age = (int) ageSpinner.getValue();
@@ -459,24 +482,16 @@ public class MaterialForm extends JPanel {
         int rating = (int) ratingSpinner.getValue();
         String format = formatField.getText().trim();
 
-        // Create a new Video object
-        try {
-            return new Video(
-                    Publisher.getPublisherIdByName(publisher),
-                    description,
-                    imageUrl,
-                    age,
-                    title,
-                    language,
-                    duration,
-                    rating,
-                    format);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-
+        return new Video(
+                publisher.getPublisherId(),
+                description,
+                imageUrl,
+                age,
+                title,
+                language,
+                duration,
+                rating,
+                format);
     }
 
     /**
@@ -484,7 +499,7 @@ public class MaterialForm extends JPanel {
      * @return Data from book form
      */
     public Book getBookData() {
-        String publisher = ((PublisherComboBoxItem) publisherComboBox.getSelectedItem()).getPublisher().getName();
+        Publisher publisher = ((PublisherComboBoxItem) publisherComboBox.getSelectedItem()).getPublisher();
         String title = titleField.getText();
         String description = descriptionField.getText();
         int age = (int) ageSpinner.getValue();
@@ -494,7 +509,7 @@ public class MaterialForm extends JPanel {
         String isbn = isbnField.getText().trim();
 
         Book newBook = new Book(
-                ((Publisher) publisherComboBox.getSelectedItem()).getPublisherId(),
+                publisher.getPublisherId(),
                 description,
                 imageUrl,
                 age,
@@ -511,6 +526,15 @@ public class MaterialForm extends JPanel {
         for (Author author : authors) {
             authorComboBox.addItem(new AuthorComboBoxItem(author));
         }
+    }
+
+    /**
+     * 
+     * @return Material type of active form.
+     */
+    public MaterialType getMaterialType() {
+        return ((MaterialTypeComboBox) materialTypeDropdown.getSelectedItem())
+                .getMaterialType();
     }
 
     public void loadPublishers(List<Publisher> publishers) {
