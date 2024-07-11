@@ -87,7 +87,7 @@ public class Book extends Material {
         String materialQuery = """
                 INSERT INTO material
                  (publisher_id, description, image_url, age_restriction, type, title)
-                 VALUES (?, ?, ?, ?, ?, ?, ?)
+                 VALUES (?, ?, ?, ?, ?, ?)
                  """;
 
         // start a transaction
