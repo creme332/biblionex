@@ -4,6 +4,7 @@ import com.github.creme332.model.AppState;
 import com.github.creme332.model.Author;
 import com.github.creme332.model.Book;
 import com.github.creme332.model.Journal;
+import com.github.creme332.model.MaterialType;
 import com.github.creme332.model.Publisher;
 import com.github.creme332.model.Video;
 import com.github.creme332.view.librarian.MaterialForm;
@@ -24,7 +25,20 @@ public class MaterialFormController {
         materialForm.handleGoBack(e -> app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN));
 
         materialForm.handleFormSubmission(e -> {
-            System.out.println("form submitted");
+            MaterialType type = materialForm.getMaterialType();
+
+            if (type == MaterialType.BOOK) {
+                handleBookSubmission();
+            }
+
+            if (type == MaterialType.JOURNAL) {
+                handleJournalSubmission();
+            }
+
+            if (type == MaterialType.VIDEO) {
+                handleVideoSubmission();
+            }
+
             materialForm.clearForm();
         });
 
@@ -38,7 +52,6 @@ public class MaterialFormController {
     }
 
     private void loadDropdownData() {
-        System.out.println("Loading dropdowns");
         try {
             materialForm.loadAuthors(Author.findAll());
             materialForm.loadPublishers(Publisher.findAll());
