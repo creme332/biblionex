@@ -3,6 +3,7 @@ package com.github.creme332.view.librarian;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.github.creme332.model.Author;
 import com.github.creme332.model.Book;
 import com.github.creme332.model.Journal;
@@ -392,6 +393,7 @@ public class MaterialForm extends JPanel {
 
         gbc.gridx = 3;
         formatField = new JTextField(15);
+        formatField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "DD-MM-YYYY");
         videoPanel.add(formatField, gbc);
 
         return videoPanel;
