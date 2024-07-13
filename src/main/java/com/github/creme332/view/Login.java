@@ -66,6 +66,7 @@ public class Login extends JPanel {
 
         // Create text field for password
         passwordField = new JPasswordField(20);
+        passwordField.putClientProperty("FlatLaf.style", "showRevealButton: true");
         passwordField.setAlignmentX(Component.LEFT_ALIGNMENT);
         formContainer.add(passwordField);
 
