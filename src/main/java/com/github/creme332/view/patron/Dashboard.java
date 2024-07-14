@@ -84,7 +84,7 @@ public class Dashboard extends JPanel {
                     .collect(Collectors.joining(", "));
             data[i][2] = book.getDescription();
             data[i][3] = book.getAgeRestriction();
-            data[i][4] = "View button has been clicked";
+            data[i][4] = "View";
         }
 
         bookRecommendationsTable.setModel(new DefaultTableModel(data, columnNames) {
