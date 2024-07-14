@@ -2,7 +2,11 @@ package com.github.creme332.view.librarian;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import com.github.creme332.model.Author;
+
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class AuthorForm extends JPanel {
     private JTextField firstNameField;
@@ -68,7 +72,7 @@ public class AuthorForm extends JPanel {
         headerPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
         backButton = new JButton("< Back");
         headerPanel.add(backButton, BorderLayout.WEST);
-        JLabel heading = new JLabel("Author Registration Form", JLabel.CENTER);
+        JLabel heading = new JLabel("Create new author", javax.swing.SwingConstants.CENTER);
         heading.putClientProperty("FlatLaf.style", "font: $h1.font");
         headerPanel.add(heading, BorderLayout.CENTER);
         return headerPanel;
@@ -78,22 +82,50 @@ public class AuthorForm extends JPanel {
         firstNameField.setText("");
         lastNameField.setText("");
         emailField.setText("");
+
+        // reset outlines
+        firstNameField.putClientProperty("JComponent.outline", "");
+        lastNameField.putClientProperty("JComponent.outline", "");
+        emailField.putClientProperty("JComponent.outline", "");
     }
 
-    public JTextField getFirstNameField() {
-        return firstNameField;
+    /**
+     * Shows colored outline around field if it is valid or not.
+     * 
+     * @param isValid Whether field value is valid
+     */
+    public void highlightFirstNameField(boolean isValid) {
+        firstNameField.putClientProperty("JComponent.outline", isValid ? Color.green : Color.red);
     }
 
-    public JTextField getLastNameField() {
-        return lastNameField;
+    /**
+     * Shows colored outline around field if it is valid or not.
+     * 
+     * @param isValid Whether field value is valid
+     */
+    public void highlightLastNameField(boolean isValid) {
+        lastNameField.putClientProperty("JComponent.outline", isValid ? Color.green : Color.red);
     }
 
-    public JTextField getEmailField() {
-        return emailField;
+    /**
+     * Shows colored outline around field if it is valid or not.
+     * 
+     * @param isValid Whether field value is valid
+     */
+    public void highlightEmailField(boolean isValid) {
+        emailField.putClientProperty("JComponent.outline", isValid ? Color.green : Color.red);
     }
 
-    public JButton getSaveButton() {
-        return saveButton;
+    public void handleFormSubmission(ActionListener listener) {
+        saveButton.addActionListener(listener);
+    }
+
+    /**
+     * 
+     * @return Author data input in form
+     */
+    public Author getAuthor() {
+        return new Author(lastNameField.getText().trim(), firstNameField.getText().trim(), emailField.getText().trim());
     }
 
     public JButton getBackButton() {

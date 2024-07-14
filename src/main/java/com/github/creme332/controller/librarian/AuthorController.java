@@ -4,8 +4,7 @@ import com.github.creme332.model.AppState;
 import com.github.creme332.model.Author;
 import com.github.creme332.view.librarian.AuthorForm;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.sql.SQLException;
 
 public class AuthorController {
@@ -16,27 +15,26 @@ public class AuthorController {
         this.authorForm = authorForm;
         this.app = app;
 
-        this.authorForm.getSaveButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveAuthor();
-            }
+        this.authorForm.handleFormSubmission(e -> {
+            saveAuthor();
         });
 
-        this.authorForm.getBackButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // back button functionality
-            }
+        this.authorForm.getBackButton().addActionListener(e -> {
+            app.setCurrentScreen(app.getPreviousScreen());
         });
     }
 
     private void saveAuthor() {
-        String firstName = authorForm.getFirstNameField().getText();
-        String lastName = authorForm.getLastNameField().getText();
-        String email = authorForm.getEmailField().getText();
+        Author author = authorForm.getAuthor();
 
-        Author author = new Author(0, lastName, firstName, email);
+        authorForm.highlightFirstNameField(author.getFirstName().length() > 0);
+        authorForm.highlightLastNameField(author.getLastName().length() > 0);
+        authorForm.highlightEmailField(author.getEmail().length() > 0);
+
+        if (author.getFirstName().length() == 0 || author.getLastName().length() == 0
+                || author.getEmail().length() == 0)
+            return;
+
         try {
             Author.save(author);
             JOptionPane.showMessageDialog(authorForm, "Author saved successfully!", "Success",
@@ -47,4 +45,3 @@ public class AuthorController {
         }
     }
 }
-
