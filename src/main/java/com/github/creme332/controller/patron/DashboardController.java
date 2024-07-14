@@ -1,5 +1,6 @@
 package com.github.creme332.controller.patron;
 
+import com.github.creme332.controller.Screen;
 import com.github.creme332.model.*;
 import com.github.creme332.view.patron.Dashboard;
 
@@ -30,40 +31,30 @@ public class DashboardController implements PropertyChangeListener {
      * NOT LOGGED IN YET.
      */
     private void refreshDashboard() {
-        // Fetch data from the database and update the view
-        try {
-            int patronId = patron.getUserId();
-            int pendingFines = patron.getDueFine();
-            int totalFinesPaid = patron.getTotalFinePaid();
-            int activeLoans = calculateActiveLoans(patronId);
+        Thread th = new Thread() {
+            @Override
+            public void run() {
 
-            List<Book> bookRecommendations = fetchBookRecommendations();
+                // Fetch data from the database and update the view
+                try {
+                    List<Book> bookRecommendations = Book.findAll().subList(0, 4);
 
-            // find authors of each book from database
-            for (Book book : bookRecommendations) {
-                book.setAuthors(Book.findAuthors(book));
+                    // find authors of each book from database
+                    for (Book book : bookRecommendations) {
+                        book.setAuthors(Book.findAuthors(book));
+                    }
+
+                    dashboard.setOverdueLoans(patron.getOverdueLoans().size());
+                    dashboard.setTotalFinesPaid(patron.getTotalFinePaid());
+                    dashboard.setActiveLoans(patron.getLoans().size());
+                    dashboard.setBookRecommendations(bookRecommendations);
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-
-            dashboard.setPendingFines(pendingFines);
-            dashboard.setTotalFinesPaid(totalFinesPaid);
-            dashboard.setActiveLoans(activeLoans);
-            dashboard.setBookRecommendations(bookRecommendations);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private int calculateActiveLoans(int patronId) throws SQLException {
-        // Count the number of active loans for the patron
-        List<Loan> loans = Loan.findAll();
-        return (int) loans.stream()
-                .filter(loan -> loan.getPatronId() == patronId && loan.getReturnDate() == null)
-                .count();
-    }
-
-    private List<Book> fetchBookRecommendations() throws SQLException {
-        return Book.findAll().subList(0, 4);
+        };
+        th.start();
     }
 
     @Override
@@ -71,14 +62,12 @@ public class DashboardController implements PropertyChangeListener {
         String propertyName = evt.getPropertyName();
         if (propertyName.equals("loggedInUser") && ((User) evt.getNewValue()).getUserType() == UserType.PATRON) {
             patron = (Patron) evt.getNewValue();
+            refreshDashboard();
+        }
 
-            Thread th = new Thread() {
-                @Override
-                public void run() {
-                    refreshDashboard();
-                }
-            };
-            th.start();
+        // refresh dashboard each time screen is switched to dashboard
+        if (propertyName.equals("currentScreen") && (Screen) evt.getNewValue() == Screen.PATRON_DASHBOARD_SCREEN) {
+            refreshDashboard();
         }
     }
 }
