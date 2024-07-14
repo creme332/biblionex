@@ -8,11 +8,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Book extends Material {
     private int pageCount;
     private String isbn;
+    private Set<Author> authors = new HashSet<>();
 
     public Book(int materialId, int publisherId, String description, String imageUrl, int ageRestriction,
             String title, int pageCount, String isbn) {
@@ -57,8 +60,20 @@ public class Book extends Material {
         this.isbn = isbn;
     }
 
-    public int getPublisherId() {
-        return this.publisherId;
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void addAuthor(Author author) {
+        if (authors.add(author)) {
+            author.getBooks().add(this);
+        }
+    }
+
+    public void removeAuthor(Author author) {
+        if (authors.remove(author)) {
+            author.getBooks().remove(this);
+        }
     }
 
     /**
@@ -71,9 +86,9 @@ public class Book extends Material {
         Connection connection = DatabaseConnection.getConnection();
         String materialQuery = """
                 INSERT INTO material
-                (publisher_id, description, image_url, age_restriction, type, title)
-                VALUES (?, ?, ?, ?, ?, ?)
-                """;
+                 (publisher_id, description, image_url, age_restriction, type, title)
+                 VALUES (?, ?, ?, ?, ?, ?)
+                 """;
 
         // start a transaction
         connection.setAutoCommit(false);

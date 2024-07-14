@@ -22,19 +22,10 @@ public class DashboardController implements PropertyChangeListener {
 
         dashboard.getLogOutButton().addActionListener(e -> app.logOut());
 
-        dashboard.getCheckInButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Check in button click
-            }
-        });
+        dashboard.getCheckInButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_CHECKIN_SCREEN));
 
-        dashboard.getMaterialsButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Materials button click
-            }
-        });
+        dashboard.getMaterialsButton()
+                .addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_MATERIAL_SCREEN));
 
         dashboard.getCatalogingButton().addActionListener(new ActionListener() {
             @Override
