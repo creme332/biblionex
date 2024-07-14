@@ -52,20 +52,19 @@ public class Publisher {
         return country;
     }
 
-    public static List<Publisher> findById(int publisherId) throws SQLException {
+    public static Publisher findById(int publisherId) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
-        List<Publisher> publishers = new ArrayList<>();
+        Publisher publisher = null;
         String query = "SELECT * FROM publisher WHERE publisher_id = ?";
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setInt(1, publisherId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Publisher publisher = new Publisher(resultSet.getInt("publisher_id"), resultSet.getString("name"),
+            if (resultSet.next()) {
+                publisher = new Publisher(resultSet.getInt("publisher_id"), resultSet.getString("name"),
                         resultSet.getString("email"), resultSet.getString("country"));
-                publishers.add(publisher);
             }
         }
-        return publishers;
+        return publisher;
     }
 
     /**
