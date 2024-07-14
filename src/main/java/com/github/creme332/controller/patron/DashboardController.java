@@ -60,9 +60,10 @@ public class DashboardController implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         String propertyName = evt.getPropertyName();
+
+        // update logged in user when it changes
         if (propertyName.equals("loggedInUser") && ((User) evt.getNewValue()).getUserType() == UserType.PATRON) {
             patron = (Patron) evt.getNewValue();
-            refreshDashboard();
         }
 
         // refresh dashboard each time screen is switched to dashboard
