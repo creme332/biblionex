@@ -25,6 +25,13 @@ public class Author {
         this.email = email;
     }
 
+    public Author(String lastName, String firstName, String email) {
+        this.authorId = -1;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+    }
+
     public void addBook(Book book) {
         if (books.add(book)) {
             book.getAuthors().add(this);
