@@ -13,7 +13,7 @@ import com.github.creme332.model.Author;
 import com.github.creme332.model.Book;
 
 public class Dashboard extends JPanel {
-    DashboardCard pendingFinesCard;
+    DashboardCard overdueLoadCard;
     DashboardCard totalFinesPaidCard;
     DashboardCard activeLoansCard;
 
@@ -30,11 +30,11 @@ public class Dashboard extends JPanel {
         gbc.gridy = 0;
         gbc.gridx = 0;
 
-        pendingFinesCard = new DashboardCard("Pending fines", "Rs 0");
-        topPanel.add(pendingFinesCard, gbc);
+        overdueLoadCard = new DashboardCard("Overdue loans", "Rs 0");
+        topPanel.add(overdueLoadCard, gbc);
         gbc.gridx++;
 
-        totalFinesPaidCard = new DashboardCard("Total fines paid", "Rs 0");
+        totalFinesPaidCard = new DashboardCard("Fines paid", "Rs 0");
         topPanel.add(totalFinesPaidCard, gbc);
         gbc.gridx++;
 
@@ -59,12 +59,12 @@ public class Dashboard extends JPanel {
         add(centerPanel, BorderLayout.CENTER);
     }
 
-    public void setPendingFines(int amount) {
-        pendingFinesCard.setDescription("Rs " + amount);
+    public void setOverdueLoans(int amount) {
+        overdueLoadCard.setDescription("" + amount);
     }
 
-    public void setTotalFinesPaid(int amount) {
-        pendingFinesCard.setDescription("Rs " + amount);
+    public void setTotalFinesPaid(double amount) {
+        totalFinesPaidCard.setDescription("Rs " + amount);
 
     }
 
