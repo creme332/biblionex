@@ -120,17 +120,24 @@ public class Login extends JPanel {
     }
 
     public void showError() {
-        emailField.setBorder(redBorder);
-        passwordField.setBorder(redBorder);
+        emailField.putClientProperty("JComponent.outline", Color.red);
+        passwordField.putClientProperty("JComponent.outline", Color.red);
     }
 
     public JTextField getEmailField() {
         return emailField;
     }
 
-    public void resetFields() {
+    /**
+     * Resets form to its original state, erasing all data and removing any error
+     * outlines.
+     */
+    public void clearForm() {
         emailField.setText("");
         passwordField.setText("");
+
+        emailField.putClientProperty("JComponent.outline", "");
+        passwordField.putClientProperty("JComponent.outline", "");
     }
 
     public JPasswordField getPasswordField() {
