@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.github.creme332.utils.DatabaseConnection;
 
@@ -14,12 +16,29 @@ public class Author {
     private String lastName;
     private String firstName;
     private String email;
+    private Set<Book> books = new HashSet<>();
 
     public Author(int authorId, String lastName, String firstName, String email) {
         this.authorId = authorId;
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
+    }
+
+    public void addBook(Book book) {
+        if (books.add(book)) {
+            book.getAuthors().add(this);
+        }
+    }
+
+    public void removeBook(Book book) {
+        if (books.remove(book)) {
+            book.getAuthors().remove(this);
+        }
+    }
+
+    public Set<Book> getBooks() {
+        return books;
     }
 
     public int getAuthorId() {
