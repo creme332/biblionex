@@ -17,6 +17,7 @@ import com.github.creme332.view.patron.Catalog;
 import com.github.creme332.view.librarian.PatronListPage;
 import com.github.creme332.view.librarian.AuthorForm;
 import com.github.creme332.view.librarian.CheckInPage;
+import com.github.creme332.view.librarian.CheckOutPage;
 import com.github.creme332.view.librarian.LibrarianListPage;
 import com.github.creme332.view.patron.Registration;
 import com.github.creme332.view.patron.Sidebar;
@@ -78,6 +79,7 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.PATRON_ACCOUNT_SCREEN, new Account());
         screenMapper.put(Screen.PATRON_CATALOG_SCREEN, new Catalog());
         screenMapper.put(Screen.LIBRARIAN_CHECKIN_SCREEN, new CheckInPage());
+        screenMapper.put(Screen.LIBRARIAN_CHECKOUT_SCREEN, new CheckOutPage());
 
         // add screens to cardPanels
         for (Map.Entry<Screen, JPanel> entry : screenMapper.entrySet()) {

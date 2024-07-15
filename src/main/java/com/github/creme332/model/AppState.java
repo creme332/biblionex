@@ -22,7 +22,7 @@ public class AppState {
      * Current screen displayed. The initial value of this variable is the first
      * screen displayed after SPLASH_SCREEN.
      */
-    private Screen currentScreen = Screen.LOGIN_SCREEN;
+    private Screen currentScreen = Screen.LIBRARIAN_CHECKOUT_SCREEN;
 
     /**
      * Determines whether to automatically login as librarian or patron or none.
