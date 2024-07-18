@@ -60,24 +60,28 @@ public class Frame extends JFrame {
         }
 
         // setup screen mapper and create screens
+
+        // add screens visible to everyone
         screenMapper.put(Screen.SPLASH_SCREEN, new SplashScreen());
         screenMapper.put(Screen.LOGIN_SCREEN, new Login());
+        screenMapper.put(Screen.FORGET_PASSWORD, new ForgotPassword());
+
+        // add screens visible to only patron
         screenMapper.put(Screen.PATRON_REGISTRATION_SCREEN, new Registration());
         screenMapper.put(Screen.PATRON_DASHBOARD_SCREEN, new com.github.creme332.view.patron.Dashboard());
         screenMapper.put(Screen.PATRON_LOAN_SCREEN, new com.github.creme332.view.patron.LoanPage());
+        screenMapper.put(Screen.PATRON_ACCOUNT_SCREEN, new Account());
+        screenMapper.put(Screen.PATRON_CATALOG_SCREEN, new Catalog());
+
+        // add screens visible to only librarians
         screenMapper.put(Screen.LIBRARIAN_DASHBOARD_SCREEN, new com.github.creme332.view.librarian.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
         screenMapper.put(Screen.LIBRARIAN_MATERIAL_SCREEN, new MaterialForm());
-
-        // Fetch the list of patrons and pass it to the ListPage constructor
+        screenMapper.put(Screen.LIBRARIAN_CHECKIN_SCREEN, new CheckInPage());
         screenMapper.put(Screen.LIBRARIAN_PATRON_LIST_SCREEN, new PatronListPage());
         screenMapper.put(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN, new LibrarianListPage());
-        screenMapper.put(Screen.FORGET_PASSWORD, new ForgotPassword());
         screenMapper.put(Screen.LIBRARIAN_VENDOR_SCREEN, new VendorForm());
         screenMapper.put(Screen.LIBRARIAN_AUTHOR_SCREEN, new AuthorForm());
-        screenMapper.put(Screen.PATRON_ACCOUNT_SCREEN, new Account());
-        screenMapper.put(Screen.PATRON_CATALOG_SCREEN, new Catalog());
-        screenMapper.put(Screen.LIBRARIAN_CHECKIN_SCREEN, new CheckInPage());
 
         // add screens to cardPanels
         for (Map.Entry<Screen, JPanel> entry : screenMapper.entrySet()) {
