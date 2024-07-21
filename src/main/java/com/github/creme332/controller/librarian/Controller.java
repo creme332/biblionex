@@ -5,6 +5,7 @@ import com.github.creme332.model.AppState;
 import com.github.creme332.view.Frame;
 import com.github.creme332.view.librarian.AuthorForm;
 import com.github.creme332.view.librarian.CheckInPage;
+import com.github.creme332.view.librarian.CheckOutPage;
 import com.github.creme332.view.librarian.Dashboard;
 import com.github.creme332.view.librarian.LibrarianListPage;
 import com.github.creme332.view.librarian.MaterialForm;
@@ -30,6 +31,9 @@ public class Controller {
 
         // controller for Check In and Renew
         new CheckInController(app, (CheckInPage) frame.getPage(Screen.LIBRARIAN_CHECKIN_SCREEN));
+
+        // controller for Check Out
+        new CheckOutController(app, (CheckOutPage) frame.getPage(Screen.LIBRARIAN_CHECKOUT_SCREEN));
 
         // controller for librarian dashboard
         new DashboardController(app, (Dashboard) frame.getPage(Screen.LIBRARIAN_DASHBOARD_SCREEN));

@@ -138,6 +138,10 @@ public class Loan {
         return renewalCount;
     }
 
+    public void setLoanId(int id) {
+        loanId = id;
+    }
+
     public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
     }
@@ -206,30 +210,6 @@ public class Loan {
             }
         }
         return loans;
-    }
-
-    public static void save(Loan loan) throws SQLException {
-        final Connection conn = DatabaseConnection.getConnection();
-        String query = """
-                INSERT INTO loan (patron_id, barcode, checkout_librarian_id, checkin_librarian_id,
-                                 issue_date, return_date, due_date, renewal_count)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                 """;
-        try (PreparedStatement createLoan = conn.prepareStatement(query)) {
-            createLoan.setInt(1, loan.getPatronId());
-            createLoan.setInt(2, loan.getBarcode());
-            createLoan.setInt(3, loan.getCheckoutLibrarianId());
-            createLoan.setInt(4, loan.getCheckinLibrarianId());
-            createLoan.setDate(5, new java.sql.Date(loan.getIssueDate().getTime()));
-            if (loan.getReturnDate() != null) {
-                createLoan.setDate(6, new java.sql.Date(loan.getReturnDate().getTime()));
-            } else {
-                createLoan.setNull(6, java.sql.Types.DATE);
-            }
-            createLoan.setDate(7, new java.sql.Date(loan.getDueDate().getTime()));
-            createLoan.setInt(8, loan.getRenewalCount());
-            createLoan.executeUpdate();
-        }
     }
 
     public static void delete(int loanId) throws SQLException {
