@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import com.github.creme332.model.Loan;
+import com.github.creme332.model.LoanStatus;
 
 /**
  * A page that displays loans of a patron.
@@ -37,10 +38,10 @@ public class LoanPage extends JPanel {
 
         for (Loan loan : loans) {
             String returnDate = loan.getReturnDate() != null ? loan.getReturnDate().toString() : "Pending";
-            String status = determineLoanStatus(loan);
+            LoanStatus status = determineLoanStatus(loan);
 
             tableModel.addRow(new Object[] { loan.getLoanId(), loan.getBarcode(), loan.getIssueDate(),
-                    returnDate, loan.getDueDate(), status, status.equals("Overdue") ? "Pay" : "" });
+                    returnDate, loan.getDueDate(), status, status == LoanStatus.OVERDUE ? "Pay" : "" });
         }
     }
 
@@ -48,13 +49,13 @@ public class LoanPage extends JPanel {
         this.actionListener = listener;
     }
 
-    private String determineLoanStatus(Loan loan) {
+    private LoanStatus determineLoanStatus(Loan loan) {
         if (loan.getReturnDate() != null) {
-            return "Complete";
+            return LoanStatus.COMPLETE;
         } else if (loan.getDueDate().before(new java.util.Date())) {
-            return "Overdue";
+            return LoanStatus.OVERDUE;
         } else {
-            return "Pending";
+            return LoanStatus.PENDING;
         }
     }
 
@@ -65,7 +66,11 @@ public class LoanPage extends JPanel {
 
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                 int row, int column) {
-            setText((value == null) ? "" : value.toString());
+            if ("Pay".equals(value)) {
+                setText("Pay");
+            } else {
+                setText("");
+            }
             return this;
         }
     }
