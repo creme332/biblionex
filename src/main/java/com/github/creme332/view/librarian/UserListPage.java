@@ -8,6 +8,8 @@ import java.awt.*;
 import java.util.List;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
+import com.github.creme332.model.Librarian;
+import com.github.creme332.model.Patron;
 import com.github.creme332.model.User;
 import com.github.creme332.model.UserType;
 
@@ -25,6 +27,10 @@ public class UserListPage extends JPanel {
     private DefaultTableModel tableModel;
     private UserType userType;
 
+    /**
+     * 
+     * @param userType Type of users displayed on page
+     */
     public UserListPage(UserType userType) {
         setLayout(new BorderLayout());
 
@@ -56,10 +62,10 @@ public class UserListPage extends JPanel {
         // Determine column names based on user type
         String[] columnNames;
         if (userType == UserType.PATRON) {
-            columnNames = new String[] { " ID", "First Name", "Last Name", "Email", "Phone No", "Credit Card",
-                    "Action" };
+            columnNames = new String[] { " ID", "First Name", "Last Name", "Email", "Phone No", "Registration Date",
+                    "Credit Card", "Birthday", "Action" };
         } else {
-            columnNames = new String[] { " ID", "First Name", "Last Name", "Email", "Phone No", "Action" };
+            columnNames = new String[] { " ID", "First Name", "Last Name", "Email", "Phone No", "Role", "Action" };
         }
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -141,15 +147,30 @@ public class UserListPage extends JPanel {
             return;
 
         for (User user : users) {
-            Object[] rowData = {
-                    user.getUserId(),
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getEmail(),
-                    user.getPhoneNo(),
-                    "Delete"
-            };
-            tableModel.addRow(rowData);
+            if (user.getUserType() == UserType.PATRON) {
+                Patron patron = (Patron) user;
+                tableModel.addRow(new Object[] {
+                        patron.getUserId(),
+                        patron.getFirstName(),
+                        patron.getLastName(),
+                        patron.getEmail(),
+                        patron.getPhoneNo(),
+                        patron.getRegistrationDate(),
+                        patron.getCreditCardNo(),
+                        patron.getBirthDate()
+                });
+            } else {
+                Librarian librarian = (Librarian) user;
+                tableModel.addRow(new Object[] {
+                        librarian.getUserId(),
+                        librarian.getFirstName(),
+                        librarian.getLastName(),
+                        librarian.getEmail(),
+                        librarian.getPhoneNo(),
+                        librarian.getRole()
+                });
+            }
+
         }
     }
 
