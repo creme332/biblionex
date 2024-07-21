@@ -42,26 +42,24 @@ public class CheckOutPage extends JPanel {
         backButton = new JButton("Back");
         topPanel.add(backButton, BorderLayout.WEST);
 
-        // Barcode field
-        JPanel barcodePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // Create a panel that will contain fields and buttons
+        JPanel container = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(container, BorderLayout.CENTER);
+
+        // create barcode field
         barcodeField = new JTextField(20);
         barcodeField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter item barcode");
-        barcodePanel.add(barcodeField);
-        topPanel.add(barcodePanel, BorderLayout.CENTER);
+        container.add(barcodeField);
+        topPanel.add(container);
 
-        // Patron ID field
-        JPanel patronIdPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // create Patron ID field
         patronIdField = new JTextField(20);
         patronIdField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter patron ID");
+        container.add(patronIdField);
 
-        patronIdPanel.add(patronIdField);
-        topPanel.add(patronIdPanel, BorderLayout.EAST);
-
-        // Check Out button
+        // create check Out button
         checkOutButton = new JButton("Check Out");
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.add(checkOutButton);
-        topPanel.add(buttonPanel, BorderLayout.SOUTH);
+        container.add(checkOutButton);
 
         return topPanel;
     }
