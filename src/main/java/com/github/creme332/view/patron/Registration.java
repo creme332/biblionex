@@ -183,6 +183,7 @@ public class Registration extends JPanel {
         formPanel.add(passwordLabel, gbc);
         gbc.gridy = 15;
         passwordField = new JPasswordField(15);
+        passwordField.putClientProperty("FlatLaf.style", "showRevealButton: true");
         formPanel.add(passwordField, gbc);
 
         gbc.gridx = 1;
@@ -191,6 +192,7 @@ public class Registration extends JPanel {
         formPanel.add(confirmPasswordLabel, gbc);
         gbc.gridy = 15;
         confirmPasswordField = new JPasswordField(15);
+        confirmPasswordField.putClientProperty("FlatLaf.style", "showRevealButton: true");
         formPanel.add(confirmPasswordField, gbc);
 
         // position error label

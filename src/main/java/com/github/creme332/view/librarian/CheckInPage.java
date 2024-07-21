@@ -4,9 +4,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.util.EventObject;
 
 public class CheckInPage extends JPanel {
@@ -51,27 +55,11 @@ public class CheckInPage extends JPanel {
         JPanel searchContainer = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         barcodeField = new JTextField(20);
+        barcodeField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+                new FlatSearchIcon());
+        barcodeField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter barcode");
+
         searchContainer.add(barcodeField);
-
-        barcodeField.setForeground(Color.GRAY);
-        barcodeField.setText("Enter barcode");
-        barcodeField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (barcodeField.getText().equals("Enter barcode")) {
-                    barcodeField.setText("");
-                    barcodeField.setForeground(Color.WHITE);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (barcodeField.getText().isEmpty()) {
-                    barcodeField.setText("Enter barcode");
-                    barcodeField.setForeground(Color.GRAY);
-                }
-            }
-        });
         topPanel.add(searchContainer, BorderLayout.CENTER);
 
         searchButton = new JButton("Search");
