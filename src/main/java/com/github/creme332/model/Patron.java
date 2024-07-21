@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.github.creme332.utils.DatabaseConnection;
 import com.github.creme332.utils.PasswordAuthentication;
+import com.github.creme332.utils.exception.UserVisibleException;
 
 public class Patron extends User {
     private Date registrationDate;
@@ -143,10 +144,31 @@ public class Patron extends User {
      * 
      * @param patron
      * @throws SQLException
+     * @throws UserVisibleException
      */
-    public static void save(Patron patron) throws SQLException {
+    public static void save(Patron patron) throws SQLException, UserVisibleException {
+
+        if (patron.getEmail().isEmpty()) {
+            throw new UserVisibleException("Email cannot be empty");
+        }
+        if (patron.getFirstName().isEmpty()) {
+            throw new UserVisibleException("First name cannot be empty");
+        }
+        if (patron.getLastName().isEmpty()) {
+            throw new UserVisibleException("Last name cannot be empty");
+        }
+        if (patron.getPhoneNo().isEmpty()) {
+            throw new UserVisibleException("Phone number cannot be empty");
+        }
+        if (patron.getAddress().isEmpty()) {
+            throw new UserVisibleException("Address cannot be empty");
+        }
+        if (patron.getPassword().isEmpty()) {
+            throw new UserVisibleException("Password cannot be empty");
+        }
+
         if (!User.validateEmail(patron.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new UserVisibleException("Email already exists");
         }
 
         final Connection conn = DatabaseConnection.getConnection();
