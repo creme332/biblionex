@@ -4,7 +4,7 @@ import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Librarian;
 import com.github.creme332.utils.StringUtil;
-import com.github.creme332.view.librarian.LibrarianListPage;
+import com.github.creme332.view.librarian.UserListPage;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -17,9 +17,9 @@ import java.util.List;
 
 public class LibrarianListPageController {
     private AppState app;
-    private LibrarianListPage listPage;
+    private UserListPage listPage;
 
-    public LibrarianListPageController(AppState app, LibrarianListPage listPage) {
+    public LibrarianListPageController(AppState app, UserListPage listPage) {
         this.app = app;
         this.listPage = listPage;
         initController();

@@ -4,7 +4,7 @@ import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Patron;
 import com.github.creme332.utils.StringUtil;
-import com.github.creme332.view.librarian.PatronListPage;
+import com.github.creme332.view.librarian.UserListPage;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -17,9 +17,9 @@ import java.util.List;
 
 public class PatronListPageController {
     private AppState app;
-    private PatronListPage listPage;
+    private UserListPage listPage;
 
-    public PatronListPageController(AppState app, PatronListPage listPage) {
+    public PatronListPageController(AppState app, UserListPage listPage) {
         this.app = app;
         this.listPage = listPage;
         initController();

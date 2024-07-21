@@ -5,14 +5,16 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
 import com.github.creme332.model.User;
+import com.github.creme332.model.UserType;
 
-public abstract class ListPage extends JPanel {
+/**
+ * Displays user details in a table.
+ */
+public class UserListPage extends JPanel {
     private JButton backButton;
     private JTextField searchField;
     private JButton searchButton;
@@ -21,9 +23,12 @@ public abstract class ListPage extends JPanel {
     private JTable userTable;
     private JButton newUserButton;
     private DefaultTableModel tableModel;
+    private UserType userType;
 
-    protected ListPage() {
+    public UserListPage(UserType userType) {
         setLayout(new BorderLayout());
+
+        this.userType = userType;
 
         // Top Panel
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -48,8 +53,14 @@ public abstract class ListPage extends JPanel {
         topPanel.add(byIdRadio);
         add(topPanel, BorderLayout.NORTH);
 
-        // Table
-        String[] columnNames = { getUserType() + " ID", "First Name", "Last Name", "Email", "Phone No", "Action" };
+        // Determine column names based on user type
+        String[] columnNames;
+        if (userType == UserType.PATRON) {
+            columnNames = new String[] { " ID", "First Name", "Last Name", "Email", "Phone No", "Credit Card",
+                    "Action" };
+        } else {
+            columnNames = new String[] { " ID", "First Name", "Last Name", "Email", "Phone No", "Action" };
+        }
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -58,7 +69,7 @@ public abstract class ListPage extends JPanel {
         };
         userTable = new JTable(tableModel);
         userTable.getColumn("Action").setCellRenderer(new DeleteButtonRenderer());
-        userTable.getColumn("Action").setCellEditor(new DeleteButtonEditor(new JCheckBox(), this));
+        userTable.getColumn("Action").setCellEditor(new DeleteButtonEditor(new JCheckBox()));
         JScrollPane scrollPane = new JScrollPane(userTable);
         scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -66,7 +77,7 @@ public abstract class ListPage extends JPanel {
 
         // New User Button
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        newUserButton = new JButton("+ New " + getUserType());
+        newUserButton = new JButton("+ New User");
         bottomPanel.add(newUserButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
@@ -86,44 +97,31 @@ public abstract class ListPage extends JPanel {
     }
 
     class DeleteButtonEditor extends DefaultCellEditor {
-        protected JButton button;
+        protected JButton deleteButton;
         private String label;
-        private ListPage listPage;
-        private int row;
 
-        public DeleteButtonEditor(JCheckBox checkBox, ListPage listPage) {
+        public DeleteButtonEditor(JCheckBox checkBox) {
             super(checkBox);
-            this.listPage = listPage;
-            button = new JButton();
-            button.setOpaque(true);
-            button.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    fireEditingStopped();
-                    deleteRow();
-                }
+            deleteButton = new JButton();
+            deleteButton.setOpaque(true);
+            deleteButton.addActionListener(e -> {
+                fireEditingStopped();
             });
-        }
-
-        private void deleteRow() {
-            if (row >= 0) {
-                listPage.notifyDeleteUser(row);
-            }
         }
 
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
                 int column) {
             if (isSelected) {
-                button.setForeground(table.getSelectionForeground());
-                button.setBackground(table.getSelectionBackground());
+                deleteButton.setForeground(table.getSelectionForeground());
+                deleteButton.setBackground(table.getSelectionBackground());
             } else {
-                button.setForeground(table.getForeground());
-                button.setBackground(UIManager.getColor("Button.background"));
+                deleteButton.setForeground(table.getForeground());
+                deleteButton.setBackground(UIManager.getColor("Button.background"));
             }
             label = (value == null) ? "Delete" : value.toString();
-            button.setText(label);
-            this.row = row; // Capture the row index
-            return button;
+            deleteButton.setText(label);
+            return deleteButton;
         }
 
         @Override
@@ -131,10 +129,6 @@ public abstract class ListPage extends JPanel {
             return label;
         }
     }
-
-    protected abstract String getUserType();
-
-    public abstract void notifyDeleteUser(int row);
 
     /**
      * Display a list of users in the table.
