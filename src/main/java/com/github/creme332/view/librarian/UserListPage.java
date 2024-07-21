@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.List;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
@@ -26,6 +27,8 @@ public class UserListPage extends JPanel {
     private JButton newUserButton;
     private DefaultTableModel tableModel;
     private UserType userType;
+
+    private DeleteButtonEditor deleteButtonEditor;
 
     /**
      * 
@@ -75,7 +78,8 @@ public class UserListPage extends JPanel {
         };
         userTable = new JTable(tableModel);
         userTable.getColumn("Action").setCellRenderer(new DeleteButtonRenderer());
-        userTable.getColumn("Action").setCellEditor(new DeleteButtonEditor(new JCheckBox()));
+        deleteButtonEditor = new DeleteButtonEditor(new JCheckBox());
+        userTable.getColumn("Action").setCellEditor(deleteButtonEditor);
         JScrollPane scrollPane = new JScrollPane(userTable);
         scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -86,6 +90,10 @@ public class UserListPage extends JPanel {
         newUserButton = new JButton("+ New User");
         bottomPanel.add(newUserButton);
         add(bottomPanel, BorderLayout.SOUTH);
+    }
+
+    public DeleteButtonEditor getDeleteButtonEditor() {
+        return deleteButtonEditor;
     }
 
     public class DeleteButtonRenderer extends JButton implements TableCellRenderer {
@@ -102,7 +110,7 @@ public class UserListPage extends JPanel {
         }
     }
 
-    class DeleteButtonEditor extends DefaultCellEditor {
+    public class DeleteButtonEditor extends DefaultCellEditor {
         protected JButton deleteButton;
         private String label;
 
@@ -110,9 +118,16 @@ public class UserListPage extends JPanel {
             super(checkBox);
             deleteButton = new JButton();
             deleteButton.setOpaque(true);
-            deleteButton.addActionListener(e -> {
-                fireEditingStopped();
-            });
+
+        }
+
+        public void handleDelete(ActionListener listener) {
+            fireEditingStopped();
+            for (ActionListener al : deleteButton.getActionListeners()) {
+                deleteButton.removeActionListener(al);
+            }
+
+            deleteButton.addActionListener(listener);
         }
 
         @Override
@@ -172,6 +187,10 @@ public class UserListPage extends JPanel {
             }
 
         }
+    }
+
+    public JTable getTable() {
+        return userTable;
     }
 
     public JButton getBackButton() {
