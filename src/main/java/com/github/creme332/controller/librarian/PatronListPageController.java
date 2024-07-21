@@ -16,6 +16,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PatronListPageController implements PropertyChangeListener {
@@ -134,7 +135,10 @@ public class PatronListPageController implements PropertyChangeListener {
         String lastName = (String) listPage.getTableModel().getValueAt(row, 2);
         String email = (String) listPage.getTableModel().getValueAt(row, 3);
         String phoneNo = (String) listPage.getTableModel().getValueAt(row, 4);
-        // TODO: Add more attributes
+        String address = (String) listPage.getTableModel().getValueAt(row, 5);
+        Date birthdate = (Date) listPage.getTableModel().getValueAt(row, 6);
+        String creditcardno = (String) listPage.getTableModel().getValueAt(row, 7);
+        Date registrationdate = (Date) listPage.getTableModel().getValueAt(row, 8);
         try {
             Patron patron = Patron.findById(userId);
             if (patron != null) {
@@ -142,6 +146,10 @@ public class PatronListPageController implements PropertyChangeListener {
                 patron.setLastName(lastName);
                 patron.setEmail(email);
                 patron.setPhoneNo(phoneNo);
+                patron.setAddress(address);
+                patron.setBirthDate(birthdate);
+                patron.setCreditCardNo(creditcardno);
+                patron.setRegistrationDate(registrationdate);
                 Patron.update(patron);
             }
         } catch (SQLException e) {
