@@ -13,6 +13,8 @@ import com.github.creme332.controller.Screen;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import java.awt.*;
 
 public class MaterialFormController {
     MaterialForm materialForm;
@@ -23,6 +25,20 @@ public class MaterialFormController {
         this.app = app;
 
         materialForm.handleGoBack(e -> app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN));
+
+        materialForm.handleExpand(e -> {
+            JScrollPane authorScrollPane = materialForm.getAuthorScrollPane();
+            Dimension size = authorScrollPane.getPreferredSize();
+            if (size.height == 100) {
+                authorScrollPane.setPreferredSize(new Dimension(150, 200));
+                materialForm.setExpandButtonText("Collapse");
+            } else {
+                authorScrollPane.setPreferredSize(new Dimension(150, 100));
+                materialForm.setExpandButtonText("Expand");
+            }
+            materialForm.revalidate();
+            materialForm.repaint();
+        });
 
         materialForm.handleFormSubmission(e -> {
             MaterialType type = materialForm.getMaterialType();

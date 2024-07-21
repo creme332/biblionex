@@ -30,6 +30,7 @@ public class MaterialForm extends JPanel {
     private JComboBox<MaterialTypeComboBox> materialTypeDropdown;
     private JButton submitButton = new JButton("Submit");
     private JButton backButton;
+    private JButton expandButton;
 
     // Common form components
     private JComboBox<PublisherComboBoxItem> publisherComboBox;
@@ -42,7 +43,7 @@ public class MaterialForm extends JPanel {
     // Book specific components
     private JSpinner pageCountSpinner;
     private JTextField isbnField;
-    private JList<Author> authorList; // TODO: Use JList
+    private JList<Author> authorList;
 
     // Journal specific components
     private JTextField issnField;
@@ -154,23 +155,6 @@ public class MaterialForm extends JPanel {
         }
     }
 
-    private class AuthorJList {
-        private Author data;
-
-        public AuthorJList(Author author) {
-            this.data = author;
-        }
-
-        public Author getAuthor() {
-            return data;
-        }
-
-        @Override
-        public String toString() {
-            return data.getFirstName() + " " + data.getLastName();
-        }
-    }
-
     /**
      * 
      * @return Header panel with back button and material selection dropdown
@@ -259,10 +243,6 @@ public class MaterialForm extends JPanel {
         return panel;
     }
 
-    /**
-     * 
-     * @return Section of formPanel that is specific to books.
-     */
     private JPanel createBookPanel() {
         JPanel bookPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -286,13 +266,59 @@ public class MaterialForm extends JPanel {
         gbc.gridy = 6;
         bookPanel.add(new JLabel("Authors"), gbc);
         gbc.gridx = 1;
-        authorList = new JList<>(); // Initialize JList for authors
+        gbc.gridwidth = 2;
+
+        authorList = new JList<>();
         authorList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        authorList.setCellRenderer(new CustomListCellRenderer());
         JScrollPane authorScrollPane = new JScrollPane(authorList);
-        authorScrollPane.setPreferredSize(new Dimension(150, 80)); // Adjust size as needed
-        bookPanel.add(authorScrollPane, gbc);
+        authorScrollPane.setPreferredSize(new Dimension(150, 100));
+
+        JPanel authorsPanel = new JPanel(new BorderLayout());
+        authorsPanel.add(authorScrollPane, BorderLayout.CENTER);
+
+        expandButton = new JButton("Expand");
+        authorsPanel.add(expandButton, BorderLayout.SOUTH);
+
+        bookPanel.add(authorsPanel, gbc);
 
         return bookPanel;
+    }
+
+    private static class CustomListCellRenderer extends JPanel implements ListCellRenderer<Author> {
+        private JTextArea textArea;
+
+        public CustomListCellRenderer() {
+            setLayout(new BorderLayout());
+            textArea = new JTextArea();
+            textArea.setWrapStyleWord(true);
+            textArea.setLineWrap(true);
+            textArea.setOpaque(true);
+            textArea.setBorder(new EmptyBorder(5, 5, 5, 5));
+            add(textArea, BorderLayout.CENTER);
+        }
+
+        @Override
+        public Component getListCellRendererComponent(JList<? extends Author> list, Author value, int index,
+                boolean isSelected, boolean cellHasFocus) {
+            if (value != null) {
+                textArea.setText(value.getFirstName() + " " + value.getLastName());
+                textArea.setToolTipText(value.getFirstName() + " " + value.getLastName());
+            } else {
+                textArea.setText("");
+                textArea.setToolTipText(null);
+            }
+
+            if (isSelected) {
+                textArea.setBackground(list.getSelectionBackground());
+                textArea.setForeground(list.getSelectionForeground());
+            } else {
+                textArea.setBackground(list.getBackground());
+                textArea.setForeground(list.getForeground());
+            }
+
+            return this;
+        }
     }
 
     /**
@@ -555,4 +581,20 @@ public class MaterialForm extends JPanel {
     public void handleFormSubmission(ActionListener listener) {
         submitButton.addActionListener(listener);
     }
+
+    public void handleExpand(ActionListener listener) {
+        expandButton.addActionListener(listener);
+    }
+
+    public void setExpandButtonText(String text) {
+        expandButton.setText(text);
+    }
+
+    public JScrollPane getAuthorScrollPane() {
+        JPanel bookPanel = (JPanel) switchPanel.getComponent(0); // Assuming bookPanel is the first component in the
+                                                                 // switchPanel
+        JPanel authorsPanel = (JPanel) bookPanel.getComponent(5); // Adjust index if necessary
+        return (JScrollPane) ((JPanel) authorsPanel.getComponent(0)).getComponent(0);
+    }
+
 }
