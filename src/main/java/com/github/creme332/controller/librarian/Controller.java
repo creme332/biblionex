@@ -44,6 +44,6 @@ public class Controller {
         new AuthorController(app, (AuthorForm) frame.getPage(Screen.LIBRARIAN_AUTHOR_SCREEN));
 
         // controller for material form
-        new MaterialFormController(app, (MaterialForm) frame.getPage(Screen.LIBRARIAN_MATERIAL_SCREEN));
+        new MaterialFormController(app, (MaterialForm) frame.getPage(Screen.LIBRARIAN_CATALOGING_SCREEN));
     }
 }

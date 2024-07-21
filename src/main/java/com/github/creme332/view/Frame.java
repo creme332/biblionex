@@ -77,7 +77,7 @@ public class Frame extends JFrame {
         // add screens visible to only librarians
         screenMapper.put(Screen.LIBRARIAN_DASHBOARD_SCREEN, new com.github.creme332.view.librarian.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
-        screenMapper.put(Screen.LIBRARIAN_MATERIAL_SCREEN, new MaterialForm());
+        screenMapper.put(Screen.LIBRARIAN_CATALOGING_SCREEN, new MaterialForm());
         screenMapper.put(Screen.LIBRARIAN_CHECKIN_SCREEN, new CheckInPage());
         screenMapper.put(Screen.LIBRARIAN_PATRON_LIST_SCREEN, new UserListPage(UserType.PATRON));
         screenMapper.put(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN, new UserListPage(UserType.LIBRARIAN));
