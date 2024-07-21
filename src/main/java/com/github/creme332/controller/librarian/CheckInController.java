@@ -74,7 +74,7 @@ public class CheckInController implements PropertyChangeListener {
             List<Loan> loans = Loan.findAllActive();
             for (Loan loan : loans) {
                 Object[] rowData = { loan.getLoanId(), loan.getPatronId(), loan.getBarcode(),
-                        loan.getDueDate(), loan.getRenewalCount(), "Action" };
+                        loan.getDueDate(), loan.getRenewalCount() };
                 tableModel.addRow(rowData);
             }
         } catch (SQLException e) {
