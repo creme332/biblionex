@@ -6,6 +6,8 @@ import java.awt.*;
 import java.util.List;
 import com.github.creme332.utils.ButtonRenderer;
 import com.github.creme332.utils.ButtonEditor;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
 import com.github.creme332.model.User;
 
 public abstract class ListPage extends JPanel {
@@ -25,7 +27,11 @@ public abstract class ListPage extends JPanel {
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         backButton = new JButton("Back");
         searchField = new JTextField(20);
-        searchButton = new JButton("Enter");
+        searchField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+                new FlatSearchIcon());
+        searchField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter name or ID");
+
+        searchButton = new JButton("Search");
         byNameRadio = new JRadioButton("By name");
         byIdRadio = new JRadioButton("By ID");
         ButtonGroup searchGroup = new ButtonGroup();

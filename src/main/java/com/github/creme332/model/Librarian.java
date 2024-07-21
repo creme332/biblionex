@@ -4,12 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Date;
 
 import com.github.creme332.utils.DatabaseConnection;
 import com.github.creme332.utils.PasswordAuthentication;
+import com.github.creme332.utils.exception.UserVisibleException;
 
 public class Librarian extends User {
     private String role;
@@ -66,6 +69,76 @@ public class Librarian extends User {
             preparedStatement.setInt(3, loan.getLoanId());
             preparedStatement.executeUpdate();
         }
+    }
+
+    /**
+     * Performs checkout of a material by creating a new loan and saving it to
+     * database.
+     * 
+     * @param patronId ID of patron
+     * @param barcode  Barcode of material being checked out
+     * @return Newly created loan
+     * @throws SQLException
+     */
+    public Loan checkOut(int patronId, int barcode) throws UserVisibleException, SQLException {
+        // Check if patronId and barcode are valid
+        if (Patron.findById(patronId) == null) {
+            throw new UserVisibleException("Patron does not exist.");
+        }
+
+        MaterialCopy material = MaterialCopy.findById(barcode);
+        if (material == null) {
+            throw new UserVisibleException("MaterialCopy does not exist.");
+        }
+
+        // Check if material is not already being loaned
+        if (material.onLoan()) {
+            throw new UserVisibleException("Material is already being loaned.");
+        }
+
+        // Get the current date
+        Date currentDate = new Date();
+
+        // Create a Calendar object and set it to the current date
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        // Add 2 months to the current date
+        calendar.add(Calendar.MONTH, 2);
+
+        // Get the updated date
+        Date dueDate = calendar.getTime();
+
+        // create a new loan object
+        Loan loan = new Loan(patronId, barcode, userId, dueDate);
+
+        // save loan to database
+        final Connection conn = DatabaseConnection.getConnection();
+        String query = """
+                INSERT INTO loan (patron_id, barcode, checkout_librarian_id,
+                                    issue_date, due_date)
+                VALUES (?, ?, ?, ?, ?)
+                """;
+        try (PreparedStatement createLoan = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            createLoan.setInt(1, loan.getPatronId());
+            createLoan.setInt(2, loan.getBarcode());
+            createLoan.setInt(3, loan.getCheckoutLibrarianId());
+            createLoan.setDate(4, new java.sql.Date(loan.getIssueDate().getTime()));
+            createLoan.setDate(5, new java.sql.Date(loan.getDueDate().getTime()));
+            int rowsAffected = createLoan.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new UserVisibleException("Could not insert loan" + loan.toString());
+            }
+
+            // update loan ID of object
+            ResultSet rs = createLoan.getGeneratedKeys();
+            if (rs.next()) {
+                loan.setLoanId(rs.getInt(1));
+            }
+        }
+
+        return loan;
     }
 
     public void checkIn(Loan loan) throws SQLException {

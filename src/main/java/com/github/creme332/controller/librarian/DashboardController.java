@@ -24,12 +24,8 @@ public class DashboardController implements PropertyChangeListener {
 
         dashboard.getCheckInButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_CHECKIN_SCREEN));
 
-        dashboard.getMaterialsButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Materials button click
-            }
-        });
+        dashboard.getMaterialsButton()
+                .addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_MATERIAL_SCREEN));
 
         dashboard.getCatalogingButton().addActionListener(new ActionListener() {
             @Override
@@ -38,12 +34,7 @@ public class DashboardController implements PropertyChangeListener {
             }
         });
 
-        dashboard.getCheckOutButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Check out button click
-            }
-        });
+        dashboard.getCheckOutButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_CHECKOUT_SCREEN));
 
         dashboard.getPatronsButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_PATRON_LIST_SCREEN));
 

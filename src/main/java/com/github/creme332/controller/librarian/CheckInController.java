@@ -32,6 +32,7 @@ public class CheckInController implements PropertyChangeListener {
             @Override
             public void run() {
                 refreshTable();
+                addTableButtonListeners();
             }
         };
         th.start();
@@ -63,7 +64,7 @@ public class CheckInController implements PropertyChangeListener {
     }
 
     /**
-     * Displays active loans in table and sets appropriate action listeners.
+     * Updates list of active loans in table.
      */
     private void refreshTable() {
         DefaultTableModel tableModel = view.getTableModel();
@@ -73,22 +74,26 @@ public class CheckInController implements PropertyChangeListener {
             List<Loan> loans = Loan.findAllActive();
             for (Loan loan : loans) {
                 Object[] rowData = { loan.getLoanId(), loan.getPatronId(), loan.getBarcode(),
-                        loan.getDueDate(), loan.getRenewalCount(), "Action" };
+                        loan.getDueDate(), loan.getRenewalCount() };
                 tableModel.addRow(rowData);
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(view, "Error occurred while fetching loans.", "Database Error",
                     JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
         }
-
-        addTableButtonListeners();
     }
 
     public void searchLoans() {
-        String barcodeText = view.getBarcodeField().getText().trim();
-        int barcode;
+        String barcodeText = view.getBarcode();
 
+        if (barcodeText.isBlank()) {
+            // display all loans
+            refreshTable();
+            return;
+        }
+
+        // convert barcode to integer
+        int barcode;
         try {
             barcode = Integer.parseInt(barcodeText);
         } catch (NumberFormatException e) {
@@ -107,7 +112,7 @@ public class CheckInController implements PropertyChangeListener {
                         loan.getDueDate(), loan.getRenewalCount(), "Action" };
                 tableModel.addRow(rowData);
             } else {
-                JOptionPane.showMessageDialog(view, "No active loans found for the given barcode.",
+                JOptionPane.showMessageDialog(view, "No active loan found for the given barcode.",
                         "No Results",
                         JOptionPane.INFORMATION_MESSAGE);
             }
@@ -151,6 +156,13 @@ public class CheckInController implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         String propertyName = evt.getPropertyName();
+
+        if (propertyName.equals("currentScreen") && (Screen) evt.getNewValue() == Screen.LIBRARIAN_CHECKIN_SCREEN) {
+            // each time user switches to check-in page, refresh page
+            refreshTable();
+            view.clearBarcodeField();
+        }
+
         if (propertyName.equals("loggedInUser")) {
 
             // ignore event if logged in user is not a librarian
