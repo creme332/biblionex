@@ -8,6 +8,7 @@ public enum Screen {
     SPLASH_SCREEN,
     LOGIN_SCREEN,
     FORGET_PASSWORD,
+    MATERIAL_PAGE,
 
     // patron screens
     PATRON_REGISTRATION_SCREEN,
