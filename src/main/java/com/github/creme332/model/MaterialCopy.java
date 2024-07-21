@@ -29,7 +29,10 @@ public class MaterialCopy {
     private MaterialCondition condition;
     private int materialId;
 
-    public MaterialCopy(MaterialLocation location, int orderId, MaterialCondition condition) {
+    public MaterialCopy(int barcode, int materialId, MaterialLocation location, int orderId,
+            MaterialCondition condition) {
+        this.barcode = barcode;
+        this.materialId = materialId;
         this.location = location;
         this.orderId = orderId;
         this.condition = condition;
@@ -74,6 +77,15 @@ public class MaterialCopy {
 
     public void setCondition(MaterialCondition condition) {
         this.condition = condition;
+    }
+
+    /**
+     * 
+     * @return True if material is currently being loaned
+     * @throws SQLException
+     */
+    public boolean onLoan() throws SQLException {
+        return Loan.findActiveLoanByBarcode(barcode) != null;
     }
 
     /**
@@ -132,6 +144,8 @@ public class MaterialCopy {
                     resultSet.getInt("section_no"));
 
             result = new MaterialCopy(
+                    resultSet.getInt("barcode"),
+                    resultSet.getInt("material_id"),
                     materialLocation,
                     resultSet.getInt("order_id"),
                     MaterialCondition.fromString(resultSet.getString("condition")));
@@ -154,6 +168,8 @@ public class MaterialCopy {
                         resultSet.getInt("section_no"));
 
                 MaterialCopy materialCopy = new MaterialCopy(
+                        resultSet.getInt("barcode"),
+                        resultSet.getInt("material_id"),
                         materialLocation,
                         resultSet.getInt("order_id"),
                         MaterialCondition.fromString(resultSet.getString("condition")));
@@ -233,5 +249,16 @@ public class MaterialCopy {
                                 materialCopy.getBarcode(), materialCopy.getMaterialId()));
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "MaterialCopy{" +
+                "barcode=" + barcode +
+                ", location=" + location +
+                ", orderId=" + orderId +
+                ", condition=" + condition +
+                ", materialId=" + materialId +
+                '}';
     }
 }

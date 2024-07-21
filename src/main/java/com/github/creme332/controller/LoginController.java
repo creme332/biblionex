@@ -65,7 +65,7 @@ public class LoginController {
                 }
 
                 // erase entered data on form
-                loginPage.resetFields();
+                loginPage.clearForm();
 
                 if (user.getUserType() == UserType.PATRON) {
                     try {

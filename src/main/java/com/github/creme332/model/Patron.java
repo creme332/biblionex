@@ -348,4 +348,19 @@ public class Patron extends User {
                 ", credit_card_no='" + creditCardNo + '\'' +
                 '}';
     }
+
+    public double getTotalFinePaid() throws SQLException {
+        final Connection conn = DatabaseConnection.getConnection();
+        String query = "SELECT SUM(amount) as total FROM fine where patron_id = ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getDouble("total");
+            }
+        }
+        return 0;
+    }
 }
