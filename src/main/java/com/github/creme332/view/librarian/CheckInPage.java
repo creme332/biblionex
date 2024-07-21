@@ -11,6 +11,7 @@ import com.formdev.flatlaf.icons.FlatSearchIcon;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
 import java.util.EventObject;
 
 public class CheckInPage extends JPanel {
@@ -72,8 +73,12 @@ public class CheckInPage extends JPanel {
         return searchButton;
     }
 
-    public JTextField getBarcodeField() {
-        return barcodeField;
+    public String getBarcode() {
+        return barcodeField.getText().trim();
+    }
+
+    public void clearBarcodeField() {
+        barcodeField.setText("");
     }
 
     public JTable getTable() {
@@ -111,12 +116,22 @@ public class CheckInPage extends JPanel {
             panel.add(checkInButton, BorderLayout.EAST);
         }
 
-        public JButton getRenewButton() {
-            return renewButton;
+        public void setRenewButtonActionListener(ActionListener listener) {
+            fireEditingStopped();
+
+            for (ActionListener al : renewButton.getActionListeners()) {
+                renewButton.removeActionListener(al);
+            }
+            renewButton.addActionListener(listener);
         }
 
-        public JButton getCheckInButton() {
-            return checkInButton;
+        public void setCheckInButtonActionListener(ActionListener listener) {
+            fireEditingStopped();
+
+            for (ActionListener al : checkInButton.getActionListeners()) {
+                checkInButton.removeActionListener(al);
+            }
+            checkInButton.addActionListener(listener);
         }
 
         @Override
