@@ -2,10 +2,12 @@ package com.github.creme332.view.librarian;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
-import com.github.creme332.utils.ButtonRenderer;
-import com.github.creme332.utils.ButtonEditor;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
 import com.github.creme332.model.User;
@@ -55,8 +57,8 @@ public abstract class ListPage extends JPanel {
             }
         };
         userTable = new JTable(tableModel);
-        userTable.getColumn("Action").setCellRenderer(new ButtonRenderer());
-        userTable.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox(), this));
+        userTable.getColumn("Action").setCellRenderer(new DeleteButtonRenderer());
+        userTable.getColumn("Action").setCellEditor(new DeleteButtonEditor(new JCheckBox(), this));
         JScrollPane scrollPane = new JScrollPane(userTable);
         scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -67,6 +69,67 @@ public abstract class ListPage extends JPanel {
         newUserButton = new JButton("+ New " + getUserType());
         bottomPanel.add(newUserButton);
         add(bottomPanel, BorderLayout.SOUTH);
+    }
+
+    public class DeleteButtonRenderer extends JButton implements TableCellRenderer {
+        public DeleteButtonRenderer() {
+            setOpaque(true);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
+            setText((value == null) ? "Delete" : value.toString());
+            setBackground(Color.RED);
+            return this;
+        }
+    }
+
+    class DeleteButtonEditor extends DefaultCellEditor {
+        protected JButton button;
+        private String label;
+        private ListPage listPage;
+        private int row;
+
+        public DeleteButtonEditor(JCheckBox checkBox, ListPage listPage) {
+            super(checkBox);
+            this.listPage = listPage;
+            button = new JButton();
+            button.setOpaque(true);
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    fireEditingStopped();
+                    deleteRow();
+                }
+            });
+        }
+
+        private void deleteRow() {
+            if (row >= 0) {
+                listPage.notifyDeleteUser(row);
+            }
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+                int column) {
+            if (isSelected) {
+                button.setForeground(table.getSelectionForeground());
+                button.setBackground(table.getSelectionBackground());
+            } else {
+                button.setForeground(table.getForeground());
+                button.setBackground(UIManager.getColor("Button.background"));
+            }
+            label = (value == null) ? "Delete" : value.toString();
+            button.setText(label);
+            this.row = row; // Capture the row index
+            return button;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return label;
+        }
     }
 
     protected abstract String getUserType();
