@@ -8,7 +8,9 @@ import javax.swing.table.TableCellRenderer;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.util.EventObject;
 
@@ -71,8 +73,12 @@ public class CheckInPage extends JPanel {
         return searchButton;
     }
 
-    public JTextField getBarcodeField() {
-        return barcodeField;
+    public String getBarcode() {
+        return barcodeField.getText().trim();
+    }
+
+    public void clearBarcodeField() {
+        barcodeField.setText("");
     }
 
     public JTable getTable() {
@@ -92,8 +98,7 @@ public class CheckInPage extends JPanel {
     }
 
     /**
-     * Class responsible for rendering all cells in Action column and setting action
-     * listeners to each button in the Action column.
+     * Class responsible for rendering all cells in Action column.
      */
     public class ActionCellRenderer extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
         private final JButton renewButton;
@@ -112,6 +117,8 @@ public class CheckInPage extends JPanel {
         }
 
         public void setRenewButtonActionListener(ActionListener listener) {
+            fireEditingStopped();
+
             for (ActionListener al : renewButton.getActionListeners()) {
                 renewButton.removeActionListener(al);
             }
@@ -119,6 +126,8 @@ public class CheckInPage extends JPanel {
         }
 
         public void setCheckInButtonActionListener(ActionListener listener) {
+            fireEditingStopped();
+
             for (ActionListener al : checkInButton.getActionListeners()) {
                 checkInButton.removeActionListener(al);
             }
