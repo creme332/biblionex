@@ -138,6 +138,10 @@ public class Loan {
         return renewalCount;
     }
 
+    public void setLoanId(int id) {
+        loanId = id;
+    }
+
     public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
     }
@@ -213,7 +217,7 @@ public class Loan {
         String query = """
                 INSERT INTO loan (patron_id, barcode, checkout_librarian_id, checkin_librarian_id,
                                  issue_date, return_date, due_date, renewal_count)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                  """;
         try (PreparedStatement createLoan = conn.prepareStatement(query)) {
             createLoan.setInt(1, loan.getPatronId());
