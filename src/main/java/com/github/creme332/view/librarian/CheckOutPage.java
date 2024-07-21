@@ -2,9 +2,11 @@ package com.github.creme332.view.librarian;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.event.ActionListener;
 
 public class CheckOutPage extends JPanel {
     private JTextField barcodeField;
@@ -12,21 +14,22 @@ public class CheckOutPage extends JPanel {
     private JButton checkOutButton;
     private JTable loanTable;
     private DefaultTableModel tableModel;
+    private JButton backButton;
 
     public CheckOutPage() {
         setLayout(new BorderLayout());
 
         add(createTopPanel(), BorderLayout.NORTH);
 
-        String[] columnNames = {"Loan ID", "Patron ID", "Barcode", "Due Date", "Renewal Count", "Action"};
+        String[] columnNames = { "Loan ID", "Patron ID", "Barcode", "Due Date", "Renewal Count" };
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Make only last column editable to allow button clicks
-                return column == columnNames.length - 1;
+                return false; // no cells should be editable
             }
         };
         loanTable = new JTable(tableModel);
+        loanTable.setEnabled(false); // Disable table editing
 
         JScrollPane scrollPane = new JScrollPane(loanTable);
         add(scrollPane, BorderLayout.CENTER);
@@ -36,56 +39,21 @@ public class CheckOutPage extends JPanel {
         JPanel topPanel = new JPanel(new BorderLayout());
 
         // Back button
-        JButton backButton = new JButton("Back");
+        backButton = new JButton("Back");
         topPanel.add(backButton, BorderLayout.WEST);
 
         // Barcode field
         JPanel barcodePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         barcodeField = new JTextField(20);
-        barcodeField.setForeground(Color.GRAY);
-        barcodeField.setText("Item Barcode");
-        barcodeField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (barcodeField.getText().equals("Item Barcode")) {
-                    barcodeField.setText("");
-                    barcodeField.setForeground(Color.BLACK);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (barcodeField.getText().isEmpty()) {
-                    barcodeField.setText("Item Barcode");
-                    barcodeField.setForeground(Color.GRAY);
-                }
-            }
-        });
+        barcodeField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter item barcode");
         barcodePanel.add(barcodeField);
         topPanel.add(barcodePanel, BorderLayout.CENTER);
 
         // Patron ID field
         JPanel patronIdPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         patronIdField = new JTextField(20);
-        patronIdField.setForeground(Color.GRAY);
-        patronIdField.setText("Patron ID");
-        patronIdField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (patronIdField.getText().equals("Patron ID")) {
-                    patronIdField.setText("");
-                    patronIdField.setForeground(Color.BLACK);
-                }
-            }
+        patronIdField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter patron ID");
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (patronIdField.getText().isEmpty()) {
-                    patronIdField.setText("Patron ID");
-                    patronIdField.setForeground(Color.GRAY);
-                }
-            }
-        });
         patronIdPanel.add(patronIdField);
         topPanel.add(patronIdPanel, BorderLayout.EAST);
 
@@ -98,16 +66,25 @@ public class CheckOutPage extends JPanel {
         return topPanel;
     }
 
-    public JButton getCheckOutButton() {
-        return checkOutButton;
+    public void clearFields() {
+        barcodeField.setText("");
+        patronIdField.setText("");
     }
 
-    public JTextField getBarcodeField() {
-        return barcodeField;
+    public void handleBackButton(ActionListener listener) {
+        backButton.addActionListener(listener);
     }
 
-    public JTextField getPatronIdField() {
-        return patronIdField;
+    public void handleCheckout(ActionListener listener) {
+        checkOutButton.addActionListener(listener);
+    }
+
+    public String getBarcode() {
+        return barcodeField.getText().trim();
+    }
+
+    public String getPatronId() {
+        return patronIdField.getText().trim();
     }
 
     public JTable getLoanTable() {
