@@ -55,12 +55,21 @@ public class SidebarController implements PropertyChangeListener {
             this.sidebar.setPatronDetails(patron.getFirstName(), patron.getLastName());
         }
 
+        // when user first logs in wer want to update the highlighted button
         if (propertyName.equals("currentScreen")) {
             Screen newScreen = (Screen) evt.getNewValue();
             if (newScreen == Screen.PATRON_DASHBOARD_SCREEN) {
                 sidebar.highlightButton(sidebar.getDashboardButton());
             }
-            // TODO : add more screens based on sidebar buttons
+            if (newScreen == Screen.PATRON_LOAN_SCREEN) {
+                sidebar.highlightButton(sidebar.getLoansButton());
+            }
+            if (newScreen == Screen.PATRON_CATALOG_SCREEN) {
+                sidebar.highlightButton(sidebar.getCatalogButton());
+            }
+            if (newScreen == Screen.PATRON_ACCOUNT_SCREEN) {
+                sidebar.highlightButton(sidebar.getAccountButton());
+            }
         }
     }
 }
