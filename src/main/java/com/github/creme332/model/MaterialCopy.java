@@ -93,8 +93,39 @@ public class MaterialCopy {
      * @return A list of loans for current material copy.
      */
     public List<Loan> getLoanHistory() {
-        // TODO
-        return new ArrayList<>();
+        List<Loan> loanHistory = new ArrayList<>();
+        String query = "SELECT * FROM loan WHERE barcode = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, this.barcode);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Loan loan = new Loan(
+                            rs.getInt("loan_id"),
+                            rs.getInt("patron_id"),
+                            rs.getInt("barcode"),
+                            rs.getInt("checkout_librarian_id"),
+                            rs.getInt("checkin_librarian_id"),
+                            rs.getDate("issue_date"),
+                            rs.getDate("return_date"),
+                            rs.getDate("due_date"),
+                            rs.getInt("renewal_count"));
+
+                    // Deal with possible null values
+                    rs.getInt("checkin_librarian_id");
+                    if (rs.wasNull()) {
+                        loan.setCheckinLibrarianId(-1);
+                    }
+
+                    loanHistory.add(loan);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return loanHistory;
     }
 
     public static MaterialCopy findById(int barcode) throws SQLException {
