@@ -5,6 +5,8 @@ import java.beans.PropertyChangeSupport;
 import java.sql.SQLException;
 import java.util.Date;
 
+import javax.swing.JOptionPane;
+
 import com.github.creme332.controller.Screen;
 import com.github.creme332.utils.exception.UserVisibleException;
 
@@ -127,8 +129,16 @@ public class AppState {
         return loggedInUser;
     }
 
+    public boolean confirmLogout() {
+        int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to log out?",
+                "Confirm Logout", JOptionPane.YES_NO_OPTION);
+        return response == JOptionPane.YES_OPTION;
+    }
+
     public void logOut() {
-        loggedInUser = null;
-        setCurrentScreen(Screen.LOGIN_SCREEN);
+        if (confirmLogout()) {
+            loggedInUser = null;
+            setCurrentScreen(Screen.LOGIN_SCREEN);
+        }
     }
 }
