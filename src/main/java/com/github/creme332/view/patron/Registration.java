@@ -2,10 +2,11 @@ package com.github.creme332.view.patron;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
+import java.awt.event.KeyListener;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.swing.FontIcon;
 
+import com.github.creme332.model.Patron;
 import com.github.creme332.utils.IconLoader;
 
 import java.awt.*;
@@ -21,7 +22,6 @@ public class Registration extends JPanel {
     private JTextField expiryDateField;
     private JTextField securityCodeField;
     private JTextField creditCardField;
-    private JLabel errorLabel;
     private JButton registerButton;
     private JButton backButton;
 
@@ -42,7 +42,7 @@ public class Registration extends JPanel {
         FontIcon backIcon = FontIcon.of(BootstrapIcons.ARROW_LEFT, 40);
         backIcon.setIconColor(Color.white);
         backButton.setIcon(backIcon);
-        
+
         headerPanel.add(backButton, BorderLayout.WEST);
 
         // create form title
@@ -195,30 +195,63 @@ public class Registration extends JPanel {
         confirmPasswordField.putClientProperty("FlatLaf.style", "showRevealButton: true");
         formPanel.add(confirmPasswordField, gbc);
 
-        // position error label
-        gbc.gridx = 0;
-        gbc.gridy = 16;
-        gbc.gridwidth = 2;
-        errorLabel = new JLabel("");
-        errorLabel.setBorder(new EmptyBorder(10, 0, 10, 0));
-        formPanel.add(errorLabel, gbc);
-
         // position Register button
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
         gbc.gridy = 17;
         registerButton = new JButton("Register");
         formPanel.add(registerButton, gbc);
+    }
+
+    public Patron getPatronDetails() {
+        String email = emailField.getText().trim();
+        char[] password = passwordField.getPassword();
+        String firstName = firstNameField.getText().trim();
+        String lastName = lastNameField.getText().trim();
+        String phone = phoneField.getText().trim();
+        String address = addressField.getText().trim();
+        String creditCardNo = creditCardField.getText().trim();
+
+        return new Patron(email, new String(password), address, firstName, lastName, phone,
+                creditCardNo, null);
     }
 
     public JButton getRegisterButton() {
         return registerButton;
     }
 
-    public JButton getBackButton() {
-        return backButton;
+    public void initEnterKeyListener(KeyListener listener) {
+        JTextField[] textFields = {
+                emailField,
+                passwordField,
+                confirmPasswordField,
+                firstNameField,
+                lastNameField,
+                phoneField,
+                addressField,
+                creditCardField
+        };
+
+        for (JTextField textField : textFields) {
+            textField.addKeyListener(listener);
+        }
     }
 
-    public String getEmail() {
-        return emailField.getText();
+    public void clearForm() {
+        emailField.setText("");
+        passwordField.setText("");
+        confirmPasswordField.setText("");
+        firstNameField.setText("");
+        lastNameField.setText("");
+        phoneField.setText("");
+        addressField.setText("");
+        expiryDateField.setText("");
+        securityCodeField.setText("");
+        creditCardField.setText("");
+    }
+
+    public JButton getBackButton() {
+        return backButton;
     }
 
     public char[] getPassword() {
@@ -227,73 +260,5 @@ public class Registration extends JPanel {
 
     public char[] getConfirmPassword() {
         return confirmPasswordField.getPassword();
-    }
-
-    public String getFirstName() {
-        return firstNameField.getText();
-    }
-
-    public String getLastName() {
-        return lastNameField.getText();
-    }
-
-    public String getPhone() {
-        return phoneField.getText();
-    }
-
-    public String getAddress() {
-        return addressField.getText();
-    }
-
-    public String getCreditCardNo() {
-        return creditCardField.getText();
-    }
-
-    public String getExpiryDate() {
-        return expiryDateField.getText();
-    }
-
-    public String getSecurityCode() {
-        return securityCodeField.getText();
-    }
-
-    public void setErrorMessage(String text) {
-        errorLabel.setText(text);
-    }
-
-    public void setSuccessMessage(String text) {
-        errorLabel.setText(text);
-    }
-
-    public JTextField getAddressField() {
-        return addressField;
-    }
-
-        public JTextField getPhoneField() {
-        return phoneField;
-    }
-
-        public JTextField getLastNameField() {
-        return lastNameField;
-    }
-
-        public JTextField getFirstNameField() {
-        return firstNameField;
-    }
-
-        public JTextField getConfirmPasswordField() {
-        return confirmPasswordField;
-    }
-
-        public JTextField getPasswordField() {
-        return passwordField;
-    }
-
-        public JTextField getEmailField() {
-        return emailField;
-    }
-
-    public JTextField getCreditCardField(){
-        return creditCardField;
     }
 }

@@ -94,12 +94,14 @@ public class RegistrationForm extends JPanel {
         formPanel.add(new JLabel("Password"), gbc);
         gbc.gridx = 1;
         passwordField = new JPasswordField(15);
+        passwordField.putClientProperty("FlatLaf.style", "showRevealButton: true");
         formPanel.add(passwordField, gbc);
 
         gbc.gridx = 2;
         formPanel.add(new JLabel("Confirm Password"), gbc);
         gbc.gridx = 3;
         confirmPasswordField = new JPasswordField(15);
+        confirmPasswordField.putClientProperty("FlatLaf.style", "showRevealButton: true");
         formPanel.add(confirmPasswordField, gbc);
 
         gbc.gridx = 0;

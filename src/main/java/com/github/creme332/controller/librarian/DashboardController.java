@@ -6,8 +6,6 @@ import com.github.creme332.model.User;
 import com.github.creme332.model.UserType;
 import com.github.creme332.view.librarian.Dashboard;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -24,49 +22,26 @@ public class DashboardController implements PropertyChangeListener {
 
         dashboard.getCheckInButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_CHECKIN_SCREEN));
 
-        dashboard.getMaterialsButton()
-                .addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_MATERIAL_SCREEN));
-
-        dashboard.getCatalogingButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Cataloging button click
-            }
+        dashboard.getMaterialsButton().addActionListener(e -> {
         });
+
+        dashboard.getCatalogingButton()
+                .addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_CATALOGING_SCREEN));
 
         dashboard.getCheckOutButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_CHECKOUT_SCREEN));
 
         dashboard.getPatronsButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_PATRON_LIST_SCREEN));
 
-        dashboard.getOverduesButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Overdues button click
-            }
-        });
-
-        dashboard.getRenewButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Renew button click
-            }
+        dashboard.getOverduesButton().addActionListener(e -> {
         });
 
         dashboard.getLibrariansButton()
                 .addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN));
 
-        dashboard.getAcquisitionsButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Acquisitions button click
-            }
+        dashboard.getAcquisitionsButton().addActionListener(e -> {
         });
 
-        dashboard.getReportsButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Reports button click
-            }
+        dashboard.getReportsButton().addActionListener(e -> {
         });
     }
 

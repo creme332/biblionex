@@ -7,10 +7,9 @@ import com.github.creme332.view.librarian.AuthorForm;
 import com.github.creme332.view.librarian.CheckInPage;
 import com.github.creme332.view.librarian.CheckOutPage;
 import com.github.creme332.view.librarian.Dashboard;
-import com.github.creme332.view.librarian.LibrarianListPage;
 import com.github.creme332.view.librarian.MaterialForm;
-import com.github.creme332.view.librarian.PatronListPage;
 import com.github.creme332.view.librarian.RegistrationForm;
+import com.github.creme332.view.librarian.UserListPage;
 import com.github.creme332.view.librarian.VendorForm;
 
 /**
@@ -24,10 +23,10 @@ public class Controller {
         new RegistrationController(app, (RegistrationForm) frame.getPage(Screen.LIBRARIAN_REGISTRATION_SCREEN));
 
         // controller for page listing patron details
-        new PatronListPageController(app, (PatronListPage) frame.getPage(Screen.LIBRARIAN_PATRON_LIST_SCREEN));
+        new PatronListPageController(app, (UserListPage) frame.getPage(Screen.LIBRARIAN_PATRON_LIST_SCREEN));
 
         // controller for listing librarian details
-        new LibrarianListPageController(app, (LibrarianListPage) frame.getPage(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN));
+        new LibrarianListPageController(app, (UserListPage) frame.getPage(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN));
 
         // controller for Check In and Renew
         new CheckInController(app, (CheckInPage) frame.getPage(Screen.LIBRARIAN_CHECKIN_SCREEN));
@@ -45,6 +44,6 @@ public class Controller {
         new AuthorController(app, (AuthorForm) frame.getPage(Screen.LIBRARIAN_AUTHOR_SCREEN));
 
         // controller for material form
-        new MaterialFormController(app, (MaterialForm) frame.getPage(Screen.LIBRARIAN_MATERIAL_SCREEN));
+        new MaterialFormController(app, (MaterialForm) frame.getPage(Screen.LIBRARIAN_CATALOGING_SCREEN));
     }
 }

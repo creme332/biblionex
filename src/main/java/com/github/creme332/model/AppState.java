@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import com.github.creme332.controller.Screen;
+import com.github.creme332.utils.exception.UserVisibleException;
 
 public class AppState {
     private PropertyChangeSupport support;
@@ -82,7 +83,7 @@ public class AppState {
                     Patron.save(defaultPatron);
                     user = Patron.findByEmail(defaultPatron.getEmail());
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | UserVisibleException e) {
                 e.printStackTrace();
                 System.exit(1);
             }

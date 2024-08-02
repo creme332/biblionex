@@ -7,18 +7,18 @@ import java.util.Map;
 import javax.swing.*;
 
 import com.github.creme332.controller.Screen;
+import com.github.creme332.model.UserType;
 import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.librarian.MaterialForm;
 import com.github.creme332.view.librarian.RegistrationForm;
+import com.github.creme332.view.librarian.UserListPage;
 import com.github.creme332.view.librarian.VendorForm;
 import com.github.creme332.view.patron.Account;
 import com.github.creme332.view.patron.Catalog;
-import com.github.creme332.view.librarian.PatronListPage;
 import com.github.creme332.view.librarian.AuthorForm;
 import com.github.creme332.view.librarian.CheckInPage;
 import com.github.creme332.view.librarian.CheckOutPage;
-import com.github.creme332.view.librarian.LibrarianListPage;
 import com.github.creme332.view.patron.Registration;
 import com.github.creme332.view.patron.Sidebar;
 
@@ -77,10 +77,10 @@ public class Frame extends JFrame {
         // add screens visible to only librarians
         screenMapper.put(Screen.LIBRARIAN_DASHBOARD_SCREEN, new com.github.creme332.view.librarian.Dashboard());
         screenMapper.put(Screen.LIBRARIAN_REGISTRATION_SCREEN, new RegistrationForm());
-        screenMapper.put(Screen.LIBRARIAN_MATERIAL_SCREEN, new MaterialForm());
+        screenMapper.put(Screen.LIBRARIAN_CATALOGING_SCREEN, new MaterialForm());
         screenMapper.put(Screen.LIBRARIAN_CHECKIN_SCREEN, new CheckInPage());
-        screenMapper.put(Screen.LIBRARIAN_PATRON_LIST_SCREEN, new PatronListPage());
-        screenMapper.put(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN, new LibrarianListPage());
+        screenMapper.put(Screen.LIBRARIAN_PATRON_LIST_SCREEN, new UserListPage(UserType.PATRON));
+        screenMapper.put(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN, new UserListPage(UserType.LIBRARIAN));
         screenMapper.put(Screen.LIBRARIAN_VENDOR_SCREEN, new VendorForm());
         screenMapper.put(Screen.LIBRARIAN_AUTHOR_SCREEN, new AuthorForm());
         screenMapper.put(Screen.LIBRARIAN_CHECKOUT_SCREEN, new CheckOutPage());
