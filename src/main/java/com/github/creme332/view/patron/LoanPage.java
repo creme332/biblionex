@@ -1,11 +1,10 @@
 package com.github.creme332.view.patron;
 
 import java.util.List;
-import javax.swing.table.DefaultTableModel;
+
 import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import com.github.creme332.model.Loan;
 import com.github.creme332.model.LoanStatus;
@@ -16,7 +15,7 @@ import com.github.creme332.model.LoanStatus;
 public class LoanPage extends JPanel {
     private JTable table;
     private DefaultTableModel tableModel;
-    private transient ActionListener actionListener;
+    private PayButtonEditor payButtonEditor;
 
     public LoanPage() {
         setLayout(new BorderLayout());
@@ -28,9 +27,25 @@ public class LoanPage extends JPanel {
                 return column == tableModel.getColumnCount() - 1; // Only the "Action" column is editable
             }
         };
-        table.getColumn("Action").setCellRenderer(new ButtonRenderer());
-        table.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox()));
+
+        payButtonEditor = new PayButtonEditor(new JCheckBox());
+        table.getColumn("Action").setCellEditor(payButtonEditor);
+        table.getColumn("Action").setCellRenderer(new PayButtonRenderer());
+
         add(new JScrollPane(table), BorderLayout.CENTER);
+    }
+
+    public int getSelectedLoanID() {
+        int selectedRow = table.getSelectedRow();
+
+        if (selectedRow != -1) {
+            return (int) table.getValueAt(selectedRow, 0);
+        }
+        return -1;
+    }
+
+    public PayButtonEditor getPayButtonEditor() {
+        return payButtonEditor;
     }
 
     public void updateTableModel(List<Loan> loans) {
@@ -38,86 +53,49 @@ public class LoanPage extends JPanel {
 
         for (Loan loan : loans) {
             String returnDate = loan.getReturnDate() != null ? loan.getReturnDate().toString() : "Pending";
-            LoanStatus status = determineLoanStatus(loan);
 
             tableModel.addRow(new Object[] { loan.getLoanId(), loan.getBarcode(), loan.getIssueDate(),
-                    returnDate, loan.getDueDate(), status, status == LoanStatus.OVERDUE ? "Pay" : "" });
+                    returnDate, loan.getDueDate(), loan.getLoanStatus(), loan.isOverdue() });
         }
     }
 
-    public void addLoanActionListener(ActionListener listener) {
-        this.actionListener = listener;
-    }
-
-    private LoanStatus determineLoanStatus(Loan loan) {
-        if (loan.getReturnDate() != null) {
-            return LoanStatus.COMPLETE;
-        } else if (loan.getDueDate().before(new java.util.Date())) {
-            return LoanStatus.OVERDUE;
-        } else {
-            return LoanStatus.PENDING;
-        }
-    }
-
-    private class ButtonRenderer extends JButton implements TableCellRenderer {
-        public ButtonRenderer() {
-            setOpaque(true);
+    // Custom renderer for pay button
+    class PayButtonRenderer extends JButton implements TableCellRenderer {
+        public PayButtonRenderer() {
+            setText("Pay");
         }
 
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus,
                 int row, int column) {
-            if ("Pay".equals(value)) {
-                setText("Pay");
-            } else {
-                setText("");
-            }
+            // Determine if the button should be enabled or disabled
+            setEnabled((LoanStatus) table.getValueAt(row, 5) == LoanStatus.OVERDUE);
             return this;
         }
     }
 
-    private class ButtonEditor extends DefaultCellEditor {
-        protected JButton button;
-        private String label;
-        private boolean isPushed;
-        private int loanId;
+    // Custom editor for pay button
+    public class PayButtonEditor extends DefaultCellEditor {
+        protected JButton payButton;
 
-        public ButtonEditor(JCheckBox checkBox) {
+        public PayButtonEditor(JCheckBox checkBox) {
             super(checkBox);
-            button = new JButton();
-            button.setOpaque(true);
-            button.addActionListener(e -> fireEditingStopped());
+            payButton = new JButton("Pay");
+        }
+
+        public void handlePayment(ActionListener listener) {
+            payButton.addActionListener(listener);
         }
 
         @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
-                int column) {
-            label = (value == null) ? "" : value.toString();
-            button.setText(label);
-            isPushed = true;
-            loanId = (int) table.getValueAt(row, 0); // Assuming Loan ID is in the first column
-            return button;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            if (isPushed && "Pay".equals(label)) {
-                firePayAction(loanId);
-            }
-            isPushed = false;
-            return new String(label);
-        }
-
-        @Override
-        public boolean stopCellEditing() {
-            isPushed = false;
-            return super.stopCellEditing();
-        }
-
-        private void firePayAction(int loanId) {
-            if (actionListener != null) {
-                ActionEvent e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, Integer.toString(loanId));
-                actionListener.actionPerformed(e);
-            }
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                boolean isSelected, int row, int column) {
+            boolean enabledButton = (LoanStatus) table.getValueAt(row, 5) == LoanStatus.OVERDUE;
+            if (!enabledButton)
+                return null;
+            return payButton;
         }
     }
+
 }

@@ -26,7 +26,11 @@ public class LoanController implements PropertyChangeListener {
     public LoanController(AppState app, LoanPage loanView) {
         this.loanView = loanView;
         app.addPropertyChangeListener(this);
-        loanView.addLoanActionListener(e -> handlePayment(Integer.parseInt(e.getActionCommand())));
+
+        loanView.getPayButtonEditor().handlePayment(e -> {
+            handlePayment(loanView.getSelectedLoanID());
+        });
+
     }
 
     public void displayLoans() {
@@ -49,6 +53,11 @@ public class LoanController implements PropertyChangeListener {
         // Fetch loan details
         try {
             currentLoan = Loan.findById(loanId);
+            if (currentLoan == null) {
+                JOptionPane.showMessageDialog(loanView, "Loan not found.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(0);
@@ -66,7 +75,7 @@ public class LoanController implements PropertyChangeListener {
             JOptionPane.showMessageDialog(loanView, "Payment Successful.", "Message",
                     JOptionPane.INFORMATION_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(loanView, "Payment is not possible yet.", "Error",
+            JOptionPane.showMessageDialog(loanView, "An error occurred during payment.", "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
 
