@@ -96,14 +96,14 @@ public class Loan {
 
     public LoanStatus getLoanStatus() {
         if (returnDate != null) {
-            return LoanStatus.COMPLETE;
+            return LoanStatus.RETURNED;
         }
 
         if (dueDate.before(new Date())) {
             return LoanStatus.OVERDUE;
         }
 
-        return LoanStatus.PENDING;
+        return LoanStatus.BORROWED;
     }
 
     public boolean isOverdue() {
