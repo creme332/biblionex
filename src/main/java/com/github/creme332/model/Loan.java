@@ -94,8 +94,20 @@ public class Loan {
         this.renewalCount = 0;
     }
 
+    public LoanStatus getLoanStatus() {
+        if (returnDate != null) {
+            return LoanStatus.COMPLETE;
+        }
+
+        if (dueDate.before(new Date())) {
+            return LoanStatus.OVERDUE;
+        }
+
+        return LoanStatus.PENDING;
+    }
+
     public boolean isOverdue() {
-        return dueDate.after(new Date());
+        return getLoanStatus() == LoanStatus.OVERDUE;
     }
 
     public float getAmountDue() {
