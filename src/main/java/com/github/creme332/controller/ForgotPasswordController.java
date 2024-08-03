@@ -68,7 +68,7 @@ public class ForgotPasswordController {
                     String enteredCode = forgotPasswordPage.showVerificationDialog();
                     if (verificationCode.equals(enteredCode)) {
                         // Update user's password
-                        User.changePassword(user, newPassword);
+                        user.changePassword(newPassword);
                         JOptionPane.showMessageDialog(forgotPasswordPage, "Password has been reset successfully.");
                         forgotPasswordPage.clearForm();
                         app.setCurrentScreen(Screen.LOGIN_SCREEN);
