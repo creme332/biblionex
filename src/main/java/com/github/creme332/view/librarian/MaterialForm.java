@@ -44,6 +44,8 @@ public class MaterialForm extends JPanel {
     private JSpinner pageCountSpinner;
     private JTextField isbnField;
     private JList<Author> authorList;
+    private DefaultListModel<Author> authorListModel;
+    private JScrollPane authorScrollPane;
 
     // Journal specific components
     private JTextField issnField;
@@ -268,10 +270,11 @@ public class MaterialForm extends JPanel {
         gbc.gridx = 1;
         gbc.gridwidth = 2;
 
-        authorList = new JList<>();
+        authorListModel = new DefaultListModel<>();
+        authorList = new JList<>(authorListModel);
         authorList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         authorList.setCellRenderer(new CustomListCellRenderer());
-        JScrollPane authorScrollPane = new JScrollPane(authorList);
+        authorScrollPane = new JScrollPane(authorList);
         authorScrollPane.setPreferredSize(new Dimension(150, 100));
 
         JPanel authorsPanel = new JPanel(new BorderLayout());
@@ -591,10 +594,38 @@ public class MaterialForm extends JPanel {
     }
 
     public JScrollPane getAuthorScrollPane() {
-        JPanel bookPanel = (JPanel) switchPanel.getComponent(0); // Assuming bookPanel is the first component in the
-                                                                 // switchPanel
-        JPanel authorsPanel = (JPanel) bookPanel.getComponent(5); // Adjust index if necessary
-        return (JScrollPane) ((JPanel) authorsPanel.getComponent(0)).getComponent(0);
+        // Get the currently visible panel from the switchPanel
+        Component[] components = switchPanel.getComponents();
+        JPanel bookPanel = null;
+
+        for (Component component : components) {
+            if (component.isVisible() && component instanceof JPanel) {
+                bookPanel = (JPanel) component;
+                break;
+            }
+        }
+
+        if (bookPanel == null) {
+            throw new IllegalStateException("Book panel not found");
+        }
+
+        // Find the authorsPanel within the bookPanel
+        for (Component component : bookPanel.getComponents()) {
+            if (component instanceof JPanel) {
+                JPanel panel = (JPanel) component;
+                for (Component childComponent : panel.getComponents()) {
+                    if (childComponent instanceof JScrollPane) {
+                        return (JScrollPane) childComponent;
+                    }
+                }
+            }
+        }
+
+        throw new IllegalStateException("Author scroll pane not found");
+    }
+
+    public JList<Author> getAuthorList() {
+        return authorList;
     }
 
 }
