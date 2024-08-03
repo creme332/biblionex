@@ -83,7 +83,7 @@ public class AccountController {
             Patron.update(patron);
 
             if (password.length > 0) {
-                User.changePassword(patron, password);
+                patron.changePassword(password);
             }
 
             if (fieldsModified > 0) {
