@@ -11,6 +11,7 @@ import com.github.creme332.model.Loan;
 import com.github.creme332.model.Patron;
 import com.github.creme332.model.User;
 import com.github.creme332.model.UserType;
+import com.github.creme332.utils.exception.UserVisibleException;
 
 /**
  * Controller for patron loan page.
@@ -27,9 +28,7 @@ public class LoanController implements PropertyChangeListener {
         this.loanView = loanView;
         app.addPropertyChangeListener(this);
 
-        loanView.getPayButtonEditor().handlePayment(e -> {
-            handlePayment(loanView.getSelectedLoanID());
-        });
+        loanView.getPayButtonEditor().handlePayment(e -> handlePayment(loanView.getSelectedLoanID()));
 
     }
 
@@ -70,13 +69,17 @@ public class LoanController implements PropertyChangeListener {
             return;
         }
 
-        boolean paymentSuccessful = patron.payFine(currentLoan);
-        if (paymentSuccessful) {
+        try {
+            patron.payFine(currentLoan);
             JOptionPane.showMessageDialog(loanView, "Payment Successful.", "Message",
                     JOptionPane.INFORMATION_MESSAGE);
-        } else {
+        } catch (UserVisibleException e) {
+            JOptionPane.showMessageDialog(loanView, e.getMessage(), "Payment rejected",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(loanView, "An error occurred during payment.", "Error",
                     JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
 
         // Refresh the loan view to update the status and button

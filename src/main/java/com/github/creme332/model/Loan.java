@@ -234,6 +234,29 @@ public class Loan {
     }
 
     /**
+     * Returns the total fine that has been paid.
+     */
+    public float getFinesPaid() throws SQLException {
+        final Connection conn = DatabaseConnection.getConnection();
+        float finesPaid = 0;
+
+        String query = """
+                SELECT SUM(amount) as total from fine
+                WHERE loan_id = ?
+                """;
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, loanId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                finesPaid = resultSet.getFloat("total");
+            }
+        }
+        return finesPaid;
+    }
+
+    /**
      * Finds all active loans where the return date is null.
      * 
      * @return List of active loans.
