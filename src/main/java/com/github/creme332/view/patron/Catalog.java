@@ -41,7 +41,7 @@ public class Catalog extends JPanel {
             // Create title container
             JPanel titleContainer = new JPanel(new BorderLayout());
 
-            // create a title label with word wrapping
+            // Create a title label with word wrapping
             JLabel titleLabel = new JLabel("<html>" + title + "</html>");
             titleLabel.putClientProperty("FlatLaf.style", "font: $semibold.font");
 
@@ -65,6 +65,19 @@ public class Catalog extends JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void showMaterialDialog(String title, String details) {
+        JTextPane textPane = new JTextPane();
+        textPane.setContentType("text/html");
+        textPane.setText("<html>" + details + "</html>");
+        textPane.setEditable(false);
+        textPane.setMargin(new Insets(10, 10, 10, 10));
+
+        JScrollPane scrollPane = new JScrollPane(textPane);
+        scrollPane.setPreferredSize(new Dimension(400, 300));
+
+        JOptionPane.showMessageDialog(this, scrollPane, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
     private JScrollPane createScrollableCatalog() {
