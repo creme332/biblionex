@@ -114,15 +114,15 @@ public class AppState {
                     "New screen should not be null. If you clicked on back button, ensure that you have previously visited the previous page.");
             return;
         }
-        System.out.println("Switching screens: " + currentScreen.name() + "-> " + newScreen.name());
-        support.firePropertyChange("currentScreen", currentScreen, newScreen);
         previousScreen = currentScreen;
         currentScreen = newScreen;
+        support.firePropertyChange("currentScreen", previousScreen, newScreen);
     }
 
     public void setLoggedInUser(User newUser) {
-        support.firePropertyChange("loggedInUser", loggedInUser, newUser);
+        User oldUser = loggedInUser;
         loggedInUser = newUser;
+        support.firePropertyChange("loggedInUser", oldUser, newUser);
     }
 
     public User getLoggedInUser() {
