@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import com.github.creme332.view.patron.LoanPage;
+import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Loan;
 import com.github.creme332.model.Patron;
@@ -24,7 +25,10 @@ public class LoanController implements PropertyChangeListener {
      */
     Patron patron;
 
+    AppState app;
+
     public LoanController(AppState app, LoanPage loanView) {
+        this.app = app;
         this.loanView = loanView;
         app.addPropertyChangeListener(this);
 
@@ -32,10 +36,9 @@ public class LoanController implements PropertyChangeListener {
 
     }
 
-    public void displayLoans() {
-        List<Loan> loans;
+    public void refreshLoanTable() {
         try {
-            loans = patron.getLoans();
+            List<Loan> loans = patron.getLoans();
             loanView.updateTableModel(loans);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(loanView,
@@ -53,7 +56,9 @@ public class LoanController implements PropertyChangeListener {
         try {
             currentLoan = Loan.findById(loanId);
             if (currentLoan == null) {
-                JOptionPane.showMessageDialog(loanView, "Loan not found.", "Error",
+                JOptionPane.showMessageDialog(loanView, String.format(
+                        "Loan ID %d not found. Ensure that you have properly selected a row before clicking on the pay button.",
+                        loanId), "Error",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -64,7 +69,7 @@ public class LoanController implements PropertyChangeListener {
 
         // Check if payment is needed
         if (currentLoan.getAmountDue() <= 0) {
-            JOptionPane.showMessageDialog(loanView, "No payment required for this loan.", "Message",
+            JOptionPane.showMessageDialog(loanView, "No payment required for loan " + loanId, "Message",
                     JOptionPane.INFORMATION_MESSAGE);
             return;
         }
@@ -73,6 +78,7 @@ public class LoanController implements PropertyChangeListener {
             patron.payFine(currentLoan);
             JOptionPane.showMessageDialog(loanView, "Payment Successful.", "Message",
                     JOptionPane.INFORMATION_MESSAGE);
+            refreshLoanTable();
         } catch (UserVisibleException e) {
             JOptionPane.showMessageDialog(loanView, e.getMessage(), "Payment rejected",
                     JOptionPane.ERROR_MESSAGE);
@@ -82,26 +88,28 @@ public class LoanController implements PropertyChangeListener {
             e.printStackTrace();
         }
 
-        // Refresh the loan view to update the status and button
-        displayLoans();
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         String propertyName = evt.getPropertyName();
+
+        // update identity of patron when log status changes
         if (propertyName.equals("loggedInUser")) {
 
             // ignore event if logged in user is not a patron
-            User newUser = (User) evt.getNewValue();
+            User newUser = app.getLoggedInUser();
             if (newUser == null
                     || newUser.getUserType() != UserType.PATRON)
                 return;
 
-            // initialize patron
+            // update patron
             patron = (Patron) newUser;
+        }
 
-            // display his loans
-            displayLoans();
+        // refresh loan table each time screen whenever page is accessed
+        if (propertyName.equals("currentScreen") && (Screen) evt.getNewValue() == Screen.PATRON_LOAN_SCREEN) {
+            refreshLoanTable();
         }
     }
 }
