@@ -40,10 +40,10 @@ public class Patron extends User {
      * getAmountDue() in the loan class.
      * 
      * @param loan
-     * @return True if payment was successful.
+     * @return Newly created fine if payment was successful.
      * @throws SQLException
      */
-    public boolean payFine(Loan loan) throws UserVisibleException, SQLException {
+    public Fine payFine(Loan loan) throws UserVisibleException, SQLException {
         // check if a fine has already been paid
         if (loan.getFinesPaid() > 0) {
             throw new UserVisibleException("A fine has already been paid for this loan.");
@@ -57,7 +57,7 @@ public class Patron extends User {
             e.printStackTrace();
             throw new UserVisibleException("Database error");
         }
-        return true;
+        return newFine;
     }
 
     /**
