@@ -28,63 +28,61 @@ public class LoginController {
         this.app = app;
 
         // Create a common ActionListener for login logic
-        ActionListener loginAction = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String email = loginPage.getEmail();
+        ActionListener loginAction = e -> {
+            String email = loginPage.getEmail();
 
-                // assuming is a patron, find his account
-                User user;
+            // assuming is a patron, find his account
+            User user;
+            try {
+                user = Patron.findByEmail(email);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+                return;
+            }
+
+            // if no patron account found, assume that user is librarian
+            if (user == null) {
                 try {
-                    user = Patron.findByEmail(email);
+                    user = Librarian.findByEmail(email);
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                     return;
                 }
-
-                // if no patron account found, assume that user is librarian
-                if (user == null) {
-                    try {
-                        user = Librarian.findByEmail(email);
-                    } catch (SQLException e1) {
-                        e1.printStackTrace();
-                        return;
-                    }
-                }
-
-                // if email invalid, show error
-                if (user == null) {
-                    loginPage.showError();
-                    return;
-                }
-
-                // validate password
-                if (!user.authenticate(email, loginPage.getPassword())) {
-                    loginPage.showError();
-                    return;
-                }
-
-                // erase entered data on form
-                loginPage.clearForm();
-
-                if (user.getUserType() == UserType.PATRON) {
-                    try {
-                        app.setLoggedInUser(Patron.findByEmail(email));
-                    } catch (SQLException e1) {
-                        e1.printStackTrace();
-                        return;
-                    }
-                    app.setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
-                } else {
-                    try {
-                        app.setLoggedInUser(Librarian.findByEmail(email));
-                    } catch (SQLException e1) {
-                        e1.printStackTrace();
-                        return;
-                    }
-                    app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN);
-                }
             }
+
+            // if email invalid, show error
+            if (user == null) {
+                loginPage.showError();
+                return;
+            }
+
+            // validate password
+            if (!user.authenticate(email, loginPage.getPassword())) {
+                loginPage.showError();
+                return;
+            }
+
+            // erase entered data on form
+            loginPage.clearForm();
+
+            if (user.getUserType() == UserType.PATRON) {
+                try {
+                    app.setLoggedInUser(Patron.findByEmail(email));
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                    return;
+                }
+                app.setCurrentScreen(Screen.PATRON_DASHBOARD_SCREEN);
+            } else {
+                try {
+                    app.setLoggedInUser(Librarian.findByEmail(email));
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                    return;
+                }
+                app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN);
+            }
+
         };
 
         // Add action listener to login button
