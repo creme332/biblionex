@@ -94,8 +94,20 @@ public class Loan {
         this.renewalCount = 0;
     }
 
+    public LoanStatus getLoanStatus() {
+        if (returnDate != null) {
+            return LoanStatus.RETURNED;
+        }
+
+        if (dueDate.before(new Date())) {
+            return LoanStatus.OVERDUE;
+        }
+
+        return LoanStatus.BORROWED;
+    }
+
     public boolean isOverdue() {
-        return dueDate.after(new Date());
+        return getLoanStatus() == LoanStatus.OVERDUE;
     }
 
     public float getAmountDue() {
@@ -219,6 +231,29 @@ public class Loan {
             preparedStatement.setInt(1, loanId);
             preparedStatement.executeUpdate();
         }
+    }
+
+    /**
+     * Returns the total fine that has been paid.
+     */
+    public float getFinesPaid() throws SQLException {
+        final Connection conn = DatabaseConnection.getConnection();
+        float finesPaid = 0;
+
+        String query = """
+                SELECT SUM(amount) as total from fine
+                WHERE loan_id = ?
+                """;
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, loanId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                finesPaid = resultSet.getFloat("total");
+            }
+        }
+        return finesPaid;
     }
 
     /**
