@@ -134,6 +134,7 @@ public class LibrarianListPageController implements PropertyChangeListener {
         String email = (String) listPage.getTableModel().getValueAt(row, 3);
         String phoneNo = (String) listPage.getTableModel().getValueAt(row, 4);
         String role = (String) listPage.getTableModel().getValueAt(row, 5);
+        String address = (String) listPage.getTableModel().getValueAt(row, 6);
         try {
             Librarian librarian = Librarian.findById(userId);
             if (librarian != null) {
@@ -142,6 +143,7 @@ public class LibrarianListPageController implements PropertyChangeListener {
                 librarian.setEmail(email);
                 librarian.setPhoneNo(phoneNo);
                 librarian.setRole(role);
+                librarian.setAddress(address);
                 Librarian.update(librarian);
             }
         } catch (SQLException e) {
