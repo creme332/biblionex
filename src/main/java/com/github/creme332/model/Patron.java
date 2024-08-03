@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.github.creme332.utils.DatabaseConnection;
 import com.github.creme332.utils.PasswordAuthentication;
+import com.github.creme332.utils.exception.UserVisibleException;
 
 public class Patron extends User {
     private Date registrationDate;
@@ -39,17 +40,24 @@ public class Patron extends User {
      * getAmountDue() in the loan class.
      * 
      * @param loan
-     * @return True if payment was successful.
+     * @return Newly created fine if payment was successful.
+     * @throws SQLException
      */
-    public boolean payFine(Loan loan) {
+    public Fine payFine(Loan loan) throws UserVisibleException, SQLException {
+        // check if a fine has already been paid
+        if (loan.getFinesPaid() > 0) {
+            throw new UserVisibleException("A fine has already been paid for this loan.");
+        }
+
+        // create a new fine
         Fine newFine = new Fine(userId, loan.getLoanId(), new Date(), loan.getAmountDue());
         try {
             Fine.save(newFine);
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new UserVisibleException("Database error");
         }
-        return true;
+        return newFine;
     }
 
     /**
@@ -143,10 +151,31 @@ public class Patron extends User {
      * 
      * @param patron
      * @throws SQLException
+     * @throws UserVisibleException
      */
-    public static void save(Patron patron) throws SQLException {
+    public static void save(Patron patron) throws SQLException, UserVisibleException {
+
+        if (patron.getEmail().isEmpty()) {
+            throw new UserVisibleException("Email cannot be empty");
+        }
+        if (patron.getFirstName().isEmpty()) {
+            throw new UserVisibleException("First name cannot be empty");
+        }
+        if (patron.getLastName().isEmpty()) {
+            throw new UserVisibleException("Last name cannot be empty");
+        }
+        if (patron.getPhoneNo().isEmpty()) {
+            throw new UserVisibleException("Phone number cannot be empty");
+        }
+        if (patron.getAddress().isEmpty()) {
+            throw new UserVisibleException("Address cannot be empty");
+        }
+        if (patron.getPassword().isEmpty()) {
+            throw new UserVisibleException("Password cannot be empty");
+        }
+
         if (!User.validateEmail(patron.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new UserVisibleException("Email already exists");
         }
 
         final Connection conn = DatabaseConnection.getConnection();
@@ -347,5 +376,20 @@ public class Patron extends User {
                 ", registration_date='" + registrationDate + '\'' +
                 ", credit_card_no='" + creditCardNo + '\'' +
                 '}';
+    }
+
+    public double getTotalFinePaid() throws SQLException {
+        final Connection conn = DatabaseConnection.getConnection();
+        String query = "SELECT SUM(amount) as total FROM fine where patron_id = ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getDouble("total");
+            }
+        }
+        return 0;
     }
 }
