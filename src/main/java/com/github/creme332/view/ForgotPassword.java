@@ -67,6 +67,7 @@ public class ForgotPassword extends JPanel {
         gbc.gridy = 2;
         gbc.gridwidth = 2;
         newPasswordField = new JPasswordField(10);  // Adjust the field size
+        newPasswordField.putClientProperty("FlatLaf.style", "showRevealButton: true");
         mainPanel.add(newPasswordField, gbc);
 
         // Confirm New Password field
@@ -80,6 +81,7 @@ public class ForgotPassword extends JPanel {
         gbc.gridy = 3;
         gbc.gridwidth = 2;
         confirmNewPasswordField = new JPasswordField(10);  // Adjust the field size
+        confirmNewPasswordField.putClientProperty("FlatLaf.style", "showRevealButton: true");
         mainPanel.add(confirmNewPasswordField, gbc);
 
         // Submit button

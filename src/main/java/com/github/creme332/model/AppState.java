@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import com.github.creme332.controller.Screen;
+import com.github.creme332.utils.exception.UserVisibleException;
 
 public class AppState {
     private PropertyChangeSupport support;
@@ -82,7 +83,7 @@ public class AppState {
                     Patron.save(defaultPatron);
                     user = Patron.findByEmail(defaultPatron.getEmail());
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | UserVisibleException e) {
                 e.printStackTrace();
                 System.exit(1);
             }
@@ -111,15 +112,15 @@ public class AppState {
                     "New screen should not be null. If you clicked on back button, ensure that you have previously visited the previous page.");
             return;
         }
-        System.out.println("Switching screens: " + currentScreen.name() + "-> " + newScreen.name());
-        support.firePropertyChange("currentScreen", currentScreen, newScreen);
         previousScreen = currentScreen;
         currentScreen = newScreen;
+        support.firePropertyChange("currentScreen", previousScreen, newScreen);
     }
 
     public void setLoggedInUser(User newUser) {
-        support.firePropertyChange("loggedInUser", loggedInUser, newUser);
+        User oldUser = loggedInUser;
         loggedInUser = newUser;
+        support.firePropertyChange("loggedInUser", oldUser, newUser);
     }
 
     public User getLoggedInUser() {

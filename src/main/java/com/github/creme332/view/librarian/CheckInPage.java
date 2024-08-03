@@ -4,10 +4,14 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import java.awt.*;
+
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.util.EventObject;
 
 public class CheckInPage extends JPanel {
@@ -52,27 +56,11 @@ public class CheckInPage extends JPanel {
         JPanel searchContainer = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         barcodeField = new JTextField(20);
+        barcodeField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+                new FlatSearchIcon());
+        barcodeField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter barcode");
+
         searchContainer.add(barcodeField);
-
-        barcodeField.setForeground(Color.GRAY);
-        barcodeField.setText("Enter barcode");
-        barcodeField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (barcodeField.getText().equals("Enter barcode")) {
-                    barcodeField.setText("");
-                    barcodeField.setForeground(Color.WHITE);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (barcodeField.getText().isEmpty()) {
-                    barcodeField.setText("Enter barcode");
-                    barcodeField.setForeground(Color.GRAY);
-                }
-            }
-        });
         topPanel.add(searchContainer, BorderLayout.CENTER);
 
         searchButton = new JButton("Search");
@@ -85,8 +73,12 @@ public class CheckInPage extends JPanel {
         return searchButton;
     }
 
-    public JTextField getBarcodeField() {
-        return barcodeField;
+    public String getBarcode() {
+        return barcodeField.getText().trim();
+    }
+
+    public void clearBarcodeField() {
+        barcodeField.setText("");
     }
 
     public JTable getTable() {
@@ -106,8 +98,7 @@ public class CheckInPage extends JPanel {
     }
 
     /**
-     * Class responsible for rendering all cells in Action column and setting action
-     * listeners to each button in the Action column.
+     * Class responsible for rendering all cells in Action column.
      */
     public class ActionCellRenderer extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
         private final JButton renewButton;
@@ -126,6 +117,8 @@ public class CheckInPage extends JPanel {
         }
 
         public void setRenewButtonActionListener(ActionListener listener) {
+            fireEditingStopped();
+
             for (ActionListener al : renewButton.getActionListeners()) {
                 renewButton.removeActionListener(al);
             }
@@ -133,6 +126,8 @@ public class CheckInPage extends JPanel {
         }
 
         public void setCheckInButtonActionListener(ActionListener listener) {
+            fireEditingStopped();
+
             for (ActionListener al : checkInButton.getActionListeners()) {
                 checkInButton.removeActionListener(al);
             }

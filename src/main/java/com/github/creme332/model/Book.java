@@ -64,6 +64,10 @@ public class Book extends Material {
         return authors;
     }
 
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
     public void addAuthor(Author author) {
         if (authors.add(author)) {
             author.getBooks().add(this);
@@ -110,7 +114,7 @@ public class Book extends Material {
 
             if (affectedRows == 0) {
                 connection.rollback();
-                throw new SQLException("Creating material failed, no rows affected.");
+                throw new SQLException("Creating book failed, no rows affected.");
             }
 
             try (ResultSet generatedKeys = createMaterial.getGeneratedKeys()) {
@@ -247,7 +251,7 @@ public class Book extends Material {
         }
     }
 
-    public static void delete(int materialId) throws SQLException {
+    public static void delete(Book book) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
 
         // start a transaction
@@ -255,7 +259,7 @@ public class Book extends Material {
 
         String bookQuery = "DELETE FROM book WHERE material_id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(bookQuery)) {
-            pstmt.setInt(1, materialId);
+            pstmt.setInt(1, book.getMaterialId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             connection.rollback();
@@ -264,7 +268,7 @@ public class Book extends Material {
 
         String materialQuery = "DELETE FROM material WHERE material_id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(materialQuery)) {
-            pstmt.setInt(1, materialId);
+            pstmt.setInt(1, book.getMaterialId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             connection.rollback();
@@ -272,6 +276,36 @@ public class Book extends Material {
         }
 
         connection.commit();
+    }
+
+    /**
+     * Retrieves a list of authors for a given book.
+     *
+     * @param book The material ID of the book.
+     * @return A list of authors for the book.
+     * @throws SQLException
+     */
+    public static Set<Author> findAuthors(Book book) throws SQLException {
+        Connection connection = DatabaseConnection.getConnection();
+        Set<Author> authors = new HashSet<>();
+        String query = """
+                SELECT author.* FROM author
+                INNER JOIN book_author ON author.author_id = book_author.author_id
+                WHERE book_author.material_id = ?
+                """;
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, book.getMaterialId());
+            ResultSet resultSet = pstmt.executeQuery();
+            while (resultSet.next()) {
+                authors.add(new Author(
+                        resultSet.getInt("author_id"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("email")));
+            }
+        }
+        return authors;
     }
 
     @Override

@@ -15,7 +15,6 @@ public class Dashboard extends JPanel {
     private JButton checkOutButton;
     private JButton patronsButton;
     private JButton overduesButton;
-    private JButton renewButton;
     private JButton librariansButton;
     private JButton acquisitionsButton;
     private JButton reportsButton;
@@ -49,7 +48,6 @@ public class Dashboard extends JPanel {
         checkOutButton = new JButton("Check out");
         patronsButton = new JButton("Patrons");
         overduesButton = new JButton("Overdues");
-        renewButton = new JButton("Renew");
         librariansButton = new JButton("Librarians");
         acquisitionsButton = new JButton("Acquisitions");
         reportsButton = new JButton("Reports");
@@ -60,7 +58,6 @@ public class Dashboard extends JPanel {
         mainPanel.add(checkOutButton);
         mainPanel.add(patronsButton);
         mainPanel.add(overduesButton);
-        mainPanel.add(renewButton);
         mainPanel.add(librariansButton);
         mainPanel.add(acquisitionsButton);
         mainPanel.add(new JLabel()); // Empty cell to center the last button
@@ -107,10 +104,6 @@ public class Dashboard extends JPanel {
 
     public JButton getOverduesButton() {
         return overduesButton;
-    }
-
-    public JButton getRenewButton() {
-        return renewButton;
     }
 
     public JButton getLibrariansButton() {
