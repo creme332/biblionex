@@ -1,24 +1,54 @@
 package com.github.creme332.view.patron;
 
 import com.github.creme332.utils.IconLoader;
+import com.github.creme332.utils.StringUtil;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Catalog extends JPanel {
     private static final Dimension ITEM_DIMENSION = new Dimension(200, 200);
     private JScrollPane scrollPane;
     private JPanel itemContainer;
+    private JTextField searchField;
+    private JButton searchButton;
+    private List<JPanel> itemPanels;
     private int itemCounter = 0;
 
     public Catalog() {
         setLayout(new BorderLayout());
+
+        // Initialize the item container
         itemContainer = new JPanel(new GridBagLayout());
         itemContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Initialize the search field
+        searchField = new JTextField("Search by Material Title");
+        searchField.setPreferredSize(new Dimension(400, 30));
+        searchField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
+        searchField.setForeground(Color.GRAY);
+
+        // Initialize the search button
+        searchButton = new JButton("Search");
+
+        // Create a panel for the search field and button
+        JPanel searchPanel = new JPanel(new BorderLayout());
+        searchPanel.add(searchField, BorderLayout.CENTER);
+        searchPanel.add(searchButton, BorderLayout.EAST);
+
+        // Add search panel to the top of the panel
+        add(searchPanel, BorderLayout.NORTH);
+
+        // Initialize scroll pane
         scrollPane = createScrollableCatalog();
         add(scrollPane, BorderLayout.CENTER);
+
+        // Initialize the list of item panels
+        itemPanels = new ArrayList<>();
     }
 
     public void addCatalogItem(String title, String iconPath, MouseAdapter mouseAdapter) {
@@ -41,7 +71,7 @@ public class Catalog extends JPanel {
             // Create title container
             JPanel titleContainer = new JPanel(new BorderLayout());
 
-            // create a title label with word wrapping
+            // Create a title label with word wrapping
             JLabel titleLabel = new JLabel("<html>" + title + "</html>");
             titleLabel.putClientProperty("FlatLaf.style", "font: $semibold.font");
 
@@ -59,6 +89,10 @@ public class Catalog extends JPanel {
             gbc.gridy = itemCounter / 4;
             gbc.insets = new Insets(5, 5, 5, 5);
             itemContainer.add(itemPanel, gbc);
+
+            // Add the panel to the list of item panels
+            itemPanels.add(itemPanel);
+
             itemCounter++;
             itemContainer.revalidate();
             itemContainer.repaint();
@@ -76,5 +110,39 @@ public class Catalog extends JPanel {
 
     public JScrollPane getScrollPane() {
         return scrollPane;
+    }
+
+    public JTextField getSearchField() {
+        return searchField;
+    }
+
+    public JButton getSearchButton() {
+        return searchButton;
+    }
+
+    // Expose the method to allow filtering from the controller
+    public void filterItems(String searchText) {
+        itemContainer.removeAll();
+        itemCounter = 0;
+
+        // Filter the items and update the catalog display
+        for (JPanel itemPanel : itemPanels) {
+            // Get the title label from the itemPanel
+            JPanel titleContainer = (JPanel) itemPanel.getComponent(1);
+            JLabel titleLabel = (JLabel) titleContainer.getComponent(0);
+            String title = titleLabel.getText().replaceAll("<html>", "").replaceAll("</html>", "");
+
+            if (searchText.isEmpty() || StringUtil.isSimilar(title.toLowerCase(), searchText.toLowerCase())) {
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = itemCounter % 4;
+                gbc.gridy = itemCounter / 4;
+                gbc.insets = new Insets(5, 5, 5, 5);
+                itemContainer.add(itemPanel, gbc);
+                itemCounter++;
+            }
+        }
+
+        itemContainer.revalidate();
+        itemContainer.repaint();
     }
 }
