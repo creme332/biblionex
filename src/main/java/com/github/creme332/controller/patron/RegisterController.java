@@ -1,14 +1,15 @@
 package com.github.creme332.controller.patron;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
 import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Patron;
+import com.github.creme332.utils.exception.UserVisibleException;
 import com.github.creme332.view.patron.Registration;
 
 public class RegisterController {
@@ -20,29 +21,12 @@ public class RegisterController {
         this.app = app;
 
         // Add action listener to register button
-        registrationPage.getRegisterButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                registerPatron();
-            }
-        });
+        registrationPage.getRegisterButton().addActionListener(e -> registerPatron());
 
         // Add action listener to back button
         registrationPage.getBackButton().addActionListener(e -> app.setCurrentScreen(app.getPreviousScreen()));
 
-        // Add key listener for Enter key press in form fields
-        addEnterKeyListener(registrationPage.getEmailField());
-        addEnterKeyListener(registrationPage.getPasswordField());
-        addEnterKeyListener(registrationPage.getConfirmPasswordField());
-        addEnterKeyListener(registrationPage.getFirstNameField());
-        addEnterKeyListener(registrationPage.getLastNameField());
-        addEnterKeyListener(registrationPage.getPhoneField());
-        addEnterKeyListener(registrationPage.getAddressField());
-        addEnterKeyListener(registrationPage.getCreditCardField());
-    }
-
-    private void addEnterKeyListener(javax.swing.JTextField textField) {
-        textField.addKeyListener(new KeyListener() {
+        registrationPage.initEnterKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
                 // Not used, but required by KeyListener interface
@@ -63,38 +47,29 @@ public class RegisterController {
     }
 
     private void registerPatron() {
-        String email = registrationPage.getEmail();
         char[] password = registrationPage.getPassword();
         char[] confirmPassword = registrationPage.getConfirmPassword();
-        String firstName = registrationPage.getFirstName();
-        String lastName = registrationPage.getLastName();
-        String phone = registrationPage.getPhone();
-        String address = registrationPage.getAddress();
-        String creditCardNo = registrationPage.getCreditCardNo();
 
         if (!new String(password).equals(new String(confirmPassword))) {
-            registrationPage.setErrorMessage("Passwords do not match!");
+            JOptionPane.showMessageDialog(registrationPage, "Passwords do not match!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (email.isEmpty() || password.length == 0 || firstName.isEmpty() || lastName.isEmpty()
-                || phone.isEmpty() || address.isEmpty()) {
-            registrationPage.setErrorMessage("All fields must be filled out!");
-            return;
-        }
-
-        Patron patron = new Patron(email, new String(password), address, firstName, lastName, phone,
-                creditCardNo, null);
+        Patron patron = registrationPage.getPatronDetails();
         try {
             Patron.save(patron);
-            registrationPage.setSuccessMessage("Registration successful. Please log in.");
+            JOptionPane.showMessageDialog(registrationPage, "Registration successful. Please log in.",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+            registrationPage.clearForm();
             app.setCurrentScreen(Screen.LOGIN_SCREEN);
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(registrationPage, "Unknown error occurred.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-            return;
+        } catch (UserVisibleException e) {
+            JOptionPane.showMessageDialog(registrationPage, e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        registrationPage.setSuccessMessage("Registration successful. Please log in.");
-        app.setCurrentScreen(Screen.LOGIN_SCREEN);
     }
 }

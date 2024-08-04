@@ -31,6 +31,8 @@ public class MaterialForm extends JPanel {
     private JComboBox<MaterialTypeComboBox> materialTypeDropdown;
     private JButton submitButton = new JButton("Submit");
     private JButton backButton;
+    private JButton createPublisherButton;
+    private JButton createAuthorButton;
 
     // Common form components
     private JComboBox<PublisherComboBoxItem> publisherComboBox;
@@ -194,6 +196,13 @@ public class MaterialForm extends JPanel {
         centerPanel.add(materialTypeDropdown);
 
         headerPanel.add(centerPanel, BorderLayout.CENTER);
+
+        JPanel rightPanel = new JPanel();
+        createPublisherButton = new JButton("Create Publisher");
+        createAuthorButton = new JButton("Create Author");
+        rightPanel.add(createPublisherButton);
+        rightPanel.add(createAuthorButton);
+        headerPanel.add(rightPanel, BorderLayout.EAST);
 
         return headerPanel;
     }
@@ -547,6 +556,14 @@ public class MaterialForm extends JPanel {
 
     public void handleGoBack(ActionListener listener) {
         backButton.addActionListener(listener);
+    }
+
+    public void handleAuthor(ActionListener listener) {
+        createAuthorButton.addActionListener(listener);
+    }
+
+    public void handlePublisher(ActionListener listener) {
+        createPublisherButton.addActionListener(listener);
     }
 
     public void handleFormSubmission(ActionListener listener) {

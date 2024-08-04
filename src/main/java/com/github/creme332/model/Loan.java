@@ -94,8 +94,20 @@ public class Loan {
         this.renewalCount = 0;
     }
 
+    public LoanStatus getLoanStatus() {
+        if (returnDate != null) {
+            return LoanStatus.RETURNED;
+        }
+
+        if (dueDate.before(new Date())) {
+            return LoanStatus.OVERDUE;
+        }
+
+        return LoanStatus.BORROWED;
+    }
+
     public boolean isOverdue() {
-        return dueDate.after(new Date());
+        return getLoanStatus() == LoanStatus.OVERDUE;
     }
 
     public float getAmountDue() {
@@ -136,6 +148,10 @@ public class Loan {
 
     public int getRenewalCount() {
         return renewalCount;
+    }
+
+    public void setLoanId(int id) {
+        loanId = id;
     }
 
     public void setReturnDate(Date returnDate) {
@@ -208,30 +224,6 @@ public class Loan {
         return loans;
     }
 
-    public static void save(Loan loan) throws SQLException {
-        final Connection conn = DatabaseConnection.getConnection();
-        String query = """
-                INSERT INTO loan (patron_id, barcode, checkout_librarian_id, checkin_librarian_id,
-                                 issue_date, return_date, due_date, renewal_count)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                 """;
-        try (PreparedStatement createLoan = conn.prepareStatement(query)) {
-            createLoan.setInt(1, loan.getPatronId());
-            createLoan.setInt(2, loan.getBarcode());
-            createLoan.setInt(3, loan.getCheckoutLibrarianId());
-            createLoan.setInt(4, loan.getCheckinLibrarianId());
-            createLoan.setDate(5, new java.sql.Date(loan.getIssueDate().getTime()));
-            if (loan.getReturnDate() != null) {
-                createLoan.setDate(6, new java.sql.Date(loan.getReturnDate().getTime()));
-            } else {
-                createLoan.setNull(6, java.sql.Types.DATE);
-            }
-            createLoan.setDate(7, new java.sql.Date(loan.getDueDate().getTime()));
-            createLoan.setInt(8, loan.getRenewalCount());
-            createLoan.executeUpdate();
-        }
-    }
-
     public static void delete(int loanId) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "DELETE FROM loan WHERE loan_id = ?";
@@ -239,6 +231,29 @@ public class Loan {
             preparedStatement.setInt(1, loanId);
             preparedStatement.executeUpdate();
         }
+    }
+
+    /**
+     * Returns the total fine that has been paid.
+     */
+    public float getFinesPaid() throws SQLException {
+        final Connection conn = DatabaseConnection.getConnection();
+        float finesPaid = 0;
+
+        String query = """
+                SELECT SUM(amount) as total from fine
+                WHERE loan_id = ?
+                """;
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, loanId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                finesPaid = resultSet.getFloat("total");
+            }
+        }
+        return finesPaid;
     }
 
     /**

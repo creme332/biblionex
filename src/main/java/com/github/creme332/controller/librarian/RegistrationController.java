@@ -5,7 +5,6 @@ import java.awt.event.KeyListener;
 import java.sql.SQLException;
 
 import com.github.creme332.model.AppState;
-import com.github.creme332.controller.Screen;
 import com.github.creme332.model.Librarian;
 import com.github.creme332.view.librarian.RegistrationForm;
 
@@ -76,18 +75,12 @@ public class RegistrationController {
 
         Librarian librarian = new Librarian(email, new String(password), address, firstName, lastName, phone,
                 "Librarian");
+
+                // TODO: Refactor
         try {
             Librarian.save(librarian);
         } catch (SQLException e) {
             e.printStackTrace();
-            return;
-        }
-
-        try {
-            registrationForm.setSuccessMessage("Registration successful. Please log in.");
-            app.setCurrentScreen(Screen.LOGIN_SCREEN);
-        } catch (IllegalArgumentException e) {
-            registrationForm.setErrorMessage(e.getMessage());
         }
     }
 }

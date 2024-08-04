@@ -38,4 +38,13 @@ public class MaterialLocation {
     public void setSectionNo(int sectionNo) {
         this.sectionNo = sectionNo;
     }
+
+    @Override
+    public String toString() {
+        return "MaterialLocation{" +
+                "shelfNo=" + shelfNo +
+                ", aisleNo=" + aisleNo +
+                ", sectionNo=" + sectionNo +
+                '}';
+    }
 }
