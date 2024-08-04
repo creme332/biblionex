@@ -32,17 +32,21 @@ public class DashboardController implements PropertyChangeListener {
 
         dashboard.getPatronsButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_PATRON_LIST_SCREEN));
 
+        dashboard.getOverduesButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_OVERDUE_LOANS_SCREEN));
+
         dashboard.getOverduesButton().addActionListener(e -> {
         });
 
         dashboard.getLibrariansButton()
                 .addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN));
+                
 
         dashboard.getAcquisitionsButton().addActionListener(e -> {
         });
 
         dashboard.getReportsButton().addActionListener(e -> {
         });
+        
     }
 
     @Override

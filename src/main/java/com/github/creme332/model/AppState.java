@@ -29,7 +29,7 @@ public class AppState {
      * Determines whether to automatically login as librarian or patron or none.
      * This is meant to be used for debugging only.
      */
-    private UserType autoLogin = null;
+    private UserType autoLogin = UserType.LIBRARIAN;
 
     public AppState() {
         support = new PropertyChangeSupport(this);

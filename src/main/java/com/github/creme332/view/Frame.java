@@ -5,12 +5,12 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import javax.swing.*;
-
 import com.github.creme332.controller.Screen;
 import com.github.creme332.model.UserType;
 import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.librarian.MaterialForm;
+import com.github.creme332.view.librarian.OverdueLoansPage;
 import com.github.creme332.view.librarian.RegistrationForm;
 import com.github.creme332.view.librarian.UserListPage;
 import com.github.creme332.view.librarian.VendorForm;
@@ -67,7 +67,7 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.LOGIN_SCREEN, new Login());
         screenMapper.put(Screen.FORGET_PASSWORD, new ForgotPassword());
 
-        // add screens visible to only patron
+        // add screens visible to only patrons
         screenMapper.put(Screen.PATRON_REGISTRATION_SCREEN, new Registration());
         screenMapper.put(Screen.PATRON_DASHBOARD_SCREEN, new com.github.creme332.view.patron.Dashboard());
         screenMapper.put(Screen.PATRON_LOAN_SCREEN, new com.github.creme332.view.patron.LoanPage());
@@ -84,6 +84,7 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.LIBRARIAN_VENDOR_SCREEN, new VendorForm());
         screenMapper.put(Screen.LIBRARIAN_AUTHOR_SCREEN, new AuthorForm());
         screenMapper.put(Screen.LIBRARIAN_CHECKOUT_SCREEN, new CheckOutPage());
+        screenMapper.put(Screen.LIBRARIAN_OVERDUE_LOANS_SCREEN, new OverdueLoansPage()); // Add OverdueLoansPage
 
         // add screens to cardPanels
         for (Map.Entry<Screen, JPanel> entry : screenMapper.entrySet()) {
