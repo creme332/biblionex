@@ -22,6 +22,7 @@ import com.github.creme332.view.Login;
 public class LoginController {
     private Login loginPage;
     private AppState app;
+    int incorrectAttempts = 0;
 
     public LoginController(AppState app, Login loginPage) {
         this.loginPage = loginPage;
@@ -53,17 +54,25 @@ public class LoginController {
             // if email invalid, show error
             if (user == null) {
                 loginPage.showError();
+                incorrectAttempts++;
+                if (incorrectAttempts == 3)
+                    System.exit(0);
                 return;
             }
 
             // validate password
             if (!user.authenticate(email, loginPage.getPassword())) {
                 loginPage.showError();
+                incorrectAttempts++;
+                if (incorrectAttempts == 3)
+                    System.exit(0);
                 return;
             }
 
             // erase entered data on form
             loginPage.clearForm();
+
+            incorrectAttempts = 0;
 
             if (user.getUserType() == UserType.PATRON) {
                 try {
