@@ -24,8 +24,8 @@ public class DashboardController implements PropertyChangeListener {
 
         dashboard.getCheckInButton().addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_CHECKIN_SCREEN));
 
-        dashboard.getMaterialsButton().addActionListener(e -> {
-        });
+        dashboard.getMaterialsButton()
+                .addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_MATERIAL_LIST_SCREEN));
 
         dashboard.getCatalogingButton()
                 .addActionListener(e -> app.setCurrentScreen(Screen.LIBRARIAN_CATALOGING_SCREEN));

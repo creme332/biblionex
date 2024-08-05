@@ -121,7 +121,7 @@ public class Video extends Material {
      * @return the video, or null if not found
      * @throws SQLException if a database access error occurs
      */
-    public static Video findByID(Video video) throws SQLException {
+    public static Video findByID(int id) throws SQLException {
         Connection connection = DatabaseConnection.getConnection();
         String query = """
                 SELECT m.*, v.language, v.duration, v.rating, v.format
@@ -131,7 +131,7 @@ public class Video extends Material {
                 """;
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, video.getMaterialId());
+            statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new Video(

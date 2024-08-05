@@ -12,6 +12,7 @@ import com.github.creme332.view.librarian.PublisherForm;
 import com.github.creme332.view.librarian.RegistrationForm;
 import com.github.creme332.view.librarian.UserListPage;
 import com.github.creme332.view.librarian.VendorForm;
+import com.github.creme332.view.librarian.MaterialList;
 
 /**
  * Instantiates all controllers for pages accessible by librarian only after log
@@ -49,5 +50,8 @@ public class Controller {
 
         // controller for material form
         new MaterialFormController(app, (MaterialForm) frame.getPage(Screen.LIBRARIAN_CATALOGING_SCREEN));
+
+        // controller for material list
+        new MaterialListController(app, (MaterialList) frame.getPage(Screen.LIBRARIAN_MATERIAL_LIST_SCREEN));
     }
 }

@@ -108,8 +108,9 @@ public class Catalog extends JPanel {
      * Displays a modal with more information about a material.
      * 
      * @param material
+     * @param parentComponent
      */
-    public void showMaterialDialog(Material material) {
+    public static void showMaterialDialog(Material material, Component parentComponent) {
         String details = "";
         if (material instanceof Book) {
             Book book = (Book) material;
@@ -160,7 +161,17 @@ public class Catalog extends JPanel {
         JScrollPane scrollPane = new JScrollPane(textPane);
         scrollPane.setPreferredSize(new Dimension(400, 300));
 
-        JOptionPane.showMessageDialog(this, scrollPane, material.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(parentComponent, scrollPane, material.getTitle(),
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Displays a modal with more information about a material.
+     * 
+     * @param material
+     */
+    public void showMaterialDialog(Material material) {
+        showMaterialDialog(material, this);
     }
 
     private JScrollPane createScrollableCatalog() {
