@@ -31,9 +31,9 @@ public class VendorController {
     }
 
     private void saveVendor() {
-        String email = vendorForm.getEmailField().getText();
-        String name = vendorForm.getNameField().getText();
-        String contactPerson = vendorForm.getContactPersonField().getText();
+        String email = vendorForm.getEmail();
+        String name = vendorForm.getVendorName();
+        String contactPerson = vendorForm.getContactPerson();
 
         Vendor vendor = new Vendor(0, email, name, contactPerson);
         try {

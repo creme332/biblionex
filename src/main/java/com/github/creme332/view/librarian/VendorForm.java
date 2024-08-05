@@ -80,16 +80,16 @@ public class VendorForm extends JPanel {
         contactPersonField.setText("");
     }
 
-    public JTextField getEmailField() {
-        return emailField;
+    public String getEmail() {
+        return emailField.getText().trim();
     }
 
-    public JTextField getNameField() {
-        return nameField;
+    public String getVendorName() {
+        return nameField.getText().trim();
     }
 
-    public JTextField getContactPersonField() {
-        return contactPersonField;
+    public String getContactPerson() {
+        return contactPersonField.getText().trim();
     }
 
     public JButton getSaveButton() {

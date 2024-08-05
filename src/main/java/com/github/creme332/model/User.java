@@ -76,14 +76,14 @@ public abstract class User {
      * @param newPassword New password in plain text (original version)
      * @throws SQLException
      */
-    public static void changePassword(User user, char[] newPassword) throws SQLException {
+    public void changePassword(char[] newPassword) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query;
 
         com.github.creme332.utils.PasswordAuthentication passwordAuthentication = new com.github.creme332.utils.PasswordAuthentication();
         String hashedPassword = passwordAuthentication.hash(newPassword);
 
-        if (user.getUserType() == UserType.PATRON) {
+        if (getUserType() == UserType.PATRON) {
             query = "UPDATE patron SET password = ? WHERE patron_id = ?";
         } else {
             query = "UPDATE librarian SET password = ? WHERE librarian_id = ?";
@@ -91,10 +91,10 @@ public abstract class User {
 
         try (PreparedStatement updatePassword = conn.prepareStatement(query)) {
             updatePassword.setString(1, hashedPassword);
-            updatePassword.setInt(2, user.getUserId());
+            updatePassword.setInt(2, getUserId());
             int rowsAffected = updatePassword.executeUpdate();
             if (rowsAffected == 0) {
-                throw new SQLException(String.format("User record with ID %d could not be found.", user.getUserId()));
+                throw new SQLException(String.format("User record with ID %d could not be found.", getUserId()));
             }
         }
 
