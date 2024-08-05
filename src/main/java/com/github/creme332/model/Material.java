@@ -1,13 +1,8 @@
 package com.github.creme332.model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.github.creme332.utils.DatabaseConnection;
 
 /**
  * Stores information about a material (video, book, journal).
@@ -130,6 +125,27 @@ public abstract class Material {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    /**
+     * 
+     * @return A list of all materials stored in database
+     * @throws SQLException
+     */
+    public static List<Material> findAllMaterials() throws SQLException {
+        List<Material> allMaterials = new ArrayList<>();
+
+        for (Material material : Book.findAll()) {
+            allMaterials.add(material);
+        }
+        for (Material material : Journal.findAll()) {
+            allMaterials.add(material);
+        }
+        for (Material material : Video.findAll()) {
+            allMaterials.add(material);
+        }
+
+        return allMaterials;
     }
 
     @Override
