@@ -6,6 +6,7 @@ import com.github.creme332.model.Patron;
 import com.github.creme332.utils.StringUtil;
 import com.github.creme332.view.librarian.UserListPage;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -87,11 +88,16 @@ public class PatronListPageController implements PropertyChangeListener {
 
             if (selectedRow != -1) {
                 int patronId = (int) table.getValueAt(selectedRow, 0);
-                try {
-                    Patron.delete(patronId);
-                    listPage.getTableModel().removeRow(selectedRow);
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
+                int response = JOptionPane.showConfirmDialog(null,
+                        String.format("Are you sure you want to delete patron with ID %d?", patronId),
+                        "Confirm Delete", JOptionPane.YES_NO_OPTION);
+                if (response == JOptionPane.YES_OPTION) {
+                    try {
+                        Patron.delete(patronId);
+                        listPage.getTableModel().removeRow(selectedRow);
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });

@@ -9,6 +9,8 @@ import com.github.creme332.view.patron.Sidebar;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.JOptionPane;
+
 import com.github.creme332.controller.*;
 
 public class SidebarController implements PropertyChangeListener {
@@ -41,9 +43,14 @@ public class SidebarController implements PropertyChangeListener {
             sidebar.highlightButton(sidebar.getAccountButton());
         });
 
-        this.sidebar.getLogOutButton().addActionListener(e -> {
+        this.sidebar.getLogOutButton().addActionListener(e -> handleLogOut());
+    }
+
+    public void handleLogOut() {
+        int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to log out?", "Confirm Logout",
+                JOptionPane.YES_NO_OPTION);
+        if (response == JOptionPane.YES_OPTION)
             app.logOut();
-        });
     }
 
     @Override
