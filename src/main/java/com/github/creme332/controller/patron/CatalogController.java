@@ -11,30 +11,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.SwingWorker;
-
 public class CatalogController {
 
     public CatalogController(AppState app, Catalog catalog) {
 
-        SwingWorker<List<Material>, Void> worker = new SwingWorker<>() {
+        Thread th = new Thread() {
             @Override
-            protected List<Material> doInBackground() throws Exception {
-                return fetchAllMaterials();
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    List<Material> allMaterials = get();
-                    catalog.displayMaterials(allMaterials);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.exit(0);
-                }
+            public void run() {
+                List<Material> allMaterials = fetchAllMaterials();
+                catalog.displayMaterials(allMaterials);
             }
         };
-        worker.execute();
+        th.start();
     }
 
     /**
