@@ -104,6 +104,7 @@ public class MaterialList extends JPanel {
             viewButton = new JButton("View");
             deleteButton = new JButton("Delete");
             deleteButton.setBackground(Color.RED);
+            deleteButton.setEnabled(false);
 
             panel.add(viewButton, BorderLayout.WEST);
             panel.add(deleteButton, BorderLayout.EAST);
