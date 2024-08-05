@@ -4,6 +4,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.EventObject;
@@ -12,7 +16,6 @@ public class MaterialList extends JPanel {
     private JButton backButton;
     private JButton newMaterialButton;
     private JTextField searchField;
-    private JButton searchButton;
     private JTable materialTable;
     private DefaultTableModel tableModel;
     private ActionCellRenderer actionCellRenderer;
@@ -21,7 +24,8 @@ public class MaterialList extends JPanel {
         setLayout(new BorderLayout());
         add(createTopPanel(), BorderLayout.NORTH);
 
-        String[] columnNames = {"Material ID", "Title", "Publisher ID", "Description", "Age Restriction", "Type", "Action"};
+        String[] columnNames = { "Material ID", "Title", "Publisher ID", "Description", "Age Restriction", "Type",
+                "Action" };
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -49,15 +53,13 @@ public class MaterialList extends JPanel {
         // Add search field and search button to topPanel
         JPanel searchContainer = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchField = new JTextField(20);
+        searchField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+                new FlatSearchIcon());
         searchContainer.add(searchField);
-        searchButton = new JButton("Search");
-        searchContainer.add(searchButton);
         topPanel.add(searchContainer, BorderLayout.CENTER);
 
         // Add new material button to topPanel
         newMaterialButton = new JButton("+ New Material");
-        newMaterialButton.setBackground(Color.CYAN);
-        newMaterialButton.setForeground(Color.BLACK);
         topPanel.add(newMaterialButton, BorderLayout.EAST);
 
         return topPanel;
@@ -69,10 +71,6 @@ public class MaterialList extends JPanel {
 
     public JTextField getSearchField() {
         return searchField;
-    }
-
-    public JButton getSearchButton() {
-        return searchButton;
     }
 
     public JButton getNewMaterialButton() {
@@ -104,9 +102,8 @@ public class MaterialList extends JPanel {
             panel.setOpaque(false);
 
             viewButton = new JButton("View");
-            viewButton.setBackground(Color.GREEN);  // Set the view button color to green
             deleteButton = new JButton("Delete");
-            deleteButton.setBackground(Color.RED);  // Set the delete button color to red
+            deleteButton.setBackground(Color.RED);
 
             panel.add(viewButton, BorderLayout.WEST);
             panel.add(deleteButton, BorderLayout.EAST);
@@ -131,7 +128,8 @@ public class MaterialList extends JPanel {
         }
 
         @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+                int column) {
             return panel;
         }
 
@@ -151,7 +149,8 @@ public class MaterialList extends JPanel {
         }
 
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
             return panel;
         }
     }
