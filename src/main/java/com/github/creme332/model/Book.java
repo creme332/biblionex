@@ -138,10 +138,26 @@ public class Book extends Material {
                 throw e;
             }
 
+            // perform insertion in book_author table for each author
+            String bookAuthorQuery = "INSERT INTO book_author (material_id, author_id) VALUES (?, ?)";
+            try (PreparedStatement createBookAuthor = connection.prepareStatement(bookAuthorQuery)) {
+                for (Author author : book.getAuthors()) {
+                    createBookAuthor.setInt(1, book.getMaterialId());
+                    createBookAuthor.setInt(2, author.getAuthorId());
+                    createBookAuthor.addBatch();
+                }
+                createBookAuthor.executeBatch();
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
+
             connection.commit();
         } catch (SQLException e) {
             connection.rollback();
             throw e;
+        } finally {
+            connection.close();
         }
 
     }

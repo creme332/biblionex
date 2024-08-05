@@ -17,8 +17,6 @@ import java.util.List;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -31,6 +29,7 @@ public class MaterialForm extends JPanel {
     private JComboBox<MaterialTypeComboBox> materialTypeDropdown;
     private JButton submitButton = new JButton("Submit");
     private JButton backButton;
+    private JButton expandButton;
     private JButton createPublisherButton;
     private JButton createAuthorButton;
 
@@ -45,7 +44,7 @@ public class MaterialForm extends JPanel {
     // Book specific components
     private JSpinner pageCountSpinner;
     private JTextField isbnField;
-    private JComboBox<AuthorComboBoxItem> authorComboBox; // TODO: Use JList
+    private JList<Author> authorList;
 
     // Journal specific components
     private JTextField issnField;
@@ -157,23 +156,6 @@ public class MaterialForm extends JPanel {
         }
     }
 
-    private class AuthorComboBoxItem {
-        private Author data;
-
-        public AuthorComboBoxItem(Author author) {
-            this.data = author;
-        }
-
-        public Author getAuthor() {
-            return data;
-        }
-
-        @Override
-        public String toString() {
-            return data.getFirstName() + " " + data.getLastName();
-        }
-    }
-
     /**
      * 
      * @return Header panel with back button and material selection dropdown
@@ -269,10 +251,6 @@ public class MaterialForm extends JPanel {
         return panel;
     }
 
-    /**
-     * 
-     * @return Section of formPanel that is specific to books.
-     */
     private JPanel createBookPanel() {
         JPanel bookPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -294,12 +272,62 @@ public class MaterialForm extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 6;
-        bookPanel.add(new JLabel("Author"), gbc);
+        bookPanel.add(new JLabel("Authors"), gbc);
         gbc.gridx = 1;
-        authorComboBox = new JComboBox<>();
-        bookPanel.add(authorComboBox, gbc);
+        gbc.gridwidth = 2;
+
+        DefaultListModel<Author> authorListModel = new DefaultListModel<>();
+        authorList = new JList<>(authorListModel);
+        authorList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        authorList.setCellRenderer(new AuthorListCellRenderer());
+        JScrollPane authorScrollPane = new JScrollPane(authorList);
+        authorScrollPane.setPreferredSize(new Dimension(150, 100));
+
+        JPanel authorsPanel = new JPanel(new BorderLayout());
+        authorsPanel.add(authorScrollPane, BorderLayout.CENTER);
+
+        expandButton = new JButton("Expand");
+        authorsPanel.add(expandButton, BorderLayout.SOUTH);
+
+        bookPanel.add(authorsPanel, gbc);
 
         return bookPanel;
+    }
+
+    private static class AuthorListCellRenderer extends JPanel implements ListCellRenderer<Author> {
+        private JTextArea textArea;
+
+        public AuthorListCellRenderer() {
+            setLayout(new BorderLayout());
+            textArea = new JTextArea();
+            textArea.setWrapStyleWord(true);
+            textArea.setLineWrap(true);
+            textArea.setOpaque(true);
+            textArea.setBorder(new EmptyBorder(5, 5, 5, 5));
+            add(textArea, BorderLayout.CENTER);
+        }
+
+        @Override
+        public Component getListCellRendererComponent(JList<? extends Author> list, Author value, int index,
+                boolean isSelected, boolean cellHasFocus) {
+            if (value != null) {
+                textArea.setText(value.getFirstName() + " " + value.getLastName());
+                textArea.setToolTipText(value.getFirstName() + " " + value.getLastName());
+            } else {
+                textArea.setText("");
+                textArea.setToolTipText(null);
+            }
+
+            if (isSelected) {
+                textArea.setBackground(list.getSelectionBackground());
+                textArea.setForeground(list.getSelectionForeground());
+            } else {
+                textArea.setBackground(list.getBackground());
+                textArea.setForeground(list.getForeground());
+            }
+
+            return this;
+        }
     }
 
     /**
@@ -323,23 +351,8 @@ public class MaterialForm extends JPanel {
         journalPanel.add(new JLabel("Start Date"), gbc);
         gbc.gridx = 3;
         startDateField = new JTextField(15);
-        startDateField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (startDateField.getText().equals("DD-MM-YYYY")) {
-                    startDateField.setText("");
-                    startDateField.setForeground(Color.WHITE);
-                }
-            }
+        startDateField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "DD-MM-YYYY");
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (startDateField.getText().isEmpty()) {
-                    startDateField.setText("DD-MM-YYYY");
-                    startDateField.setForeground(Color.GRAY);
-                }
-            }
-        });
         journalPanel.add(startDateField, gbc);
 
         gbc.gridx = 0;
@@ -420,7 +433,7 @@ public class MaterialForm extends JPanel {
         // Book specific components
         pageCountSpinner.setValue(0); // Assuming pageCountSpinner starts from 0
         isbnField.setText("");
-        authorComboBox.setSelectedIndex(-1); // Deselect any selected item
+        authorList.clearSelection(); // Clear selection in JList
 
         // Journal specific components
         issnField.setText("");
@@ -528,15 +541,17 @@ public class MaterialForm extends JPanel {
                 pageCount,
                 isbn);
 
-        newBook.addAuthor(((AuthorComboBoxItem) authorComboBox.getSelectedItem()).getAuthor());
+        // Add all selected authors from the JList
+        Author[] selectedAuthors = authorList.getSelectedValuesList().toArray(new Author[0]);
+        for (Author author : selectedAuthors) {
+            newBook.addAuthor(author);
+        }
 
         return newBook;
     }
 
     public void loadAuthors(List<Author> authors) {
-        for (Author author : authors) {
-            authorComboBox.addItem(new AuthorComboBoxItem(author));
-        }
+        authorList.setListData(authors.toArray(new Author[0]));
     }
 
     /**
@@ -568,5 +583,48 @@ public class MaterialForm extends JPanel {
 
     public void handleFormSubmission(ActionListener listener) {
         submitButton.addActionListener(listener);
+    }
+
+    public void handleExpand(ActionListener listener) {
+        expandButton.addActionListener(listener);
+    }
+
+    public void setExpandButtonText(String text) {
+        expandButton.setText(text);
+    }
+
+    public JScrollPane getAuthorScrollPane() {
+        // Get the currently visible panel from the switchPanel
+        Component[] components = switchPanel.getComponents();
+        JPanel bookPanel = null;
+
+        for (Component component : components) {
+            if (component.isVisible() && component instanceof JPanel) {
+                bookPanel = (JPanel) component;
+                break;
+            }
+        }
+
+        if (bookPanel == null) {
+            throw new IllegalStateException("Book panel not found");
+        }
+
+        // Find the authorsPanel within the bookPanel
+        for (Component component : bookPanel.getComponents()) {
+            if (component instanceof JPanel) {
+                JPanel panel = (JPanel) component;
+                for (Component childComponent : panel.getComponents()) {
+                    if (childComponent instanceof JScrollPane) {
+                        return (JScrollPane) childComponent;
+                    }
+                }
+            }
+        }
+
+        throw new IllegalStateException("Author scroll pane not found");
+    }
+
+    public JList<Author> getAuthorList() {
+        return authorList;
     }
 }
