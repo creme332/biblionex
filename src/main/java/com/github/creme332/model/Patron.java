@@ -140,11 +140,38 @@ public class Patron extends User {
      *         loaned has not been returned yet and the due date is less than the
      *         current date.
      */
-    public List<Loan> getOverdueLoans() {
-        // TODO: Complete
-        return new ArrayList<>();
+    public List<Loan> getOverdueLoans() throws SQLException {
+        final Connection conn = DatabaseConnection.getConnection();
+        List<Loan> overdueLoans = new ArrayList<>();
+    
+        String query = """
+                SELECT * from loan
+                WHERE patron_id = ?
+                AND return_date is NULL
+                AND due_date < CURRENT_DATE
+                """;
+    
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+    
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Loan loan = new Loan(
+                        resultSet.getInt("loan_id"),
+                        resultSet.getInt("patron_id"),
+                        resultSet.getInt("barcode"),
+                        resultSet.getInt("checkout_librarian_id"),
+                        resultSet.getInt("checkin_librarian_id"),
+                        resultSet.getDate("issue_date"),
+                        resultSet.getDate("return_date"),
+                        resultSet.getDate("due_date"),
+                        resultSet.getInt("renewal_count"));
+                overdueLoans.add(loan);
+            }
+        }
+        return overdueLoans;
     }
-
+    
     /**
      * Saves a patron to database. patron ID and registration date are automatically
      * set by database.
