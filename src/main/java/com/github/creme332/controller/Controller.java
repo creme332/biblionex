@@ -9,10 +9,9 @@ import com.github.creme332.view.Frame;
 import com.github.creme332.view.Login;
 import com.github.creme332.view.patron.Registration;
 
-import javax.swing.JOptionPane;
-
 /**
- * Main controller of application responsible for creating other controllers and app model.
+ * Main controller of application responsible for creating other controllers and
+ * app model.
  */
 public class Controller {
     private AppState app = new AppState();
@@ -46,17 +45,6 @@ public class Controller {
         } else {
             // start application normally
             frameController.playAnimation();
-        }
-    }
-
-    public boolean confirmLogout() {
-        int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to log out?", "Confirm Logout", JOptionPane.YES_NO_OPTION);
-        return response == JOptionPane.YES_OPTION;
-    }
-
-    public void handleLogout() {
-        if (confirmLogout()) {
-            app.logOut();
         }
     }
 }
