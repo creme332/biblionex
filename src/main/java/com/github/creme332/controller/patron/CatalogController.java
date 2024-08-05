@@ -3,76 +3,67 @@ package com.github.creme332.controller.patron;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Book;
 import com.github.creme332.model.Journal;
+import com.github.creme332.model.Material;
 import com.github.creme332.model.Video;
 import com.github.creme332.view.patron.Catalog;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.SwingWorker;
+
 public class CatalogController {
-    private AppState app;
-    private Catalog catalog;
 
     public CatalogController(AppState app, Catalog catalog) {
-        this.app = app;
-        this.catalog = catalog;
 
-        Thread th = new Thread() {
+        SwingWorker<List<Material>, Void> worker = new SwingWorker<>() {
             @Override
-            public void run() {
-                initCatalogItems();
+            protected List<Material> doInBackground() throws Exception {
+                return fetchAllMaterials();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    List<Material> allMaterials = get();
+                    catalog.displayMaterials(allMaterials);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.exit(0);
+                }
             }
         };
-        th.start();
+        worker.execute();
     }
 
-    private void initCatalogItems() {
+    /**
+     * Fetches all materials from database
+     */
+    private List<Material> fetchAllMaterials() {
+        List<Material> allMaterials = new ArrayList<>();
         try {
             // Load books from the database
             List<Book> books = Book.findAll();
             for (Book book : books) {
-                addItemToCatalog(book.getTitle(), "/catalog/book.png");
+                allMaterials.add(book);
             }
 
             // Load videos from the database
             List<Video> videos = Video.findAll();
             for (Video video : videos) {
-                addItemToCatalog(video.getTitle(), "/catalog/video.png");
+                allMaterials.add(video);
             }
 
             // Load journals from the database
             List<Journal> journals = Journal.findAll();
             for (Journal journal : journals) {
-                addItemToCatalog(journal.getTitle(), "/catalog/journal.png");
+                allMaterials.add(journal);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Handle the exception, possibly by showing an error message to the user
+            System.exit(0);
         }
-    }
-
-    private void addItemToCatalog(String title, String iconPath) {
-        catalog.addCatalogItem(title, iconPath, new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                handleItemClick(title);
-            }
-        });
-    }
-
-    private void handleItemClick(String title) {
-        switch (title) {
-            case "Book":
-                // app.setCurrentScreen(Screen.BOOK);
-                break;
-            case "Video":
-                // app.setCurrentScreen(Screen.VIDEO);
-                break;
-            case "Journal":
-                // app.setCurrentScreen(Screen.JOURNAL);
-                break;
-        }
+        return allMaterials;
     }
 }
