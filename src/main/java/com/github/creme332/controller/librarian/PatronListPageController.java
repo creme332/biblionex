@@ -87,10 +87,11 @@ public class PatronListPageController implements PropertyChangeListener {
             int selectedRow = table.getSelectedRow();
 
             if (selectedRow != -1) {
-                int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this user?",
+                int patronId = (int) table.getValueAt(selectedRow, 0);
+                int response = JOptionPane.showConfirmDialog(null,
+                        String.format("Are you sure you want to delete patron with ID %d?", patronId),
                         "Confirm Delete", JOptionPane.YES_NO_OPTION);
                 if (response == JOptionPane.YES_OPTION) {
-                    int patronId = (int) table.getValueAt(selectedRow, 0);
                     try {
                         Patron.delete(patronId);
                         listPage.getTableModel().removeRow(selectedRow);

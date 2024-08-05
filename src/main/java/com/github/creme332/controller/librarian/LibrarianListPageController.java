@@ -86,10 +86,12 @@ public class LibrarianListPageController implements PropertyChangeListener {
             int selectedRow = table.getSelectedRow();
 
             if (selectedRow != -1) {
-                int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this user?",
+                int librarianId = (int) table.getValueAt(selectedRow, 0);
+
+                int response = JOptionPane.showConfirmDialog(null,
+                        String.format("Are you sure you want to delete librarian with ID %d?", librarianId),
                         "Confirm Delete", JOptionPane.YES_NO_OPTION);
                 if (response == JOptionPane.YES_OPTION) {
-                    int librarianId = (int) table.getValueAt(selectedRow, 0);
                     try {
                         Librarian.delete(librarianId);
                         listPage.getTableModel().removeRow(selectedRow);
