@@ -1,5 +1,9 @@
 package com.github.creme332.model;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Stores information about a material (video, book, journal).
  */
@@ -69,12 +73,34 @@ public abstract class Material {
         this.description = description;
     }
 
+    /**
+     * 
+     * @return File name of image representing material
+     */
     public String getImageUrl() {
         return imageUrl;
     }
 
+    /**
+     * 
+     * @param imageUrl New file name of image representing material
+     */
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    /**
+     * 
+     * @return Project-root-relative path to image representing material
+     */
+    public String getRelativeImgPath() {
+        if (type == MaterialType.BOOK) {
+            return "/catalog/book.png";
+        }
+        if (type == MaterialType.JOURNAL) {
+            return "/catalog/journal.png";
+        }
+        return "/catalog/video.png";
     }
 
     public int getAgeRestriction() {
@@ -99,6 +125,27 @@ public abstract class Material {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    /**
+     * 
+     * @return A list of all materials stored in database
+     * @throws SQLException
+     */
+    public static List<Material> findAllMaterials() throws SQLException {
+        List<Material> allMaterials = new ArrayList<>();
+
+        for (Material material : Book.findAll()) {
+            allMaterials.add(material);
+        }
+        for (Material material : Journal.findAll()) {
+            allMaterials.add(material);
+        }
+        for (Material material : Video.findAll()) {
+            allMaterials.add(material);
+        }
+
+        return allMaterials;
     }
 
     @Override

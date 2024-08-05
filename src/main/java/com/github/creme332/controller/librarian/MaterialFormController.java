@@ -16,7 +16,6 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
-// import org.w3c.dom.events.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -32,10 +31,10 @@ public class MaterialFormController {
         this.materialForm = materialForm;
         this.app = app;
 
-        materialForm.handleGoBack(e -> app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN));
-        // materialForm.handlePublisher(e -> app.setCurrentScreen(Screen.LIBRARIAN_PUBLISHER_SCREEN));
+        materialForm.handleGoBack(e -> app.setCurrentScreen(app.getPreviousScreen()));
+        // materialForm.handlePublisher(e ->
+        // app.setCurrentScreen(Screen.LIBRARIAN_PUBLISHER_SCREEN));
         materialForm.handleAuthor(e -> app.setCurrentScreen(Screen.LIBRARIAN_AUTHOR_SCREEN));
-
 
         materialForm.handleExpand(e -> {
             JScrollPane authorScrollPane = materialForm.getAuthorScrollPane();

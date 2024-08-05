@@ -1,78 +1,73 @@
 package com.github.creme332.controller.patron;
 
 import com.github.creme332.model.AppState;
-import com.github.creme332.model.Book;
-import com.github.creme332.model.Journal;
-import com.github.creme332.model.Video;
+import com.github.creme332.model.Material;
+import com.github.creme332.utils.StringUtil;
 import com.github.creme332.view.patron.Catalog;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CatalogController {
-    private AppState app;
-    private Catalog catalog;
+    Catalog catalog;
+    List<Material> allMaterials = new ArrayList<>();
 
     public CatalogController(AppState app, Catalog catalog) {
-        this.app = app;
         this.catalog = catalog;
+
+        // Add document listener for real-time filtering
+        catalog.getSearchField().getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filterMaterials();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filterMaterials();
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filterMaterials();
+            }
+        });
 
         Thread th = new Thread() {
             @Override
             public void run() {
-                initCatalogItems();
+                try {
+                    allMaterials = Material.findAllMaterials();
+                    catalog.displayMaterials(allMaterials);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    System.exit(0);
+                }
             }
         };
         th.start();
     }
 
-    private void initCatalogItems() {
-        try {
-            // Load books from the database
-            List<Book> books = Book.findAll();
-            for (Book book : books) {
-                addItemToCatalog(book.getTitle(), "/catalog/book.png");
-            }
+    private void filterMaterials() {
+        String searchText = catalog.getSearchField().getText().trim();
 
-            // Load videos from the database
-            List<Video> videos = Video.findAll();
-            for (Video video : videos) {
-                addItemToCatalog(video.getTitle(), "/catalog/video.png");
-            }
-
-            // Load journals from the database
-            List<Journal> journals = Journal.findAll();
-            for (Journal journal : journals) {
-                addItemToCatalog(journal.getTitle(), "/catalog/journal.png");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // Handle the exception, possibly by showing an error message to the user
+        // Display all materials if the search field is empty
+        if (searchText.isEmpty()) {
+            catalog.displayMaterials(allMaterials);
+            return;
         }
-    }
+        List<Material> filteredMaterials = new ArrayList<>();
 
-    private void addItemToCatalog(String title, String iconPath) {
-        catalog.addCatalogItem(title, iconPath, new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                handleItemClick(title);
+        for (Material material : allMaterials) {
+            if (StringUtil.isSimilar(material.getTitle(), searchText)) {
+                filteredMaterials.add(material);
             }
-        });
-    }
-
-    private void handleItemClick(String title) {
-        switch (title) {
-            case "Book":
-                // app.setCurrentScreen(Screen.BOOK);
-                break;
-            case "Video":
-                // app.setCurrentScreen(Screen.VIDEO);
-                break;
-            case "Journal":
-                // app.setCurrentScreen(Screen.JOURNAL);
-                break;
         }
+        catalog.displayMaterials(filteredMaterials);
     }
 }

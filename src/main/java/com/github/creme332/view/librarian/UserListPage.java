@@ -65,14 +65,18 @@ public class UserListPage extends JPanel {
         // Determine column names based on user type
         String[] columnNames;
         if (userType == UserType.PATRON) {
-            columnNames = new String[] { " ID", "First Name", "Last Name", "Email", "Phone No", "Registration Date",
+            columnNames = new String[] { "ID", "First Name", "Last Name", "Email", "Phone No", "Address", "Registration Date",
                     "Credit Card", "Birthday", "Action" };
         } else {
-            columnNames = new String[] { " ID", "First Name", "Last Name", "Email", "Phone No", "Role", "Action" };
+            columnNames = new String[] { "ID", "First Name", "Last Name", "Email", "Phone No", "Role", "Address",
+                    "Action" };
         }
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
+                if (userType == UserType.PATRON) {
+                    return column != 6; // Prevent editing of Registration Date
+                }
                 return column != 0; // Prevent editing of User ID
             }
         };
@@ -170,10 +174,11 @@ public class UserListPage extends JPanel {
                         patron.getLastName(),
                         patron.getEmail(),
                         patron.getPhoneNo(),
-                        patron.getRegistrationDate(),
+                        patron.getAddress(),
+                        patron.getRegistrationDate().toString(),
                         patron.getCreditCardNo(),
-                        patron.getBirthDate()
-                });
+                        patron.getBirthDate().toString()
+                        });
             } else {
                 Librarian librarian = (Librarian) user;
                 tableModel.addRow(new Object[] {
@@ -182,7 +187,8 @@ public class UserListPage extends JPanel {
                         librarian.getLastName(),
                         librarian.getEmail(),
                         librarian.getPhoneNo(),
-                        librarian.getRole()
+                        librarian.getRole(),
+                        librarian.getAddress()
                 });
             }
 
