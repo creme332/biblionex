@@ -6,6 +6,7 @@ import com.github.creme332.model.Librarian;
 import com.github.creme332.utils.StringUtil;
 import com.github.creme332.view.librarian.UserListPage;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -86,11 +87,17 @@ public class LibrarianListPageController implements PropertyChangeListener {
 
             if (selectedRow != -1) {
                 int librarianId = (int) table.getValueAt(selectedRow, 0);
-                try {
-                    Librarian.delete(librarianId);
-                    listPage.getTableModel().removeRow(selectedRow);
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
+
+                int response = JOptionPane.showConfirmDialog(null,
+                        String.format("Are you sure you want to delete librarian with ID %d?", librarianId),
+                        "Confirm Delete", JOptionPane.YES_NO_OPTION);
+                if (response == JOptionPane.YES_OPTION) {
+                    try {
+                        Librarian.delete(librarianId);
+                        listPage.getTableModel().removeRow(selectedRow);
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });

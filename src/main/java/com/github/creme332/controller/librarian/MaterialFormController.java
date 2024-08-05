@@ -22,10 +22,10 @@ public class MaterialFormController {
         this.materialForm = materialForm;
         this.app = app;
 
-        materialForm.handleGoBack(e -> app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN));
-        // materialForm.handlePublisher(e -> app.setCurrentScreen(Screen.LIBRARIAN_PUBLISHER_SCREEN));
+        materialForm.handleGoBack(e -> app.setCurrentScreen(app.getPreviousScreen()));
+        // materialForm.handlePublisher(e ->
+        // app.setCurrentScreen(Screen.LIBRARIAN_PUBLISHER_SCREEN));
         materialForm.handleAuthor(e -> app.setCurrentScreen(Screen.LIBRARIAN_AUTHOR_SCREEN));
-
 
         materialForm.handleFormSubmission(e -> {
             MaterialType type = materialForm.getMaterialType();

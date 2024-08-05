@@ -224,6 +224,30 @@ public class Loan {
         return loans;
     }
 
+    public static List<Loan> findAllOverdue() throws SQLException {
+    final Connection conn = DatabaseConnection.getConnection();
+    List<Loan> overdueLoans = new ArrayList<>();
+    String query = "SELECT * FROM loan WHERE return_date IS NULL AND due_date < CURRENT_DATE";
+
+    try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            Loan loan = new Loan(
+                    resultSet.getInt("loan_id"),
+                    resultSet.getInt("patron_id"),
+                    resultSet.getInt("barcode"),
+                    resultSet.getInt("checkout_librarian_id"),
+                    resultSet.getInt("checkin_librarian_id"),
+                    resultSet.getDate("issue_date"),
+                    resultSet.getDate("return_date"),
+                    resultSet.getDate("due_date"),
+                    resultSet.getInt("renewal_count"));
+            overdueLoans.add(loan);
+        }
+    }
+    return overdueLoans;
+}
+
     public static void delete(int loanId) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
         String query = "DELETE FROM loan WHERE loan_id = ?";
