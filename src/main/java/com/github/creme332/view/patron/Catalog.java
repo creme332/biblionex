@@ -1,5 +1,7 @@
 package com.github.creme332.view.patron;
 
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
 import com.github.creme332.model.Book;
 import com.github.creme332.model.Journal;
 import com.github.creme332.model.Material;
@@ -19,15 +21,29 @@ import java.util.List;
 public class Catalog extends JPanel {
     private static final Dimension ITEM_DIMENSION = new Dimension(200, 200);
     private JPanel itemContainer;
+    private JTextField searchField = new JTextField(20);
 
     public Catalog() {
         setLayout(new BorderLayout());
+
+        // create search field
+        searchField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search material");
+        searchField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+                new FlatSearchIcon());
+        this.add(searchField, BorderLayout.NORTH);
+
+        // create scrollable item container
         itemContainer = new JPanel(new GridBagLayout());
         itemContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        add(createScrollableCatalog(), BorderLayout.CENTER);
+
+        JScrollPane scrollPane = new JScrollPane(itemContainer);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     public void displayMaterials(List<Material> materials) {
+        itemContainer.removeAll();
         int itemCounter = 0;
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -61,7 +77,6 @@ public class Catalog extends JPanel {
                                                                                               // border
                 }
             });
-            ;
         }
     }
 
@@ -102,6 +117,10 @@ public class Catalog extends JPanel {
         itemPanel.add(titleContainer);
 
         return itemPanel;
+    }
+
+    public JTextField getSearchField() {
+        return searchField;
     }
 
     /**
@@ -172,12 +191,5 @@ public class Catalog extends JPanel {
      */
     public void showMaterialDialog(Material material) {
         showMaterialDialog(material, this);
-    }
-
-    private JScrollPane createScrollableCatalog() {
-        JScrollPane scrollPane = new JScrollPane(itemContainer);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        return scrollPane;
     }
 }
