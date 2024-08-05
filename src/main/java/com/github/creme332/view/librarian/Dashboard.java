@@ -40,17 +40,34 @@ public class Dashboard extends JPanel {
         headerPanel.add(titleLabel, BorderLayout.CENTER);
 
         // Main panel with buttons
-        JPanel mainPanel = new JPanel(new GridLayout(4, 3, 10, 10));
+        JPanel mainPanel = new JPanel(new GridLayout(3, 3, 10, 10));
 
         checkInButton = new JButton("Check in");
+        checkInButton.setIcon(FontIcon.of(BootstrapIcons.ARROW_90DEG_RIGHT, 40, Color.white));
+
         materialsButton = new JButton("Materials");
+        materialsButton.setIcon(FontIcon.of(BootstrapIcons.CARD_LIST, 40, Color.white));
+
         catalogingButton = new JButton("Cataloging");
+        catalogingButton.setIcon(FontIcon.of(BootstrapIcons.BOOKMARK, 40, Color.white));
+
         checkOutButton = new JButton("Check out");
+        checkOutButton.setIcon(FontIcon.of(BootstrapIcons.ARROW_90DEG_LEFT, 40, Color.white));
+
         patronsButton = new JButton("Patrons");
+        patronsButton.setIcon(FontIcon.of(BootstrapIcons.PERSON_BADGE, 40, Color.white));
+
         overduesButton = new JButton("Overdues");
+        overduesButton.setIcon(FontIcon.of(BootstrapIcons.CASH, 40, Color.white));
+
         librariansButton = new JButton("Librarians");
+        librariansButton.setIcon(FontIcon.of(BootstrapIcons.PERSON_BADGE, 40, Color.white));
+
         acquisitionsButton = new JButton("Acquisitions");
+        acquisitionsButton.setIcon(FontIcon.of(BootstrapIcons.CART, 40, Color.white));
+
         reportsButton = new JButton("Reports");
+        reportsButton.setIcon(FontIcon.of(BootstrapIcons.CLIPBOARD_DATA, 40, Color.white));
 
         mainPanel.add(checkInButton);
         mainPanel.add(materialsButton);
@@ -60,9 +77,7 @@ public class Dashboard extends JPanel {
         mainPanel.add(overduesButton);
         mainPanel.add(librariansButton);
         mainPanel.add(acquisitionsButton);
-        mainPanel.add(new JLabel()); // Empty cell to center the last button
         mainPanel.add(reportsButton);
-        mainPanel.add(new JLabel()); // Empty cell to center the last button
 
         // Scroll pane for the main panel
         JScrollPane scrollPane = new JScrollPane(mainPanel);
