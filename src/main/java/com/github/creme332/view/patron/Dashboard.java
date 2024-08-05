@@ -18,6 +18,7 @@ public class Dashboard extends JPanel {
     DashboardCard activeLoansCard;
 
     JTable bookRecommendationsTable;
+    private List<Book> bookRecommendations;
 
     public Dashboard() {
         setLayout(new BorderLayout());
@@ -73,8 +74,10 @@ public class Dashboard extends JPanel {
     }
 
     public void setBookRecommendations(List<Book> books) {
+        this.bookRecommendations = books; // Store the list of books
+
         String[] columnNames = { "Title", "Author", "Description", "Age Restriction", "Action" };
-        Object[][] data = new Object[books.size()][7];
+        Object[][] data = new Object[books.size()][5];
 
         for (int i = 0; i < books.size(); i++) {
             Book book = books.get(i);
@@ -113,6 +116,7 @@ public class Dashboard extends JPanel {
         private JButton button;
         private String label;
         private boolean isPushed;
+        private int row; // Track the row of the clicked button
 
         public ActionButtonEditor(JCheckBox checkBox) {
             super(checkBox);
@@ -127,14 +131,16 @@ public class Dashboard extends JPanel {
             label = (value == null) ? "" : value.toString();
             button.setText(label);
             isPushed = true;
+            this.row = row; // Store the row index
             return button;
         }
 
         @Override
         public Object getCellEditorValue() {
             if (isPushed) {
-                // Handle button action here
-                System.out.println("Button clicked");
+                // Show dialog with book details
+                Book book = bookRecommendations.get(row);
+                Catalog.showMaterialDialog(book, Dashboard.this);
             }
             isPushed = false;
             return label;
