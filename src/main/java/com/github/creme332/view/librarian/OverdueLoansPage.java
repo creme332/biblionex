@@ -3,7 +3,6 @@ package com.github.creme332.view.librarian;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.sql.SQLException;
 import java.util.List;
 import com.github.creme332.model.Loan;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -27,9 +26,6 @@ public class OverdueLoansPage extends JPanel {
             new Object[]{"Loan ID", "Patron ID", "Barcode", "Due Date", "Issue Date", "Return Date"}, 0
         );
         table = new JTable(tableModel);
-
-        // Load overdue loans
-        loadOverdueLoans();
 
         // Add table to the center of the layout
         add(new JScrollPane(table), BorderLayout.CENTER);
@@ -59,26 +55,6 @@ public class OverdueLoansPage extends JPanel {
         return topPanel;
     }
 
-    private void loadOverdueLoans() {
-        try {
-            List<Loan> overdueLoans = Loan.findAllOverdue();
-            for (Loan loan : overdueLoans) {
-                tableModel.addRow(new Object[]{
-                    loan.getLoanId(),
-                    loan.getPatronId(),
-                    loan.getBarcode(),
-                    loan.getDueDate(),
-                    loan.getIssueDate(),
-                    loan.getReturnDate()
-                });
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(
-                this, "Error loading overdue loans: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE
-            );
-        }
-    }
-
     public JButton getBackButton() {
         return backButton;
     }
@@ -101,5 +77,19 @@ public class OverdueLoansPage extends JPanel {
 
     public JTable getTable() {
         return table;
+    }
+
+    public void updateTableModel(List<Loan> loans) {
+        tableModel.setRowCount(0); // Clear the table
+        for (Loan loan : loans) {
+            tableModel.addRow(new Object[]{
+                loan.getLoanId(),
+                loan.getPatronId(),
+                loan.getBarcode(),
+                loan.getDueDate(),
+                loan.getIssueDate(),
+                loan.getReturnDate()
+            });
+        }
     }
 }
