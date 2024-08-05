@@ -11,6 +11,7 @@ import com.github.creme332.model.UserType;
 import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.librarian.MaterialForm;
+import com.github.creme332.view.librarian.PublisherForm;
 import com.github.creme332.view.librarian.RegistrationForm;
 import com.github.creme332.view.librarian.UserListPage;
 import com.github.creme332.view.librarian.VendorForm;
@@ -83,6 +84,7 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.LIBRARIAN_LIBRARIAN_LIST_SCREEN, new UserListPage(UserType.LIBRARIAN));
         screenMapper.put(Screen.LIBRARIAN_VENDOR_SCREEN, new VendorForm());
         screenMapper.put(Screen.LIBRARIAN_AUTHOR_SCREEN, new AuthorForm());
+        screenMapper.put(Screen.LIBRARIAN_PUBLISHER_SCREEN, new PublisherForm());
         screenMapper.put(Screen.LIBRARIAN_CHECKOUT_SCREEN, new CheckOutPage());
 
         // add screens to cardPanels
