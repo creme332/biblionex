@@ -69,12 +69,34 @@ public abstract class Material {
         this.description = description;
     }
 
+    /**
+     * 
+     * @return File name of image representing material
+     */
     public String getImageUrl() {
         return imageUrl;
     }
 
+    /**
+     * 
+     * @param imageUrl New file name of image representing material
+     */
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    /**
+     * 
+     * @return Project-root-relative path to image representing material
+     */
+    public String getRelativeImgPath() {
+        if (type == MaterialType.BOOK) {
+            return "/catalog/book.png";
+        }
+        if (type == MaterialType.JOURNAL) {
+            return "/catalog/journal.png";
+        }
+        return "/catalog/video.png";
     }
 
     public int getAgeRestriction() {
