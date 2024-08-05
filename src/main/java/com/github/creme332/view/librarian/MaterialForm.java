@@ -17,8 +17,6 @@ import java.util.List;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -47,8 +45,6 @@ public class MaterialForm extends JPanel {
     private JSpinner pageCountSpinner;
     private JTextField isbnField;
     private JList<Author> authorList;
-    private DefaultListModel<Author> authorListModel;
-    private JScrollPane authorScrollPane;
 
     // Journal specific components
     private JTextField issnField;
@@ -280,11 +276,11 @@ public class MaterialForm extends JPanel {
         gbc.gridx = 1;
         gbc.gridwidth = 2;
 
-        authorListModel = new DefaultListModel<>();
+        DefaultListModel<Author> authorListModel = new DefaultListModel<>();
         authorList = new JList<>(authorListModel);
         authorList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        authorList.setCellRenderer(new CustomListCellRenderer());
-        authorScrollPane = new JScrollPane(authorList);
+        authorList.setCellRenderer(new AuthorListCellRenderer());
+        JScrollPane authorScrollPane = new JScrollPane(authorList);
         authorScrollPane.setPreferredSize(new Dimension(150, 100));
 
         JPanel authorsPanel = new JPanel(new BorderLayout());
@@ -298,10 +294,10 @@ public class MaterialForm extends JPanel {
         return bookPanel;
     }
 
-    private static class CustomListCellRenderer extends JPanel implements ListCellRenderer<Author> {
+    private static class AuthorListCellRenderer extends JPanel implements ListCellRenderer<Author> {
         private JTextArea textArea;
 
-        public CustomListCellRenderer() {
+        public AuthorListCellRenderer() {
             setLayout(new BorderLayout());
             textArea = new JTextArea();
             textArea.setWrapStyleWord(true);
@@ -355,23 +351,8 @@ public class MaterialForm extends JPanel {
         journalPanel.add(new JLabel("Start Date"), gbc);
         gbc.gridx = 3;
         startDateField = new JTextField(15);
-        startDateField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (startDateField.getText().equals("DD-MM-YYYY")) {
-                    startDateField.setText("");
-                    startDateField.setForeground(Color.WHITE);
-                }
-            }
+        startDateField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "DD-MM-YYYY");
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (startDateField.getText().isEmpty()) {
-                    startDateField.setText("DD-MM-YYYY");
-                    startDateField.setForeground(Color.GRAY);
-                }
-            }
-        });
         journalPanel.add(startDateField, gbc);
 
         gbc.gridx = 0;
@@ -646,5 +627,4 @@ public class MaterialForm extends JPanel {
     public JList<Author> getAuthorList() {
         return authorList;
     }
-
 }
