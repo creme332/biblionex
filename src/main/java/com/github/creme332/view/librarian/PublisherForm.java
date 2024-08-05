@@ -1,17 +1,20 @@
 package com.github.creme332.view.librarian;
 
+import com.github.creme332.model.Publisher;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
-public class VendorForm extends JPanel {
-    private JTextField emailField;
+public class PublisherForm extends JPanel {
     private JTextField nameField;
-    private JTextField contactPersonField;
+    private JTextField emailField;
+    private JTextField countryField;
     private JButton saveButton;
     private JButton backButton;
 
-    public VendorForm() {
+    public PublisherForm() {
         this.setLayout(new BorderLayout());
 
         // Add Header
@@ -32,31 +35,33 @@ public class VendorForm extends JPanel {
         // Add Form Fields
         gbc.gridx = 0;
         gbc.gridy = 0;
-        formPanel.add(new JLabel("Email"), gbc);
-        gbc.gridx = 1;
         formPanel.add(new JLabel("Name"), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        emailField = new JTextField(15);
-        formPanel.add(emailField, gbc);
-        gbc.gridx = 1;
         nameField = new JTextField(15);
         formPanel.add(nameField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        formPanel.add(new JLabel("Contact Person"), gbc);
+        formPanel.add(new JLabel("Email"), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
-        gbc.gridwidth = 2; // Span across two columns
-        contactPersonField = new JTextField(32);
-        formPanel.add(contactPersonField, gbc);
-        gbc.gridwidth = 1; // Reset to default
+        emailField = new JTextField(32);
+        formPanel.add(emailField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
+        formPanel.add(new JLabel("Country"), gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        countryField = new JTextField(32);
+        formPanel.add(countryField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
         gbc.gridwidth = 2; // Span across two columns
         saveButton = new JButton("Submit");
         formPanel.add(saveButton, gbc);
@@ -68,32 +73,41 @@ public class VendorForm extends JPanel {
         headerPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
         backButton = new JButton("< Back");
         headerPanel.add(backButton, BorderLayout.WEST);
-        JLabel heading = new JLabel("Vendor Registration Form", JLabel.CENTER);
+        JLabel heading = new JLabel("Create new publisher", javax.swing.SwingConstants.CENTER);
         heading.putClientProperty("FlatLaf.style", "font: $h1.font");
         headerPanel.add(heading, BorderLayout.CENTER);
         return headerPanel;
     }
 
     public void clearForm() {
-        emailField.setText("");
         nameField.setText("");
-        contactPersonField.setText("");
+        emailField.setText("");
+        countryField.setText("");
+
+        // reset outlines
+        nameField.putClientProperty("JComponent.outline", "");
+        emailField.putClientProperty("JComponent.outline", "");
+        countryField.putClientProperty("JComponent.outline", "");
     }
 
-    public String getEmail() {
-        return emailField.getText().trim();
+    public void highlightNameField(boolean isValid) {
+        nameField.putClientProperty("JComponent.outline", isValid ? Color.green : Color.red);
     }
 
-    public String getVendorName() {
-        return nameField.getText().trim();
+    public void highlightEmailField(boolean isValid) {
+        emailField.putClientProperty("JComponent.outline", isValid ? Color.green : Color.red);
     }
 
-    public String getContactPerson() {
-        return contactPersonField.getText().trim();
+    public void highlightCountryField(boolean isValid) {
+        countryField.putClientProperty("JComponent.outline", isValid ? Color.green : Color.red);
     }
 
-    public JButton getSaveButton() {
-        return saveButton;
+    public void handleFormSubmission(ActionListener listener) {
+        saveButton.addActionListener(listener);
+    }
+
+    public Publisher getPublisher() {
+        return new Publisher(nameField.getText().trim(), emailField.getText().trim(), countryField.getText().trim());
     }
 
     public JButton getBackButton() {
