@@ -17,7 +17,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class PatronListPageController implements PropertyChangeListener {
     private AppState app;
@@ -140,18 +144,43 @@ public class PatronListPageController implements PropertyChangeListener {
         String lastName = (String) listPage.getTableModel().getValueAt(row, 2);
         String email = (String) listPage.getTableModel().getValueAt(row, 3);
         String phoneNo = (String) listPage.getTableModel().getValueAt(row, 4);
-        // TODO: Add more attributes
+        String address = (String) listPage.getTableModel().getValueAt(row, 5);
+        String birthdateStr = (String) listPage.getTableModel().getValueAt(row, 6);
+        String creditcardno = (String) listPage.getTableModel().getValueAt(row, 7);
+        String registrationdateStr = (String) listPage.getTableModel().getValueAt(row, 8);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+
         try {
+            Date birthdate = validateAndParseDate(birthdateStr, dateFormat);
+            Date registrationdate = validateAndParseDate(registrationdateStr, dateFormat);
+
             Patron patron = Patron.findById(userId);
             if (patron != null) {
                 patron.setFirstName(firstName);
                 patron.setLastName(lastName);
                 patron.setEmail(email);
                 patron.setPhoneNo(phoneNo);
+                patron.setAddress(address);
+                patron.setRegistrationDate(registrationdate);
+                patron.setCreditCardNo(creditcardno);
+                patron.setBirthDate(birthdate);
                 Patron.update(patron);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ParseException e) {
+            // Handle invalid date format
+            e.printStackTrace();
+        }
+    }
+
+    private Date validateAndParseDate(String dateStr, SimpleDateFormat dateFormat) throws ParseException {
+        if (dateStr != null && dateStr.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            return new Date(dateFormat.parse(dateStr).getTime());
+        } else {
+            throw new ParseException("Invalid date format: " + dateStr, 0);
         }
     }
 

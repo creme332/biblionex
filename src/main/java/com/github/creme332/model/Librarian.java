@@ -198,7 +198,7 @@ public class Librarian extends User {
     public static void update(Librarian librarian) throws SQLException {
         final Connection conn = DatabaseConnection.getConnection();
 
-        String query = "UPDATE librarian SET address = ?, last_name = ?, first_name = ?, phone_no = ?, email = ? WHERE librarian_id = ?";
+        String query = "UPDATE librarian SET address = ?, last_name = ?, first_name = ?, phone_no = ?, email = ?, role = ? WHERE librarian_id = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, librarian.getAddress());
@@ -206,7 +206,8 @@ public class Librarian extends User {
             preparedStatement.setString(3, librarian.getFirstName());
             preparedStatement.setString(4, librarian.getPhoneNo());
             preparedStatement.setString(5, librarian.getEmail());
-            preparedStatement.setInt(6, librarian.getUserId());
+            preparedStatement.setString(6, librarian.getRole());
+            preparedStatement.setInt(7, librarian.getUserId());
             preparedStatement.executeUpdate();
         }
     }
