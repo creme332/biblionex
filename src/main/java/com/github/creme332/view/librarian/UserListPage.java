@@ -6,6 +6,7 @@ import javax.swing.table.TableCellRenderer;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.List;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
@@ -65,7 +66,8 @@ public class UserListPage extends JPanel {
         // Determine column names based on user type
         String[] columnNames;
         if (userType == UserType.PATRON) {
-            columnNames = new String[] { "ID", "First Name", "Last Name", "Email", "Phone No", "Address", "Registration Date",
+            columnNames = new String[] { "ID", "First Name", "Last Name", "Email", "Phone No", "Address",
+                    "Registration Date",
                     "Credit Card", "Birthday", "Action" };
         } else {
             columnNames = new String[] { "ID", "First Name", "Last Name", "Email", "Phone No", "Role", "Address",
@@ -168,6 +170,9 @@ public class UserListPage extends JPanel {
         for (User user : users) {
             if (user.getUserType() == UserType.PATRON) {
                 Patron patron = (Patron) user;
+                Date birthDate = patron.getBirthDate();
+                String birthDateAsString = birthDate == null ? "" : birthDate.toString();
+
                 tableModel.addRow(new Object[] {
                         patron.getUserId(),
                         patron.getFirstName(),
@@ -177,8 +182,8 @@ public class UserListPage extends JPanel {
                         patron.getAddress(),
                         patron.getRegistrationDate().toString(),
                         patron.getCreditCardNo(),
-                        patron.getBirthDate().toString()
-                        });
+                        birthDateAsString
+                });
             } else {
                 Librarian librarian = (Librarian) user;
                 tableModel.addRow(new Object[] {
