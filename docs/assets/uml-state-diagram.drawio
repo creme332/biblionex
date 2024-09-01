@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="G8LHQ51OOOZmgpkE-4kG" name="login">
-        <mxGraphModel dx="923" dy="465" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+        <mxGraphModel dx="1030" dy="474" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -12,7 +12,7 @@
                 </mxCell>
                 <mxCell id="16" value="user submits invalid credentials" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="8" vertex="1" connectable="0">
                     <mxGeometry x="-0.2381" y="-2" relative="1" as="geometry">
-                        <mxPoint x="23" y="13" as="offset"/>
+                        <mxPoint x="33" y="-17" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="17" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="5" target="7" edge="1">
@@ -20,7 +20,7 @@
                 </mxCell>
                 <mxCell id="18" value="user submits valid credentials" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="17" vertex="1" connectable="0">
                     <mxGeometry x="0.1654" y="-1" relative="1" as="geometry">
-                        <mxPoint x="-79" y="-13" as="offset"/>
+                        <mxPoint x="-79" y="-12" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="5" value="Wait" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;" parent="1" vertex="1">
@@ -87,7 +87,7 @@
                 </mxCell>
                 <mxCell id="26" value="user is modifying&amp;nbsp;credentials" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="25" vertex="1" connectable="0">
                     <mxGeometry x="-0.2053" y="-1" relative="1" as="geometry">
-                        <mxPoint x="53" y="15" as="offset"/>
+                        <mxPoint x="73" y="5" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="28" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="6" target="21" edge="1">
@@ -109,7 +109,29 @@
                 </mxCell>
                 <mxCell id="31" value="user submits invalid credentials" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="30" vertex="1" connectable="0">
                     <mxGeometry x="-0.2381" y="-2" relative="1" as="geometry">
-                        <mxPoint x="-88" y="5" as="offset"/>
+                        <mxPoint x="92" y="5" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="32" style="edgeStyle=none;html=1;exitX=0.001;exitY=0.9;exitDx=0;exitDy=0;entryX=0.787;entryY=-0.005;entryDx=0;entryDy=0;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="6" target="7">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="480" y="280" as="sourcePoint"/>
+                        <mxPoint x="480" y="370" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="33" value="user submits valid credentials" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="32">
+                    <mxGeometry x="0.1654" y="-1" relative="1" as="geometry">
+                        <mxPoint x="32" y="-30" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="36" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="21" target="7">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="780" y="280" as="sourcePoint"/>
+                        <mxPoint x="520.1800000000001" y="369.80000000000007" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="37" value="user submits valid credentials" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="36">
+                    <mxGeometry x="0.1654" y="-1" relative="1" as="geometry">
+                        <mxPoint x="29" y="-12" as="offset"/>
                     </mxGeometry>
                 </mxCell>
             </root>
