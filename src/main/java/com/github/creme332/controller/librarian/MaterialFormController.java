@@ -31,7 +31,9 @@ public class MaterialFormController {
         this.materialForm = materialForm;
         this.app = app;
 
-        materialForm.handleGoBack(e -> app.setCurrentScreen(app.getPreviousScreen()));
+        // when back button is pressed, always redirect to dashboard. Do not use app.getPreviousScreen() here
+        // to prevent cycles between material and publisher form.
+        materialForm.handleGoBack(e -> app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN));
         materialForm.handlePublisher(e -> app.setCurrentScreen(Screen.LIBRARIAN_PUBLISHER_SCREEN));
         materialForm.handleAuthor(e -> app.setCurrentScreen(Screen.LIBRARIAN_AUTHOR_SCREEN));
 
