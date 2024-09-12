@@ -145,43 +145,67 @@ public class PatronListPageController implements PropertyChangeListener {
         String email = (String) listPage.getTableModel().getValueAt(row, 3);
         String phoneNo = (String) listPage.getTableModel().getValueAt(row, 4);
         String address = (String) listPage.getTableModel().getValueAt(row, 5);
-        String birthdateStr = (String) listPage.getTableModel().getValueAt(row, 6);
-        String creditcardno = (String) listPage.getTableModel().getValueAt(row, 7);
-        String registrationdateStr = (String) listPage.getTableModel().getValueAt(row, 8);
+        String registerDateAsString = (String) listPage.getTableModel().getValueAt(row, 6);
+        String creditCardNo = (String) listPage.getTableModel().getValueAt(row, 7);
+        String birthDateAsString = (String) listPage.getTableModel().getValueAt(row, 8);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setLenient(false);
+        Date birthDate = stringToDate(birthDateAsString);
+        Date registrationDate = stringToDate(registerDateAsString);
 
+        if (birthDate == null) {
+            JOptionPane.showMessageDialog(null, "Invalid birth date: " + birthDateAsString, "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (registrationDate == null) {
+            JOptionPane.showMessageDialog(null, "Invalid registration date: " + registerDateAsString, "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        boolean missingPatron = true;
         try {
-            Date birthdate = validateAndParseDate(birthdateStr, dateFormat);
-            Date registrationdate = validateAndParseDate(registrationdateStr, dateFormat);
-
             Patron patron = Patron.findById(userId);
             if (patron != null) {
+                missingPatron = false;
                 patron.setFirstName(firstName);
                 patron.setLastName(lastName);
                 patron.setEmail(email);
                 patron.setPhoneNo(phoneNo);
                 patron.setAddress(address);
-                patron.setRegistrationDate(registrationdate);
-                patron.setCreditCardNo(creditcardno);
-                patron.setBirthDate(birthdate);
+                patron.setRegistrationDate(registrationDate);
+                patron.setCreditCardNo(creditCardNo);
+                patron.setBirthDate(birthDate);
                 Patron.update(patron);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (ParseException e) {
-            // Handle invalid date format
-            e.printStackTrace();
+        }
+        if (missingPatron) {
+            JOptionPane.showMessageDialog(null, "Patron no longer exists in database", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private Date validateAndParseDate(String dateStr, SimpleDateFormat dateFormat) throws ParseException {
+    /**
+     * Converts a string to Date.
+     * 
+     * @param dateStr Date following format: yyyy-MM-dd
+     * @return Null if conversion is not possible
+     */
+    private Date stringToDate(String dateStr) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+
         if (dateStr != null && dateStr.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            return new Date(dateFormat.parse(dateStr).getTime());
-        } else {
-            throw new ParseException("Invalid date format: " + dateStr, 0);
+            try {
+                return new Date(dateFormat.parse(dateStr).getTime());
+            } catch (ParseException e) {
+                return null;
+            }
         }
+        return null;
     }
 
     @Override
