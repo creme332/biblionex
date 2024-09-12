@@ -1,6 +1,7 @@
 package com.github.creme332.view.librarian;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.swing.FontIcon;
@@ -40,7 +41,8 @@ public class Dashboard extends JPanel {
         headerPanel.add(titleLabel, BorderLayout.CENTER);
 
         // Main panel with buttons
-        JPanel mainPanel = new JPanel(new GridLayout(3, 3, 10, 10));
+        JPanel mainPanel = new JPanel(new GridLayout(3, 3, 40, 40));
+        mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         checkInButton = new JButton("Check in");
         checkInButton.setIcon(FontIcon.of(BootstrapIcons.ARROW_90DEG_RIGHT, 40, Color.white));
