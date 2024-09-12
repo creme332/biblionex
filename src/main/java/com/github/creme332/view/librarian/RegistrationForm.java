@@ -3,9 +3,6 @@ package com.github.creme332.view.librarian;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
-import org.kordamp.ikonli.swing.FontIcon;
-
 import java.awt.*;
 
 public class RegistrationForm extends JPanel {
@@ -22,7 +19,7 @@ public class RegistrationForm extends JPanel {
 
     public RegistrationForm() {
         this.setLayout(new BorderLayout());
-        this.setBorder(new EmptyBorder(5,5, 5, 5));
+        this.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         add(createHeaderPanel(), BorderLayout.NORTH);
         add(createFormPanel(), BorderLayout.CENTER);
@@ -32,10 +29,7 @@ public class RegistrationForm extends JPanel {
         JPanel headerPanel = new JPanel(new BorderLayout());
 
         // create backButton
-        backButton = new JButton();
-        FontIcon backIcon = FontIcon.of(BootstrapIcons.ARROW_LEFT, 40);
-        backIcon.setIconColor(Color.white);
-        backButton.setIcon(backIcon);
+        backButton = new JButton("Back");
 
         headerPanel.add(backButton, BorderLayout.WEST);
 
@@ -171,27 +165,27 @@ public class RegistrationForm extends JPanel {
         return addressField;
     }
 
-        public JTextField getPhoneField() {
+    public JTextField getPhoneField() {
         return phoneField;
     }
 
-        public JTextField getLastNameField() {
+    public JTextField getLastNameField() {
         return lastNameField;
     }
 
-        public JTextField getFirstNameField() {
+    public JTextField getFirstNameField() {
         return firstNameField;
     }
 
-        public JTextField getConfirmPasswordField() {
+    public JTextField getConfirmPasswordField() {
         return confirmPasswordField;
     }
 
-        public JTextField getPasswordField() {
+    public JTextField getPasswordField() {
         return passwordField;
     }
 
-        public JTextField getEmailField() {
+    public JTextField getEmailField() {
         return emailField;
     }
 }

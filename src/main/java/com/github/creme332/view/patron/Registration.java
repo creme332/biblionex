@@ -40,10 +40,7 @@ public class Registration extends JPanel {
         headerPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
 
         // create backButton
-        backButton = new JButton();
-        FontIcon backIcon = FontIcon.of(BootstrapIcons.ARROW_LEFT, 40);
-        backIcon.setIconColor(Color.white);
-        backButton.setIcon(backIcon);
+        backButton = new JButton("Back");
 
         headerPanel.add(backButton, BorderLayout.WEST);
 

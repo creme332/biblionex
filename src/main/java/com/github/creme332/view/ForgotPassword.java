@@ -24,8 +24,8 @@ public class ForgotPassword extends JPanel {
         backButton = new JButton("Back");
         topPanel.add(backButton, BorderLayout.WEST);
 
-        JLabel titleLabel = new JLabel("Reset Password", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));  // Increase title size
+        JLabel titleLabel = new JLabel("Reset Password", javax.swing.SwingConstants.CENTER);
+        titleLabel.putClientProperty("FlatLaf.style", "font: $h1.font");
         topPanel.add(titleLabel, BorderLayout.CENTER);
 
         add(topPanel, BorderLayout.NORTH);
@@ -47,15 +47,15 @@ public class ForgotPassword extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        emailField = new JTextField(20);  // Adjust the field size
+        emailField = new JTextField(20); // Adjust the field size
         mainPanel.add(emailField, gbc);
-        
+
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
         JSeparator separator = new JSeparator();
         mainPanel.add(separator, gbc);
-        
+
         // New Password field
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -66,7 +66,7 @@ public class ForgotPassword extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
-        newPasswordField = new JPasswordField(10);  // Adjust the field size
+        newPasswordField = new JPasswordField(10); // Adjust the field size
         newPasswordField.putClientProperty("FlatLaf.style", "showRevealButton: true");
         mainPanel.add(newPasswordField, gbc);
 
@@ -80,7 +80,7 @@ public class ForgotPassword extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.gridwidth = 2;
-        confirmNewPasswordField = new JPasswordField(10);  // Adjust the field size
+        confirmNewPasswordField = new JPasswordField(10); // Adjust the field size
         confirmNewPasswordField.putClientProperty("FlatLaf.style", "showRevealButton: true");
         mainPanel.add(confirmNewPasswordField, gbc);
 
@@ -121,6 +121,8 @@ public class ForgotPassword extends JPanel {
     }
 
     public String showVerificationDialog() {
-        return JOptionPane.showInputDialog(this, "An email was sent to you. Please enter the verification code in the email:", "Email Verification", JOptionPane.PLAIN_MESSAGE);
+        return JOptionPane.showInputDialog(this,
+                "An email was sent to you. Please enter the verification code in the email:", "Email Verification",
+                JOptionPane.PLAIN_MESSAGE);
     }
 }

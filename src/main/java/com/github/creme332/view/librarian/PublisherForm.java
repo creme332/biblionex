@@ -71,7 +71,7 @@ public class PublisherForm extends JPanel {
     private JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
-        backButton = new JButton("< Back");
+        backButton = new JButton("Back");
         headerPanel.add(backButton, BorderLayout.WEST);
         JLabel heading = new JLabel("Create new publisher", javax.swing.SwingConstants.CENTER);
         heading.putClientProperty("FlatLaf.style", "font: $h1.font");

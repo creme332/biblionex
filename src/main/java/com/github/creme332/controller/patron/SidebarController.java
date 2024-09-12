@@ -48,7 +48,7 @@ public class SidebarController implements PropertyChangeListener {
 
     public void handleLogOut() {
         int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to log out?", "Confirm Logout",
-                JOptionPane.YES_NO_OPTION);
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         if (response == JOptionPane.YES_OPTION)
             app.logOut();
     }
