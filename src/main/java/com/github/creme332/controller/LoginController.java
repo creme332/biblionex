@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import com.github.creme332.model.AppState;
@@ -55,8 +56,13 @@ public class LoginController {
             if (user == null) {
                 loginPage.showError();
                 incorrectAttempts++;
+
                 if (incorrectAttempts == 3)
                     System.exit(0);
+
+                JOptionPane.showMessageDialog(null,
+                        (3 - incorrectAttempts) + " attempts remaining", "Invalid credentials ",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
