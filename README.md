@@ -4,6 +4,13 @@
 
 Biblionex is a desktop application designed to facilitate the management of library resources and provide a seamless experience for both patrons and librarians. It features robust search capabilities, user account management, inventory control, and various other tools to enhance the overall efficiency of library operations. For more information, see our [software requirements specifications](docs/SOFTWARE_SPEC.md).
 
+|                                      |                                          |
+| ------------------------------------ | ---------------------------------------- |
+| ![](screenshots/login.png )          | ![](screenshots/patron-registration.png) |
+| ![](screenshots/admin-dashboard.png) | ![](screenshots/patron-dashboard.png)    |
+| ![](screenshots/patron-catalog.png)  | ![](screenshots/material-list.png)       |
+| ![](screenshots/material-form.png)   |                                          |
+
 ## Architecture
 
 Biblionex is designed with a modular and scalable architecture to ensure efficiency, maintainability, and ease of development. The system leverages the Model-View-Controller (MVC) and Observer design patterns to separate concerns and promote organized code structure.
