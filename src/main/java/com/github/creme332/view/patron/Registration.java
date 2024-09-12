@@ -3,6 +3,8 @@ package com.github.creme332.view.patron;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.KeyListener;
+import java.util.Date;
+
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.swing.FontIcon;
 
@@ -212,8 +214,11 @@ public class Registration extends JPanel {
         String address = addressField.getText().trim();
         String creditCardNo = creditCardField.getText().trim();
 
+        // hard code birthday
+        final Date birthday = new Date();
+
         return new Patron(email, new String(password), address, firstName, lastName, phone,
-                creditCardNo, null);
+                creditCardNo, birthday);
     }
 
     public JButton getRegisterButton() {
