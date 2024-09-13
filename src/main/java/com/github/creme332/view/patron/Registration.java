@@ -5,9 +5,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.KeyListener;
 import java.util.Date;
 
-import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
-import org.kordamp.ikonli.swing.FontIcon;
-
 import com.github.creme332.model.Patron;
 import com.github.creme332.utils.IconLoader;
 
@@ -45,7 +42,7 @@ public class Registration extends JPanel {
         headerPanel.add(backButton, BorderLayout.WEST);
 
         // create form title
-        JLabel heading = new JLabel("Patron Registration Form", JLabel.CENTER);
+        JLabel heading = new JLabel("Patron Registration Form", SwingConstants.CENTER);
         heading.putClientProperty("FlatLaf.style", "font: $h1.font");
         headerPanel.add(heading, BorderLayout.CENTER);
 

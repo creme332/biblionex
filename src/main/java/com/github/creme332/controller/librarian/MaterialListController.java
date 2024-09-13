@@ -14,11 +14,8 @@ import com.github.creme332.controller.Screen;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Book;
 import com.github.creme332.model.Journal;
-import com.github.creme332.model.User;
-import com.github.creme332.model.UserType;
 import com.github.creme332.model.Video;
 import com.github.creme332.utils.StringUtil;
-import com.github.creme332.model.Librarian;
 import com.github.creme332.model.Material;
 import com.github.creme332.model.MaterialType;
 import com.github.creme332.view.librarian.MaterialList;
@@ -26,7 +23,6 @@ import com.github.creme332.view.patron.Catalog;
 
 public class MaterialListController implements PropertyChangeListener {
     private MaterialList view;
-    private Librarian librarian;
     private List<Material> allMaterials;
 
     public MaterialListController(AppState app, MaterialList view) {
@@ -188,14 +184,6 @@ public class MaterialListController implements PropertyChangeListener {
                 && (Screen) evt.getNewValue() == Screen.LIBRARIAN_MATERIAL_LIST_SCREEN) {
             fetchMaterials();
             displayMaterials(allMaterials);
-        }
-
-        if (propertyName.equals("loggedInUser")) {
-            User newUser = (User) evt.getNewValue();
-            if (newUser == null || newUser.getUserType() != UserType.LIBRARIAN)
-                return;
-
-            librarian = (Librarian) newUser;
         }
     }
 }

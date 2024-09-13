@@ -2,12 +2,9 @@ package com.github.creme332.controller.patron;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Patron;
-import com.github.creme332.model.User;
 import com.github.creme332.view.patron.Account;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 public class AccountController {
@@ -18,12 +15,7 @@ public class AccountController {
         this.app = app;
         this.accountPage = accountPage;
 
-        accountPage.getSubmitButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleSubmitButton();
-            }
-        });
+        accountPage.getSubmitButton().addActionListener(e -> handleSubmitButton());
     }
 
     private void handleSubmitButton() {

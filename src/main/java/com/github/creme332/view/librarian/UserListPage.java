@@ -27,7 +27,6 @@ public class UserListPage extends JPanel {
     private JTable userTable;
     private JButton newUserButton;
     private DefaultTableModel tableModel;
-    private UserType userType;
 
     private DeleteButtonEditor deleteButtonEditor;
 
@@ -37,8 +36,6 @@ public class UserListPage extends JPanel {
      */
     public UserListPage(UserType userType) {
         setLayout(new BorderLayout());
-
-        this.userType = userType;
 
         // Top Panel
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -198,10 +195,6 @@ public class UserListPage extends JPanel {
             }
 
         }
-    }
-
-    public JTable getTable() {
-        return userTable;
     }
 
     public JButton getBackButton() {

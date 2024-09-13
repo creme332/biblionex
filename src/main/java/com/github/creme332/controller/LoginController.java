@@ -21,14 +21,9 @@ import com.github.creme332.view.Login;
  * Controller for login page
  */
 public class LoginController {
-    private Login loginPage;
-    private AppState app;
     int incorrectAttempts = 0;
 
     public LoginController(AppState app, Login loginPage) {
-        this.loginPage = loginPage;
-        this.app = app;
-
         // Create a common ActionListener for login logic
         ActionListener loginAction = e -> {
             String email = loginPage.getEmail();

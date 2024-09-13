@@ -85,7 +85,7 @@ public class PatronListPageController implements PropertyChangeListener {
         });
 
         // handle deletion
-        JTable table = listPage.getTable();
+        JTable table = listPage.getUserTable();
         UserListPage.DeleteButtonEditor editor = listPage.getDeleteButtonEditor();
         editor.handleDelete(e -> {
             int selectedRow = table.getSelectedRow();

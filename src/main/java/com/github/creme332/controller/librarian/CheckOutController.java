@@ -11,12 +11,10 @@ import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 
 public class CheckOutController implements PropertyChangeListener {
-    private AppState app;
     private CheckOutPage view;
     private Librarian librarian;
 
     public CheckOutController(AppState app, CheckOutPage view) {
-        this.app = app;
         this.view = view;
         app.addPropertyChangeListener(this);
 

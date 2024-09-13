@@ -8,9 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 import org.kordamp.ikonli.swing.FontIcon;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
@@ -26,7 +24,6 @@ public class Login extends JPanel {
     private JButton registerButton;
     private JButton forgotPasswordButton;
 
-    private final Border redBorder = new LineBorder(Color.red);
     public static final int WIDTH = 600;
     public static final int HEIGHT = 600;
 

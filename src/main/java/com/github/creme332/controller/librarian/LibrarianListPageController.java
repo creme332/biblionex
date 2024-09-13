@@ -11,7 +11,6 @@ import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -68,19 +67,16 @@ public class LibrarianListPageController implements PropertyChangeListener {
             }
         });
 
-        listPage.getUserTable().getModel().addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                int row = e.getFirstRow();
-                int column = e.getColumn();
-                if (column != 0 && e.getType() == TableModelEvent.UPDATE) {
-                    updateLibrarianInDatabase(row);
-                }
+        listPage.getUserTable().getModel().addTableModelListener(e -> {
+            int row = e.getFirstRow();
+            int column = e.getColumn();
+            if (column != 0 && e.getType() == TableModelEvent.UPDATE) {
+                updateLibrarianInDatabase(row);
             }
         });
 
         // handle deletion
-        JTable table = listPage.getTable();
+        JTable table = listPage.getUserTable();
         UserListPage.DeleteButtonEditor editor = listPage.getDeleteButtonEditor();
         editor.handleDelete(e -> {
             int selectedRow = table.getSelectedRow();
