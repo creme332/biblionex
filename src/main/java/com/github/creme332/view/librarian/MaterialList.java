@@ -12,7 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.EventObject;
 
-public class MaterialList extends JPanel {
+public class MaterialList extends JFrame {
     private JButton backButton;
     private JButton newMaterialButton;
     private JTextField searchField;

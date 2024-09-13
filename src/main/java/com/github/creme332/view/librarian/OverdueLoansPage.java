@@ -8,7 +8,7 @@ import com.github.creme332.model.Loan;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
 
-public class OverdueLoansPage extends JPanel {
+public class OverdueLoansPage extends JFrame {
     private JTable table;
     private DefaultTableModel tableModel;
     private JTextField barcodeField;

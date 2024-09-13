@@ -8,7 +8,7 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 import java.awt.*;
 
-public class Dashboard extends JPanel {
+public class Dashboard extends JFrame {
     private JButton logOutButton;
     private JButton checkInButton;
     private JButton materialsButton;

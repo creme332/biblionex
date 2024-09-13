@@ -5,7 +5,7 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 
-public class RegistrationForm extends JPanel {
+public class RegistrationForm extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
     private JPasswordField confirmPasswordField;
@@ -19,7 +19,7 @@ public class RegistrationForm extends JPanel {
 
     public RegistrationForm() {
         this.setLayout(new BorderLayout());
-        this.setBorder(new EmptyBorder(5, 5, 5, 5));
+        // this.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         add(createHeaderPanel(), BorderLayout.NORTH);
         add(createFormPanel(), BorderLayout.CENTER);

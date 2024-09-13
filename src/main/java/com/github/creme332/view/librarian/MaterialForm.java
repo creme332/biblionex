@@ -20,7 +20,7 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class MaterialForm extends JPanel {
+public class MaterialForm extends JFrame {
     /**
      * Bottom section of form which contains fields specific to a material type.
      */

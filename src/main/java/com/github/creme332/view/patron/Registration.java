@@ -10,7 +10,7 @@ import com.github.creme332.utils.IconLoader;
 
 import java.awt.*;
 
-public class Registration extends JPanel {
+public class Registration extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
     private JPasswordField confirmPasswordField;

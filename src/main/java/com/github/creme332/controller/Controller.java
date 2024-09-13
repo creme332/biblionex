@@ -44,7 +44,7 @@ public class Controller {
             app.autoLogin(app.getAutoLogin());
         } else {
             // start application normally
-            frameController.playAnimation();
+            frame.switchToScreen(Screen.LOGIN_SCREEN);
         }
     }
 }

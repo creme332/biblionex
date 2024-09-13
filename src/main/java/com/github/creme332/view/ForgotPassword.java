@@ -7,7 +7,7 @@ import javax.swing.border.EmptyBorder;
 /**
  * Forgot Password form.
  */
-public class ForgotPassword extends JPanel {
+public class ForgotPassword extends JFrame {
     private JTextField emailField;
     private JPasswordField newPasswordField;
     private JPasswordField confirmNewPasswordField;

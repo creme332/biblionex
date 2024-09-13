@@ -17,29 +17,6 @@ public class FrameController implements PropertyChangeListener {
         app.addPropertyChangeListener(this); // listen to changes to app state
     }
 
-    /**
-     * Show splash screen animation
-     */
-    public void playAnimation() {
-        final long animationDuration = 800; // ms
-
-        Thread th = new Thread() {
-            @Override
-            public void run() {
-                frame.switchToScreen(Screen.SPLASH_SCREEN);
-
-                try {
-                    Thread.sleep(animationDuration);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    System.exit(0);
-                }
-                frame.switchToScreen(app.getCurrentScreen());
-            }
-        };
-        th.start();
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         String propertyName = e.getPropertyName();

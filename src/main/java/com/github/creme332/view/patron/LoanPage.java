@@ -12,7 +12,7 @@ import com.github.creme332.model.LoanStatus;
 /**
  * A page that displays loans of a patron.
  */
-public class LoanPage extends JPanel {
+public class LoanPage extends JFrame {
     private JTable table;
     private DefaultTableModel tableModel;
     private PayButtonEditor payButtonEditor;

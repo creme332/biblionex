@@ -8,7 +8,7 @@ import com.github.creme332.model.Author;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class AuthorForm extends JPanel {
+public class AuthorForm extends JFrame {
     private JTextField firstNameField;
     private JTextField lastNameField;
     private JTextField emailField;

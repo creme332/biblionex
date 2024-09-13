@@ -14,7 +14,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.util.EventObject;
 
-public class CheckInPage extends JPanel {
+public class CheckInPage extends JFrame {
     private JTextField barcodeField;
     private JButton searchButton;
     private JTable loanTable;

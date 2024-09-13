@@ -7,7 +7,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class PublisherForm extends JPanel {
+public class PublisherForm extends JFrame {
     private JTextField nameField;
     private JTextField emailField;
     private JTextField countryField;

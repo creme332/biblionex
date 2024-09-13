@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import com.github.creme332.model.Author;
 import com.github.creme332.model.Book;
 
-public class Dashboard extends JPanel {
+public class Dashboard extends JFrame {
     DashboardCard overdueLoadCard;
     DashboardCard totalFinesPaidCard;
     DashboardCard activeLoansCard;
@@ -22,7 +22,7 @@ public class Dashboard extends JPanel {
 
     public Dashboard() {
         setLayout(new BorderLayout());
-        setBorder(new EmptyBorder(30, 30, 30, 30));
+        // setBorder(new EmptyBorder(30, 30, 30, 30));
 
         // Create the panel with labels and add a border
         JPanel topPanel = new JPanel(new GridBagLayout());

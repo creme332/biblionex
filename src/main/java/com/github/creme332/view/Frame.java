@@ -28,14 +28,11 @@ import com.github.creme332.view.patron.Sidebar;
  * Frame of the GUI application.
  */
 public class Frame extends JFrame {
-    // variables for managing different screens
-    private CardLayout cardLayout = new CardLayout(); // used to swap between screens
-    private JPanel cardPanels = new JPanel(cardLayout); // a container for all screens
-
     // a map that maps a screen name to screen
-    private Map<Screen, JPanel> screenMapper = new EnumMap<>(Screen.class);
+    private Map<Screen, JFrame> screenMapper = new EnumMap<>(Screen.class);
 
     Sidebar patronSidebar = new Sidebar();
+    JFrame current = null;
 
     public Frame() throws InvalidPathException {
         // set frame title
@@ -53,7 +50,7 @@ public class Frame extends JFrame {
         // setup screen mapper and create screens
 
         // add screens visible to everyone
-        screenMapper.put(Screen.SPLASH_SCREEN, new SplashScreen());
+        // screenMapper.put(Screen.SPLASH_SCREEN, new SplashScreen());
         screenMapper.put(Screen.LOGIN_SCREEN, new Login());
         screenMapper.put(Screen.FORGET_PASSWORD, new ForgotPassword());
 
@@ -78,27 +75,21 @@ public class Frame extends JFrame {
         screenMapper.put(Screen.LIBRARIAN_OVERDUE_LOANS_SCREEN, new OverdueLoansPage()); // Add OverdueLoansPage
         screenMapper.put(Screen.LIBRARIAN_MATERIAL_LIST_SCREEN, new MaterialList());
 
-        // add screens to cardPanels
-        for (Map.Entry<Screen, JPanel> entry : screenMapper.entrySet()) {
-            cardPanels.add(entry.getValue(), entry.getKey().name());
-        }
-
         // hide patron sidebar by default
         patronSidebar.setVisible(false);
 
         // setup frame layout
         setLayout(new BorderLayout());
         add(patronSidebar, BorderLayout.WEST);
-        add(cardPanels, BorderLayout.CENTER);
 
         // display frame in the middle of the screen
-        this.pack();
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
+        // this.pack();
+        // this.setLocationRelativeTo(null);
+        // this.setVisible(true);
     }
 
-    public JPanel getPage(Screen name) {
-        JPanel screen = screenMapper.get(name);
+    public JFrame getPage(Screen name) {
+        JFrame screen = screenMapper.get(name);
         if (screen == null) {
             System.out.println("Invalid screen: " + name.name());
             System.exit(0);
@@ -107,7 +98,14 @@ public class Frame extends JFrame {
     }
 
     public void switchToScreen(Screen screenName) {
-        cardLayout.show(cardPanels, screenName.name());
+        if (current != null)
+            current.setVisible(false);
+        current = getPage(screenName);
+
+        current.pack();
+        current.setLocationRelativeTo(null);
+        current.setVisible(true);
+        
         patronSidebar
                 .setVisible(screenName.name().startsWith("PATRON_") && screenName != Screen.PATRON_REGISTRATION_SCREEN);
     }

@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class VendorForm extends JPanel {
+public class VendorForm extends JFrame {
     private JTextField emailField;
     private JTextField nameField;
     private JTextField contactPersonField;

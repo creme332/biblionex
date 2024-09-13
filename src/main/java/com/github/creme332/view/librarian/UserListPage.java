@@ -18,7 +18,7 @@ import com.github.creme332.model.UserType;
 /**
  * Displays user details in a table.
  */
-public class UserListPage extends JPanel {
+public class UserListPage extends JFrame {
     private JButton backButton;
     private JTextField searchField;
     private JButton searchButton;

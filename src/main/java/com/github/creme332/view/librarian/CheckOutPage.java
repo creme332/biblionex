@@ -8,7 +8,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class CheckOutPage extends JPanel {
+public class CheckOutPage extends JFrame {
     private JTextField barcodeField;
     private JTextField patronIdField;
     private JButton checkOutButton;

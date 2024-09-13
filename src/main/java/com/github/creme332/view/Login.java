@@ -16,7 +16,7 @@ import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 /**
  * Login form for both patron and admin.
  */
-public class Login extends JPanel {
+public class Login extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
 

@@ -3,7 +3,7 @@ package com.github.creme332.view.patron;
 import javax.swing.*;
 import java.awt.*;
 
-public class Account extends JPanel {
+public class Account extends JFrame {
     private JTextField firstNameField;
     private JTextField lastNameField;
     private JTextField emailField;
