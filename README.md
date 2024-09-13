@@ -8,7 +8,7 @@ Biblionex is a desktop application designed to facilitate the management of libr
 | ![Login page](screenshots/login.png )                    | ![Patron registration page](screenshots/patron-registration.png) |
 | ![Librarian dashboard](screenshots/admin-dashboard.png)  | ![Patron dashboard](screenshots/patron-dashboard.png)            |
 | ![Patron catalog](screenshots/patron-catalog.png)        | ![Material list page](screenshots/material-list.png)             |
-| ![Material creation form](screenshots/material-form.png) |                                                                  |
+| ![Material creation form](screenshots/material-form.png) | ![Password reset email](screenshots/password-reset.png)         |
 
 ## Tools & Technologies
 
