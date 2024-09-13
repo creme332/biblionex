@@ -159,15 +159,17 @@ public abstract class User {
 
             final String emailTemplate = """
                     <html>
-                        <body>
-                            <h1>Password Reset Verification</h1>
+                        <body style="font-family:Arial, sans-serif; color:#333;">
+                            <h1 style="color:#2a7ae2;">Password Reset Verification</h1>
                             <p>Dear %s,</p>
-                            <p>Your password reset code is: <strong>%s</strong></p>.
-                            <p>Please enter this code in the application to reset your password.</p>
+                            <p>We received a request to reset your password. To proceed, please use the following verification code:</p>
+                            <p style="font-size:1.2em; font-weight:bold;">%s</p>
+                            <p>Enter this code in the application to reset your password. If you didn't request a password reset, you can safely ignore this message.</p>
+                            <p>Thank you for using Biblionex!</p>
                             <p>Best regards,</p>
-                            <p>Biblionex Team</p>
-                            <hr>
-                            <p style='font-size:0.8em;'>&copy; 2024 Biblionex. All rights reserved.</p>
+                            <p>The Biblionex Team</p>
+                            <hr style="border:none; border-top:1px solid #ccc; margin-top:20px;">
+                            <p style="font-size:0.8em; color:#888;">&copy; 2024 Biblionex. All rights reserved.</p>
                         </body>
                     </html>
                     """;
