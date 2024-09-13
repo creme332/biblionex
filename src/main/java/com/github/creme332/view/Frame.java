@@ -28,10 +28,6 @@ import com.github.creme332.view.patron.Sidebar;
  * Frame of the GUI application.
  */
 public class Frame extends JFrame {
-    // frame properties
-    private int frameWidth = 1600;
-    private int frameHeight = 1000;
-
     // variables for managing different screens
     private CardLayout cardLayout = new CardLayout(); // used to swap between screens
     private JPanel cardPanels = new JPanel(cardLayout); // a container for all screens
@@ -45,9 +41,6 @@ public class Frame extends JFrame {
         // set frame title
         this.setTitle("biblionex");
 
-        // set frame size
-        this.setSize(frameWidth, frameHeight);
-
         // make frame resizable
         this.setResizable(true);
 
@@ -56,11 +49,6 @@ public class Frame extends JFrame {
 
         // set application icon
         this.setIconImage(new IconLoader().loadIcon("/icons/stack-of-books.png").getImage());
-
-        // center frame on startup if frame is not maximized
-        if (this.getExtendedState() != MAXIMIZED_BOTH) {
-            this.setLocationRelativeTo(null);
-        }
 
         // setup screen mapper and create screens
 
@@ -98,16 +86,14 @@ public class Frame extends JFrame {
         // hide patron sidebar by default
         patronSidebar.setVisible(false);
 
-        // setup frame
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(patronSidebar, BorderLayout.WEST);
-        mainPanel.add(cardPanels, BorderLayout.CENTER);
+        // setup frame layout
+        setLayout(new BorderLayout());
+        add(patronSidebar, BorderLayout.WEST);
+        add(cardPanels, BorderLayout.CENTER);
 
-        this.add(mainPanel);
-
+        // display frame in the middle of the screen
         this.pack();
-
-        // display frame
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
