@@ -4,9 +4,11 @@ import com.github.creme332.model.AppState;
 import com.github.creme332.model.Author;
 import com.github.creme332.model.Book;
 import com.github.creme332.model.Journal;
+import com.github.creme332.model.Material;
 import com.github.creme332.model.MaterialType;
 import com.github.creme332.model.Publisher;
 import com.github.creme332.model.Video;
+import com.github.creme332.utils.exception.UserVisibleException;
 import com.github.creme332.view.librarian.MaterialForm;
 import com.github.creme332.controller.Screen;
 
@@ -31,7 +33,8 @@ public class MaterialFormController {
         this.materialForm = materialForm;
         this.app = app;
 
-        // when back button is pressed, always redirect to dashboard. Do not use app.getPreviousScreen() here
+        // when back button is pressed, always redirect to dashboard. Do not use
+        // app.getPreviousScreen() here
         // to prevent cycles between material and publisher form.
         materialForm.handleGoBack(e -> app.setCurrentScreen(Screen.LIBRARIAN_DASHBOARD_SCREEN));
         materialForm.handlePublisher(e -> app.setCurrentScreen(Screen.LIBRARIAN_PUBLISHER_SCREEN));
@@ -55,18 +58,16 @@ public class MaterialFormController {
             MaterialType type = materialForm.getMaterialType();
 
             if (type == MaterialType.BOOK) {
-                handleBookSubmission();
+                saveToDatabase(materialForm.getBookData());
             }
 
             if (type == MaterialType.JOURNAL) {
-                handleJournalSubmission();
+                saveToDatabase(materialForm.getJournalData());
             }
 
             if (type == MaterialType.VIDEO) {
-                handleVideoSubmission();
+                saveToDatabase(materialForm.getVideoData());
             }
-
-            materialForm.clearForm();
         });
 
         Thread th = new Thread() {
@@ -109,39 +110,24 @@ public class MaterialFormController {
         }
     }
 
-    private void handleBookSubmission() {
+    private void saveToDatabase(Material data) {
         try {
-            Book.save(materialForm.getBookData());
-            JOptionPane.showMessageDialog(null, "Book submitted successfully!", "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
-            materialForm.clearForm();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to submit book!", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+            data.validate();
+            if (data instanceof Book)
+                Book.save((Book) data);
+            if (data instanceof Journal)
+                Journal.save((Journal) data);
+            if (data instanceof Video)
+                Video.save((Video) data);
 
-    private void handleJournalSubmission() {
-        try {
-            Journal.save(materialForm.getJournalData());
-            JOptionPane.showMessageDialog(null, "Journal submitted successfully!", "Success",
+            JOptionPane.showMessageDialog(null, "Material data was saved successfully!", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
             materialForm.clearForm();
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to submit journal!", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void handleVideoSubmission() {
-        try {
-            Video.save(materialForm.getVideoData());
-            JOptionPane.showMessageDialog(null, "Video submitted successfully!", "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
-            materialForm.clearForm();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to submit video!", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Failed to save material!", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (UserVisibleException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
