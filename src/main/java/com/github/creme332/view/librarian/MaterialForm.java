@@ -201,24 +201,39 @@ public class MaterialForm extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        gbc.gridx = 0;
+        // fill first row
         gbc.gridy = 0;
+
+        gbc.gridx = 0;
         panel.add(new JLabel("Publisher"), gbc);
+
         gbc.gridx = 1;
         publisherComboBox = new JComboBox<>();
         panel.add(publisherComboBox, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridx = 2;
         panel.add(new JLabel("Title"), gbc);
-        gbc.gridx = 1;
+
+        gbc.gridx = 3;
         titleField = new JTextField(15);
         panel.add(titleField, gbc);
-        gbc.gridx = 2;
+
+        // fill second row
         gbc.gridy = 1;
+
+        gbc.gridx = 0;
+        panel.add(new JLabel("Image URL"), gbc);
+        gbc.gridx = 1;
+        imageUrlField = new JTextField(15);
+        panel.add(imageUrlField, gbc);
+
+        // fill third row
+        gbc.gridx = 2;
+
         panel.add(new JLabel("Genre"), gbc);
         gbc.gridx = 3;
         genreField = new JTextField(15);
+        genreField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Fiction, Comedy, ...");
         panel.add(genreField, gbc);
 
         gbc.gridx = 0;
@@ -233,13 +248,6 @@ public class MaterialForm extends JPanel {
         gbc.gridx = 3;
         ageSpinner = new JSpinner(new SpinnerNumberModel(18, 0, 200, 1));
         panel.add(ageSpinner, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        panel.add(new JLabel("Image URL"), gbc);
-        gbc.gridx = 1;
-        imageUrlField = new JTextField(15);
-        panel.add(imageUrlField, gbc);
 
         JSeparator separator = new JSeparator();
         gbc.gridx = 0;
@@ -391,6 +399,7 @@ public class MaterialForm extends JPanel {
 
         gbc.gridx = 1;
         languageField = new JTextField(15);
+        languageField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "English, French");
         videoPanel.add(languageField, gbc);
 
         gbc.gridx = 2;
@@ -415,7 +424,7 @@ public class MaterialForm extends JPanel {
 
         gbc.gridx = 3;
         formatField = new JTextField(15);
-        formatField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "DD-MM-YYYY");
+        formatField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "MP4, WAV, MOV, AVI, ...");
         videoPanel.add(formatField, gbc);
 
         return videoPanel;
@@ -423,7 +432,7 @@ public class MaterialForm extends JPanel {
 
     public void clearForm() {
         // Common form components
-        publisherComboBox.setSelectedIndex(-1); // Deselect any selected item
+        publisherComboBox.setSelectedIndex(0); // Set first element as selected item
         titleField.setText("");
         genreField.setText("");
         descriptionField.setText("");
@@ -502,9 +511,14 @@ public class MaterialForm extends JPanel {
         String imageUrl = imageUrlField.getText();
 
         String language = languageField.getText().trim();
-        int duration = Integer.parseInt(durationField.getText());
+        int duration = -1;
         int rating = (int) ratingSpinner.getValue();
         String format = formatField.getText().trim();
+
+        try {
+            duration = Integer.parseInt(durationField.getText());
+        } catch (NumberFormatException e) {
+        }
 
         return new Video(
                 publisher.getPublisherId(),
@@ -567,6 +581,7 @@ public class MaterialForm extends JPanel {
         for (Publisher publisher : publishers) {
             publisherComboBox.addItem(new PublisherComboBoxItem(publisher));
         }
+        publisherComboBox.setSelectedIndex(0);
     }
 
     public void handleGoBack(ActionListener listener) {
