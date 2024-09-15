@@ -46,30 +46,39 @@ public class Dashboard extends JPanel {
 
         checkInButton = new JButton("Check in");
         checkInButton.setIcon(FontIcon.of(BootstrapIcons.ARROW_90DEG_RIGHT, 40, Color.white));
+        checkInButton.setIconTextGap(10);
 
         materialsButton = new JButton("Materials");
         materialsButton.setIcon(FontIcon.of(BootstrapIcons.CARD_LIST, 40, Color.white));
+        materialsButton.setIconTextGap(10);
 
         catalogingButton = new JButton("Cataloging");
         catalogingButton.setIcon(FontIcon.of(BootstrapIcons.BOOKMARK, 40, Color.white));
+        catalogingButton.setIconTextGap(10);
 
         checkOutButton = new JButton("Check out");
         checkOutButton.setIcon(FontIcon.of(BootstrapIcons.ARROW_90DEG_LEFT, 40, Color.white));
+        checkOutButton.setIconTextGap(10);
 
         patronsButton = new JButton("Patrons");
         patronsButton.setIcon(FontIcon.of(BootstrapIcons.PERSON_BADGE, 40, Color.white));
+        patronsButton.setIconTextGap(10);
 
         overduesButton = new JButton("Overdues");
         overduesButton.setIcon(FontIcon.of(BootstrapIcons.CASH, 40, Color.white));
+        overduesButton.setIconTextGap(10);
 
         librariansButton = new JButton("Librarians");
         librariansButton.setIcon(FontIcon.of(BootstrapIcons.PERSON_BADGE, 40, Color.white));
+        librariansButton.setIconTextGap(10);
 
         acquisitionsButton = new JButton("Acquisitions");
         acquisitionsButton.setIcon(FontIcon.of(BootstrapIcons.CART, 40, Color.white));
+        acquisitionsButton.setIconTextGap(10);
 
         reportsButton = new JButton("Reports");
         reportsButton.setIcon(FontIcon.of(BootstrapIcons.CLIPBOARD_DATA, 40, Color.white));
+        reportsButton.setIconTextGap(10);
 
         mainPanel.add(checkInButton);
         mainPanel.add(materialsButton);
