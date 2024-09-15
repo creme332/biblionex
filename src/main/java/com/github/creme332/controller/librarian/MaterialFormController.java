@@ -5,6 +5,7 @@ import com.github.creme332.model.Author;
 import com.github.creme332.model.Book;
 import com.github.creme332.model.Journal;
 import com.github.creme332.model.Material;
+import com.github.creme332.model.MaterialCopy;
 import com.github.creme332.model.MaterialType;
 import com.github.creme332.model.Publisher;
 import com.github.creme332.model.Video;
@@ -119,6 +120,11 @@ public class MaterialFormController {
                 Journal.save((Journal) data);
             if (data instanceof Video)
                 Video.save((Video) data);
+
+            // create a physical copy
+            // TODO: Request user for the number of copies to create or fetch number from order
+            MaterialCopy physical = new MaterialCopy(data.getMaterialId());
+            MaterialCopy.save(physical);
 
             JOptionPane.showMessageDialog(null, "Material data was saved successfully!", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
