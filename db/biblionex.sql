@@ -179,7 +179,7 @@ CREATE TABLE `librarian` (
   `role` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`librarian_id`),
   UNIQUE KEY `librarian_email_uindex` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,6 +188,7 @@ CREATE TABLE `librarian` (
 
 LOCK TABLES `librarian` WRITE;
 /*!40000 ALTER TABLE `librarian` DISABLE KEYS */;
+INSERT INTO `librarian` VALUES (1,'Royal Road','$31$16$LbeUojqa6tSOeiW4uNCF22eNmdwyyUStoficOeAtIhY','Test','Admin','4324532423','librarian@biblionex.com',NULL),(2,'Richarlison Street, Maupay','$31$16$dcIjPN0Jd6fJBBrLfOwv6nYhhkeZ7q-wma7Y9j6I1yE','Santos','Pope','45435346','pope@biblionex.com',NULL),(3,'Test Address','$31$16$18JamxOCn0pRz5hY62mPWIHUOykpS6kckIDU7YbTwbc','453','roro','423453','roro@gmail.com',NULL),(5,'Hacker Home','$31$16$zsuubGsL3RtzCgcH0hOCCfkvyuGyPO25nEzPU1ZyIbc','hacker','hacker','43534','hacker@hacker.hacker',NULL);
 /*!40000 ALTER TABLE `librarian` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,7 +218,7 @@ CREATE TABLE `loan` (
   CONSTRAINT `loan_librarian_librarian_id_fk` FOREIGN KEY (`checkout_librarian_id`) REFERENCES `librarian` (`librarian_id`),
   CONSTRAINT `loan_material_copy_barcode_fk` FOREIGN KEY (`barcode`) REFERENCES `material_copy` (`barcode`),
   CONSTRAINT `loan_patron_patron_id_fk` FOREIGN KEY (`patron_id`) REFERENCES `patron` (`patron_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -226,6 +227,7 @@ CREATE TABLE `loan` (
 
 LOCK TABLES `loan` WRITE;
 /*!40000 ALTER TABLE `loan` DISABLE KEYS */;
+INSERT INTO `loan` VALUES (1,1,11,1,1,'2024-09-11 00:00:00','2024-09-15 00:00:00','2024-11-22 00:00:00',1),(3,1,11,1,1,'2024-09-15 15:45:11','2024-09-15 00:00:00','2024-11-15 00:00:00',0),(4,1,11,1,NULL,'2024-09-15 15:48:31',NULL,'2024-11-15 00:00:00',0),(5,2,12,1,1,'2024-09-15 15:48:36','2024-09-15 15:51:33','2024-11-15 00:00:00',0),(6,2,13,1,NULL,'2024-09-11 15:48:47',NULL,'2024-11-22 00:00:00',1),(7,4,12,1,NULL,'2024-01-15 16:47:16',NULL,'2024-11-15 00:00:00',0),(8,4,14,1,NULL,'2024-03-15 16:47:25',NULL,'2024-11-15 00:00:00',0),(9,5,15,1,NULL,'2024-11-10 16:47:31',NULL,'2024-11-15 00:00:00',0),(10,4,16,1,NULL,'2024-11-11 16:47:42',NULL,'2024-11-15 00:00:00',0),(11,1,17,1,NULL,'2024-11-11 16:48:37',NULL,'2024-11-15 00:00:00',0),(12,1,18,1,1,'2024-08-15 16:52:07','2024-09-15 17:01:24','2024-11-15 00:00:00',0),(13,1,18,1,NULL,'2024-01-15 17:01:30',NULL,'2024-11-15 00:00:00',0);
 /*!40000 ALTER TABLE `loan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -375,7 +377,7 @@ CREATE TABLE `patron` (
   PRIMARY KEY (`patron_id`),
   UNIQUE KEY `patron_email_uindex` (`email`),
   UNIQUE KEY `patron_credit_card_no_uindex` (`credit_card_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -384,6 +386,7 @@ CREATE TABLE `patron` (
 
 LOCK TABLES `patron` WRITE;
 /*!40000 ALTER TABLE `patron` DISABLE KEYS */;
+INSERT INTO `patron` VALUES (1,'Terraform Street, Curepipe, Mauritius','$31$16$LMXi3RW4H-ThqScBsH4MKFMRqkXVgwsLwIAzFCH-nGI','Ramirez','Polo','54432542','polo@gmail.com','2024-09-15 15:04:07','2024-09-15 00:00:00','432455'),(2,'Royal Road, Curepipe','$31$16$nrVD_gON7QX8fEMOIFHoL8hKnGnnVKYrWjieHV7OrOI','Petito','Raoul','543544324','raoul@gmail.com','2024-09-15 15:20:07','2024-09-15 00:00:00','4535'),(3,'St Jean, Port-Louis','$31$16$IP3AQBukeib6YDKmuvOLkRfHL6hO-3fJKTbpBVMQliw','Parker','Peter','1234','peter@gmail.com','2024-09-15 15:20:56','2024-09-15 00:00:00','45325'),(4,'Triolet Street, Triolet','$31$16$B9rGLfZMPpxKGnkqMeabFzekVdJpHtE33VFLKxQ6KaA','Bois Cheri','Rachel','1234','rachel@gmail.com','2024-09-15 15:21:44','2024-09-15 00:00:00','3424234'),(5,'Big Road, Town','$31$16$57kbwAdmMY31c11kzn5Y_ODd65mjUUW3ffxWdZSupi4','Germany','Patrice','432543','patrice@gmail.com','2024-09-15 15:22:24','2024-09-15 00:00:00','3452543'),(6,'Game Street, Coromandel','$31$16$kGJyF0HGMXaDaSc9ggI4fAW8vTuWXKnZvttMDmp-X0o','Garros','Roland','4325','roland@gmail.com','2024-09-15 15:23:33','2024-09-15 00:00:00','3425435'),(7,'Royal Road','$31$16$IqCpY4z8SLuLIfdrbQvkDlT5UABLoQ8Zt930czK4e68','Test','Patron','54353534','patron@biblionex.com','2024-09-15 17:07:15','2024-09-15 00:00:00','45325435354');
 /*!40000 ALTER TABLE `patron` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -507,4 +510,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-03 14:00:32
+-- Dump completed on 2024-09-15 17:40:35
