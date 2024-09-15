@@ -1,6 +1,7 @@
 package com.github.creme332.model;
 
 import com.github.creme332.utils.DatabaseConnection;
+import com.github.creme332.utils.exception.UserVisibleException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -77,6 +78,20 @@ public class Book extends Material {
     public void removeAuthor(Author author) {
         if (authors.remove(author)) {
             author.getBooks().remove(this);
+        }
+    }
+
+    @Override
+    public void validate() throws UserVisibleException {
+        super.validate();
+        if (isbn == null || isbn.isBlank()) {
+            throw new UserVisibleException("ISBN cannot be empty");
+        }
+        if (pageCount <= 0) {
+            throw new UserVisibleException("Page count cannot be empty");
+        }
+        if (authors.isEmpty()) {
+            throw new UserVisibleException("Author list cannot be empty");
         }
     }
 

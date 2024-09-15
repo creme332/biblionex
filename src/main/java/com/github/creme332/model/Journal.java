@@ -1,6 +1,7 @@
 package com.github.creme332.model;
 
 import com.github.creme332.utils.DatabaseConnection;
+import com.github.creme332.utils.exception.UserVisibleException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -60,6 +61,23 @@ public class Journal extends Material {
         this.website = website;
         this.frequency = frequency;
         this.startDate = startDate;
+    }
+
+    @Override
+    public void validate() throws UserVisibleException {
+        super.validate();
+        if (issn == null || issn.isBlank()) {
+            throw new UserVisibleException("ISSN cannot be empty");
+        }
+        if (website == null || website.isBlank()) {
+            throw new UserVisibleException("Website cannot be empty");
+        }
+        if (frequency == null) {
+            throw new UserVisibleException("Journal frequency cannot be empty");
+        }
+        if (startDate == null) {
+            throw new UserVisibleException("Start date cannot be empty");
+        }
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.github.creme332.model;
 
 import com.github.creme332.utils.DatabaseConnection;
+import com.github.creme332.utils.exception.UserVisibleException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -62,6 +63,23 @@ public class Video extends Material {
         this.duration = duration;
         this.rating = rating;
         this.format = format;
+    }
+
+    @Override
+    public void validate() throws UserVisibleException {
+        super.validate();
+        if (language == null || language.isBlank()) {
+            throw new UserVisibleException("Language cannot be empty");
+        }
+        if (format == null || format.isBlank()) {
+            throw new UserVisibleException("Format cannot be empty");
+        }
+        if (duration <= 0) {
+            throw new UserVisibleException("Duration must be positive");
+        }
+        if (rating < 1 || rating > 5) {
+            throw new UserVisibleException("Rating must be between 1 and 5");
+        }
     }
 
     /**

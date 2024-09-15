@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.creme332.utils.exception.UserVisibleException;
+
 /**
  * Stores information about a material (video, book, journal).
  */
@@ -71,6 +73,38 @@ public abstract class Material {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void validate() throws UserVisibleException {
+        // Validate description
+        if (description == null || description.isBlank()) {
+            throw new UserVisibleException("Description cannot be empty");
+        }
+
+        // Validate publisherId
+        if (publisherId <= 0) {
+            throw new UserVisibleException("Publisher ID must be a positive integer");
+        }
+
+        // Validate imageUrl (optional validation)
+        if (imageUrl == null || imageUrl.isBlank()) {
+            throw new UserVisibleException("Image URL cannot be empty");
+        }
+
+        // Validate ageRestriction (assuming age must be a valid range)
+        if (ageRestriction < 0) {
+            throw new UserVisibleException("Age restriction cannot be negative");
+        }
+
+        // Validate type (assuming type cannot be null)
+        if (type == null) {
+            throw new UserVisibleException("Material type must be specified");
+        }
+
+        // Validate title
+        if (title == null || title.isBlank()) {
+            throw new UserVisibleException("Title cannot be empty");
+        }
     }
 
     /**
