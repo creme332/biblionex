@@ -103,7 +103,7 @@ public class CheckOutController implements PropertyChangeListener {
 
             // Update table with new loan information
             DefaultTableModel tableModel = view.getTableModel();
-            Object[] rowData = { loan.getLoanId(), loan.getPatronId(), loan.getBarcode(),
+            Object[] rowData = { loan.getLoanId(), loan.getPatronId(), loan.getBarcode(), loan.getIssueDate(),
                     loan.getDueDate(), loan.getRenewalCount(), "Action" };
             tableModel.addRow(rowData);
 

@@ -21,7 +21,7 @@ public class CheckOutPage extends JPanel {
 
         add(createTopPanel(), BorderLayout.NORTH);
 
-        String[] columnNames = { "Loan ID", "Patron ID", "Barcode", "Due Date", "Renewal Count" };
+        String[] columnNames = { "Loan ID", "Patron ID", "Barcode", "Issue Date", "Due Date", "Renewal Count" };
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {

@@ -27,7 +27,8 @@ public class CheckInPage extends JPanel {
 
         add(createTopPanel(), BorderLayout.NORTH);
 
-        String[] columnNames = { "Loan ID", "Patron ID", "Barcode", "Due Date", "Renewal Count", "Action" };
+        String[] columnNames = { "Loan ID", "Patron ID", "Barcode", "Issue Date", "Due Date", "Renewal Count",
+                "Action" };
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
