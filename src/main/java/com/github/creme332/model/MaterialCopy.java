@@ -107,9 +107,9 @@ public class MaterialCopy {
                             rs.getInt("barcode"),
                             rs.getInt("checkout_librarian_id"),
                             rs.getInt("checkin_librarian_id"),
-                            rs.getDate("issue_date"),
-                            rs.getDate("return_date"),
-                            rs.getDate("due_date"),
+                            rs.getTimestamp("issue_date"),
+                            rs.getTimestamp("return_date"),
+                            rs.getTimestamp("due_date"),
                             rs.getInt("renewal_count"));
 
                     // Deal with possible null values

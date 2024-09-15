@@ -145,9 +145,9 @@ public class Order {
                         resultSet.getInt("vendor_id"),
                         resultSet.getInt("material_id"),
                         OrderStatus.fromString(resultSet.getString("status")),
-                        resultSet.getDate("created_date"),
+                        resultSet.getTimestamp("created_date"),
                         resultSet.getInt("quantity"),
-                        resultSet.getDate("delivery_date"),
+                        resultSet.getTimestamp("delivery_date"),
                         resultSet.getDouble("unit_price"));
             }
         } catch (SQLException e) {
@@ -202,9 +202,9 @@ public class Order {
             preparedStatement.setInt(2, order.getVendorId());
             preparedStatement.setInt(3, order.getMaterialId());
             preparedStatement.setString(4, order.getStatus().toString());
-            preparedStatement.setDate(5, new java.sql.Date(order.getCreatedDate().getTime()));
+            preparedStatement.setTimestamp(5, new java.sql.Timestamp(order.getCreatedDate().getTime()));
             preparedStatement.setInt(6, order.getQuantity());
-            preparedStatement.setDate(7, new java.sql.Date(order.getDeliveryDate().getTime()));
+            preparedStatement.setTimestamp(7, new java.sql.Timestamp(order.getDeliveryDate().getTime()));
             preparedStatement.setDouble(8, order.getUnitPrice());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -225,9 +225,9 @@ public class Order {
             preparedStatement.setInt(2, order.getVendorId());
             preparedStatement.setInt(3, order.getMaterialId());
             preparedStatement.setString(4, order.getStatus().toString());
-            preparedStatement.setDate(5, new java.sql.Date(order.getCreatedDate().getTime()));
+            preparedStatement.setTimestamp(5, new java.sql.Timestamp(order.getCreatedDate().getTime()));
             preparedStatement.setInt(6, order.getQuantity());
-            preparedStatement.setDate(7, new java.sql.Date(order.getDeliveryDate().getTime()));
+            preparedStatement.setTimestamp(7, new java.sql.Timestamp(order.getDeliveryDate().getTime()));
             preparedStatement.setDouble(8, order.getUnitPrice());
             preparedStatement.setInt(9, order.getOrderId());
             preparedStatement.executeUpdate();

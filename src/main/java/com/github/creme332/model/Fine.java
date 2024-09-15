@@ -52,7 +52,7 @@ public class Fine {
                 Fine fine = new Fine(
                         resultSet.getInt("patron_id"),
                         resultSet.getInt("loan_id"),
-                        resultSet.getDate("date"),
+                        resultSet.getTimestamp("date"),
                         resultSet.getDouble("amount"));
                 fines.add(fine);
             }
@@ -69,7 +69,7 @@ public class Fine {
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setInt(1, fine.getPatronId());
             preparedStatement.setInt(2, fine.getLoanId());
-            preparedStatement.setDate(3, new java.sql.Date(fine.getDate().getTime()));
+            preparedStatement.setTimestamp(3, new java.sql.Timestamp(fine.getDate().getTime()));
             preparedStatement.setDouble(4, fine.getAmount());
             preparedStatement.executeUpdate();
         }

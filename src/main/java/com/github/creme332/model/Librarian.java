@@ -88,12 +88,12 @@ public class Librarian extends User {
 
         MaterialCopy material = MaterialCopy.findById(barcode);
         if (material == null) {
-            throw new UserVisibleException("MaterialCopy does not exist.");
+            throw new UserVisibleException("Barcode not found.");
         }
 
         // Check if material is not already being loaned
         if (material.onLoan()) {
-            throw new UserVisibleException("Material is already being loaned.");
+            throw new UserVisibleException("Cannot checkout a material that is currently being loaned to another patron.");
         }
 
         // Get the current date
@@ -123,7 +123,7 @@ public class Librarian extends User {
             createLoan.setInt(1, loan.getPatronId());
             createLoan.setInt(2, loan.getBarcode());
             createLoan.setInt(3, loan.getCheckoutLibrarianId());
-            createLoan.setDate(4, new java.sql.Date(loan.getIssueDate().getTime()));
+            createLoan.setTimestamp(4, new java.sql.Timestamp(loan.getIssueDate().getTime()));
             createLoan.setDate(5, new java.sql.Date(loan.getDueDate().getTime()));
             int rowsAffected = createLoan.executeUpdate();
 
@@ -150,7 +150,7 @@ public class Librarian extends User {
         String query = "UPDATE loan SET return_date = ?, checkin_librarian_id = ? WHERE loan_id = ?";
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setDate(1, new java.sql.Date(loan.getReturnDate().getTime()));
+            preparedStatement.setTimestamp(1, new java.sql.Timestamp(loan.getReturnDate().getTime()));
             preparedStatement.setInt(2, loan.getCheckinLibrarianId());
             preparedStatement.setInt(3, loan.getLoanId());
             preparedStatement.executeUpdate();

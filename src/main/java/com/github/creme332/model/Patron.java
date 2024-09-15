@@ -87,9 +87,9 @@ public class Patron extends User {
                         resultSet.getInt("barcode"),
                         resultSet.getInt("checkout_librarian_id"),
                         resultSet.getInt("checkin_librarian_id"),
-                        resultSet.getDate("issue_date"),
-                        resultSet.getDate("return_date"),
-                        resultSet.getDate("due_date"),
+                        resultSet.getTimestamp("issue_date"),
+                        resultSet.getTimestamp("return_date"),
+                        resultSet.getTimestamp("due_date"),
                         resultSet.getInt("renewal_count"));
                 activeLoans.add(loan);
             }
@@ -124,9 +124,9 @@ public class Patron extends User {
                         resultSet.getInt("barcode"),
                         resultSet.getInt("checkout_librarian_id"),
                         resultSet.getInt("checkin_librarian_id"),
-                        resultSet.getDate("issue_date"),
-                        resultSet.getDate("return_date"),
-                        resultSet.getDate("due_date"),
+                        resultSet.getTimestamp("issue_date"),
+                        resultSet.getTimestamp("return_date"),
+                        resultSet.getTimestamp("due_date"),
                         resultSet.getInt("renewal_count"));
                 allLoans.add(loan);
             }
@@ -162,9 +162,9 @@ public class Patron extends User {
                         resultSet.getInt("barcode"),
                         resultSet.getInt("checkout_librarian_id"),
                         resultSet.getInt("checkin_librarian_id"),
-                        resultSet.getDate("issue_date"),
-                        resultSet.getDate("return_date"),
-                        resultSet.getDate("due_date"),
+                        resultSet.getTimestamp("issue_date"),
+                        resultSet.getTimestamp("return_date"),
+                        resultSet.getTimestamp("due_date"),
                         resultSet.getInt("renewal_count"));
                 overdueLoans.add(loan);
             }
@@ -306,7 +306,7 @@ public class Patron extends User {
                         resultSet.getString("phone_no"),
                         resultSet.getString("credit_card_no"),
                         resultSet.getDate("birth_date"),
-                        resultSet.getDate("registration_date"));
+                        resultSet.getTimestamp("registration_date"));
             }
         }
         return patron;
@@ -333,7 +333,7 @@ public class Patron extends User {
                         resultSet.getString("phone_no"),
                         resultSet.getString("credit_card_no"),
                         resultSet.getDate("birth_date"),
-                        resultSet.getDate("registration_date"));
+                        resultSet.getTimestamp("registration_date"));
             }
         }
         return patron;
@@ -358,7 +358,7 @@ public class Patron extends User {
                         resultSet.getString("phone_no"),
                         resultSet.getString("credit_card_no"),
                         resultSet.getDate("birth_date"),
-                        resultSet.getDate("registration_date"));
+                        resultSet.getTimestamp("registration_date"));
                 patrons.add(patron);
             }
         }

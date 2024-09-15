@@ -185,9 +185,9 @@ public class Loan {
                         resultSet.getInt("barcode"),
                         resultSet.getInt("checkout_librarian_id"),
                         resultSet.getInt("checkin_librarian_id"),
-                        resultSet.getDate("issue_date"),
-                        resultSet.getDate("return_date"),
-                        resultSet.getDate("due_date"),
+                        resultSet.getTimestamp("issue_date"),
+                        resultSet.getTimestamp("return_date"),
+                        resultSet.getTimestamp("due_date"),
                         resultSet.getInt("renewal_count"));
 
                 // deal with possible null values since getInt() returns 0 for null
@@ -214,9 +214,9 @@ public class Loan {
                         resultSet.getInt("barcode"),
                         resultSet.getInt("checkout_librarian_id"),
                         resultSet.getInt("checkin_librarian_id"),
-                        resultSet.getDate("issue_date"),
-                        resultSet.getDate("return_date"),
-                        resultSet.getDate("due_date"),
+                        resultSet.getTimestamp("issue_date"),
+                        resultSet.getTimestamp("return_date"),
+                        resultSet.getTimestamp("due_date"),
                         resultSet.getInt("renewal_count"));
                 loans.add(loan);
             }
@@ -238,9 +238,9 @@ public class Loan {
                     resultSet.getInt("barcode"),
                     resultSet.getInt("checkout_librarian_id"),
                     resultSet.getInt("checkin_librarian_id"),
-                    resultSet.getDate("issue_date"),
-                    resultSet.getDate("return_date"),
-                    resultSet.getDate("due_date"),
+                    resultSet.getTimestamp("issue_date"),
+                    resultSet.getTimestamp("return_date"),
+                    resultSet.getTimestamp("due_date"),
                     resultSet.getInt("renewal_count"));
             overdueLoans.add(loan);
         }
@@ -299,9 +299,9 @@ public class Loan {
                         resultSet.getInt("barcode"),
                         resultSet.getInt("checkout_librarian_id"),
                         resultSet.getInt("checkin_librarian_id"),
-                        resultSet.getDate("issue_date"),
-                        resultSet.getDate("return_date"),
-                        resultSet.getDate("due_date"),
+                        resultSet.getTimestamp("issue_date"),
+                        resultSet.getTimestamp("return_date"),
+                        resultSet.getTimestamp("due_date"),
                         resultSet.getInt("renewal_count"));
                 loans.add(loan);
             }
@@ -330,9 +330,9 @@ public class Loan {
                         resultSet.getInt("barcode"),
                         resultSet.getInt("checkout_librarian_id"),
                         resultSet.getInt("checkin_librarian_id"),
-                        resultSet.getDate("issue_date"),
-                        resultSet.getDate("return_date"),
-                        resultSet.getDate("due_date"),
+                        resultSet.getTimestamp("issue_date"),
+                        resultSet.getTimestamp("return_date"),
+                        resultSet.getTimestamp("due_date"),
                         resultSet.getInt("renewal_count"));
             }
         }
