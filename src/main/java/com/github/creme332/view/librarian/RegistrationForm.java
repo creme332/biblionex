@@ -3,6 +3,8 @@ package com.github.creme332.view.librarian;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import com.github.creme332.model.Librarian;
+
 import java.awt.*;
 
 public class RegistrationForm extends JPanel {
@@ -13,7 +15,6 @@ public class RegistrationForm extends JPanel {
     private JTextField lastNameField;
     private JTextField phoneField;
     private JTextField addressField;
-    private JLabel errorLabel;
     private JButton registerButton;
     private JButton backButton;
 
@@ -33,7 +34,7 @@ public class RegistrationForm extends JPanel {
 
         headerPanel.add(backButton, BorderLayout.WEST);
 
-        JLabel heading = new JLabel("Librarian Registration Form", JLabel.CENTER);
+        JLabel heading = new JLabel("Librarian Registration Form", SwingConstants.CENTER);
         heading.putClientProperty("FlatLaf.style", "font: $h1.font");
         headerPanel.add(heading, BorderLayout.CENTER);
 
@@ -101,17 +102,14 @@ public class RegistrationForm extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 4;
-        errorLabel = new JLabel("");
-        errorLabel.setForeground(Color.RED);
-        formPanel.add(errorLabel, gbc);
 
         gbc.gridy = 5;
-        registerButton = new JButton("Register");
+        registerButton = new JButton("Create account");
         formPanel.add(registerButton, gbc);
 
         JScrollPane scrollPane = new JScrollPane(formPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         return scrollPane;
     }
@@ -124,8 +122,25 @@ public class RegistrationForm extends JPanel {
         return backButton;
     }
 
-    public String getEmail() {
-        return emailField.getText();
+    public void resetForm() {
+        emailField.setText(""); // Clears email field
+        passwordField.setText(""); // Clears password field
+        confirmPasswordField.setText(""); // Clears confirm password field
+        firstNameField.setText(""); // Clears first name field
+        lastNameField.setText(""); // Clears last name field
+        phoneField.setText(""); // Clears phone field
+        addressField.setText(""); // Clears address field
+    }
+
+    public Librarian getLibrarianData() {
+        String email = emailField.getText();
+        String firstName = firstNameField.getText();
+        String lastName = lastNameField.getText();
+        String phone = phoneField.getText();
+        String address = addressField.getText();
+
+        return new Librarian(email, new String(passwordField.getPassword()), address, firstName, lastName, phone,
+                "Librarian");
     }
 
     public char[] getPassword() {
@@ -134,58 +149,5 @@ public class RegistrationForm extends JPanel {
 
     public char[] getConfirmPassword() {
         return confirmPasswordField.getPassword();
-    }
-
-    public String getFirstName() {
-        return firstNameField.getText();
-    }
-
-    public String getLastName() {
-        return lastNameField.getText();
-    }
-
-    public String getPhone() {
-        return phoneField.getText();
-    }
-
-    public String getAddress() {
-        return addressField.getText();
-    }
-
-    public void setErrorMessage(String text) {
-        errorLabel.setText(text);
-    }
-
-    public void setSuccessMessage(String text) {
-        errorLabel.setForeground(Color.GREEN);
-        errorLabel.setText(text);
-    }
-
-    public JTextField getAddressField() {
-        return addressField;
-    }
-
-    public JTextField getPhoneField() {
-        return phoneField;
-    }
-
-    public JTextField getLastNameField() {
-        return lastNameField;
-    }
-
-    public JTextField getFirstNameField() {
-        return firstNameField;
-    }
-
-    public JTextField getConfirmPasswordField() {
-        return confirmPasswordField;
-    }
-
-    public JTextField getPasswordField() {
-        return passwordField;
-    }
-
-    public JTextField getEmailField() {
-        return emailField;
     }
 }

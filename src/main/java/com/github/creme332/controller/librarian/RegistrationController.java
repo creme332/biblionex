@@ -1,8 +1,8 @@
 package com.github.creme332.controller.librarian;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Librarian;
@@ -21,65 +21,35 @@ public class RegistrationController {
 
         // Add action listener to back button
         registrationForm.getBackButton().addActionListener(e -> app.setCurrentScreen(app.getPreviousScreen()));
-
-        // Add key listener for Enter key press in form fields
-        addEnterKeyListener(registrationForm.getEmailField());
-        addEnterKeyListener(registrationForm.getPasswordField());
-        addEnterKeyListener(registrationForm.getConfirmPasswordField());
-        addEnterKeyListener(registrationForm.getFirstNameField());
-        addEnterKeyListener(registrationForm.getLastNameField());
-        addEnterKeyListener(registrationForm.getPhoneField());
-        addEnterKeyListener(registrationForm.getAddressField());
-    }
-
-    private void addEnterKeyListener(javax.swing.JTextField textField) {
-        textField.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                // Not used, but required by KeyListener interface
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    registerLibrarian();
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                // Not used, but required by KeyListener interface
-            }
-        });
     }
 
     private void registerLibrarian() {
-        String email = registrationForm.getEmail();
         char[] password = registrationForm.getPassword();
         char[] confirmPassword = registrationForm.getConfirmPassword();
-        String firstName = registrationForm.getFirstName();
-        String lastName = registrationForm.getLastName();
-        String phone = registrationForm.getPhone();
-        String address = registrationForm.getAddress();
+        Librarian librarian = registrationForm.getLibrarianData();
 
-        if (!new String(password).equals(new String(confirmPassword))) {
-            registrationForm.setErrorMessage("Passwords do not match!");
+        if (!(librarian.getPassword()).equals(new String(confirmPassword))) {
+            JOptionPane.showMessageDialog(null, "Passwords do not match!", "Invalid passwords",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (email.isEmpty() || password.length == 0 || firstName.isEmpty() || lastName.isEmpty()
-                || phone.isEmpty() || address.isEmpty()) {
-            registrationForm.setErrorMessage("All fields must be filled out!");
+        if (librarian.getEmail().isEmpty() || password.length == 0 || librarian.getFirstName().isEmpty()
+                || librarian.getLastName().isEmpty()
+                || librarian.getPhoneNo().isEmpty() || librarian.getAddress().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "All fields must be filled out!", "Invalid form data",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        Librarian librarian = new Librarian(email, new String(password), address, firstName, lastName, phone,
-                "Librarian");
-
-                // TODO: Refactor
         try {
             Librarian.save(librarian);
+            registrationForm.resetForm();
+            JOptionPane.showMessageDialog(null, "Librarian account was successfully created.", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "An unknown error occurred.", "Unknown error",
+                    JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
