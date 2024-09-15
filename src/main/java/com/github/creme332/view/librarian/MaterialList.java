@@ -55,6 +55,7 @@ public class MaterialList extends JPanel {
         searchField = new JTextField(20);
         searchField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
                 new FlatSearchIcon());
+                searchField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter title");
         searchContainer.add(searchField);
         topPanel.add(searchContainer, BorderLayout.CENTER);
 
