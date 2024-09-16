@@ -3,6 +3,7 @@
 ![MIT](https://img.shields.io/badge/License-MIT-blue)
 
 Biblionex is a desktop application designed to facilitate the management of library resources and provide a seamless experience for both patrons and librarians. It features robust search capabilities, user account management, inventory control, and various other tools to enhance the overall efficiency of library operations. For more details on the project, see our [System Design Document (SDD)](docs/biblionex-sdd.pdf).
+
 |                                                          |                                                                  |
 | -------------------------------------------------------- | ---------------------------------------------------------------- |
 | ![Login page](screenshots/login.png )                    | ![Patron registration page](screenshots/patron-registration.png) |
